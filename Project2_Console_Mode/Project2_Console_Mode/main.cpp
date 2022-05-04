@@ -1,13 +1,17 @@
 #include <iostream>
 #include <fstream>
 #include "Clock.h"
+#include "GameManager.h"
 
 using namespace std;
 
-
-
 int main() {
+	Board board;
+	board.showBoard();
 
+	//=============================================================================================================================
+	//clock test
+	/*
 	GameClock GameTime;
 	PlayerClock PlayerTime;
 	int player = RED;
@@ -17,7 +21,9 @@ int main() {
 		else if (player == BLACK) player = RED;
 
 		string record = checkChess(player, GameTime, PlayerTime);  //-> include (moveable, move, checkmate)  and  time execute
-	}
+	}*/
+	//=============================================================================================================================
+	//outline
 	/*
 	last turn/next turn   --->   use deque<string> to execute?
 

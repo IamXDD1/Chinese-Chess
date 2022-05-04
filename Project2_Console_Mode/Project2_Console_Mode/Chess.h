@@ -10,6 +10,11 @@ using namespace std;
 struct Pos {
 	int x;
 	int y;
+
+	bool operator == (Pos a) {
+		if (x == a.x && y == a.y) return true;
+		return false;
+	}
 };
 
 class Chess {
@@ -23,7 +28,7 @@ public:
 		pos.y = 0;
 		bool death = false;
 		color = -1;
-	};
+	}
 
 	virtual void moveable(int x, int y, vector<pair<int, int>>& cango) = 0;  // Gabriel
 	virtual bool move(int x, int y) = 0;

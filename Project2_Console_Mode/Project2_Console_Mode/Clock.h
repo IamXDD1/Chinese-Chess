@@ -4,7 +4,7 @@
 #include <conio.h>
 #include <ctime>
 
-#define BLACK 0
+#define BLACK 2
 #define RED 1
 #define TIME_LIMIT 10
 #define PLAYER_BASE_TIME 1800
@@ -27,13 +27,6 @@ public:
 	time_t StartTime; //minute : second
 	time_t TotalTime;
 	GameClock() { StartTime = time(NULL); TotalTime = 0; }
-	void execute(int player) {
-		time_t currTime;
-		gotoxy(10, 10);
-		int min, sec;
-		change_formate(min, sec, currTime - StartTime);
-		cout << "execute time: " << min << ':' << sec;
-	}
 };
 
 class PlayerClock {
@@ -44,17 +37,6 @@ public:
 		black_time = PLAYER_BASE_TIME;
 		red_time = PLAYER_BASE_TIME;
 	}
-	void execute(int player, bool& notime) {
-		if (player == BLACK) {
-			
-			if (black_time == 0) notime = true;
-		}
-		else if (player == RED) {
-
-			if (red_time == 0) notime = true;
-		}
-	}
-
 };
 
 void printTime(GameClock& GameTime, PlayerClock& PlayerTime, time_t& base_time, int& player) {
