@@ -1,14 +1,12 @@
 #include <iostream>
-#include <fstream>
-#include "Clock.h"
-#include "GameManager.h"
+#include "Program.h"
 
 using namespace std;
 
 int main() {
-	Board board;
-	board.showBoard();
+	Program exe;
 
+	exe.Run();
 	//=============================================================================================================================
 	//clock test
 	/*
@@ -27,7 +25,6 @@ int main() {
 	/*
 	last turn/next turn   --->   use deque<string> to execute?
 
-	setEnvironment();
 	ProgramRun() 
 	{
 		switch(chooseOption())
