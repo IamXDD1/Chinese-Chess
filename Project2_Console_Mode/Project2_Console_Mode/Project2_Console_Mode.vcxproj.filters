@@ -18,6 +18,15 @@
     <ClCompile Include="main.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="Chess.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Clock.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Program.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameManager.h">
@@ -27,6 +36,9 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="Clock.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Program.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

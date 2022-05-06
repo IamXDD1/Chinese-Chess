@@ -25,8 +25,8 @@ public:
 		color = -1;
 	};
 
-	virtual void moveable(int x, int y, vector<pair<int, int>>& cango) = 0;  // Gabriel
-	virtual bool move(int x, int y) = 0;
+	virtual void moveable(int x, int y, vector<pair<int, int>>& cango) {};  // Gabriel
+	virtual bool move(int x, int y);
 	virtual bool checkmate(int x, int y) = 0;
 };
 
@@ -37,9 +37,9 @@ public:
 		pos.y = y;
 		color = player;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) {}
-	bool checkmate(int x, int y) {}
+	void moveable(int x, int y, int num, vector<pair<int, int>>& cango);
+	bool move(int x, int y);
+	bool checkmate(int x, int y);
 };
 
 class Advisor : public Chess {
@@ -49,9 +49,9 @@ public:
 		pos.y = y;
 		color = player;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) {}
-	bool checkmate(int x, int y) {}
+	void moveable(int x, int y, int num, vector<pair<int, int>>& cango);
+	bool move(int x, int y);
+	bool checkmate(int x, int y);
 };
 
 class Elephant : public Chess {
@@ -61,9 +61,9 @@ public:
 		pos.y = y;
 		color = player;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) {}
-	bool checkmate(int x, int y) {}
+	void moveable(int x, int y, int num, vector<pair<int, int>>& cango);
+	bool move(int x, int y);
+	bool checkmate(int x, int y);
 };
 
 class Chariot : public Chess {
@@ -73,9 +73,9 @@ public:
 		pos.y = y;
 		color = player;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) {}
-	bool checkmate(int x, int y) {}
+	void moveable(int x, int y, int num, vector<pair<int, int>>& cango);
+	bool move(int x, int y);
+	bool checkmate(int x, int y);
 };
 
 class Horse : public Chess {
@@ -85,9 +85,9 @@ public:
 		pos.y = y;
 		color = player;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) {}
-	bool checkmate(int x, int y) {}
+	void moveable(int x, int y, int num, vector<pair<int, int>>& cango);
+	bool move(int x, int y);
+	bool checkmate(int x, int y);
 };
 
 class Cannon : public Chess {
@@ -97,29 +97,9 @@ public:
 		pos.y = y;
 		color = player;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) {
-		bool object = false;
-		for (int i = 0; i < 9; i++) {
-			if (object) {
-				if (move(i, pos.y) == false) {
-					cango.push_back({ i,pos.y });
-				}
-			}
-			else if (move(i, pos.y)) {
-				cango.push_back({ i,pos.y });
-			}
-			else {
-				object = true;
-			}
-		}
-		return;
-	}
-	bool move(int x, int y) {
-		return true;
-	}
-	bool checkmate(int x, int y) {
-		return true;
-	}
+	void moveable(int x, int y, int num, vector<pair<int, int>>& cango);
+	bool move(int x, int y);
+	bool checkmate(int x, int y);
 };
 
 class Soldier : public Chess {
@@ -129,7 +109,7 @@ public:
 		pos.y = y;
 		color = player;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) {}
-	bool checkmate(int x, int y) {}
+	void moveable(int x, int y, int num, vector<pair<int, int>>& cango);
+	bool move(int x, int y);
+	bool checkmate(int x, int y);
 };
