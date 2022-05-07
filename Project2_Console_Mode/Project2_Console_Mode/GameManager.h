@@ -111,6 +111,7 @@ public:
 		}
 		initialization(board);
 	}
+
 	void initialization(int** board) {
 		board[0][0] = board[0][8] = BLACK_CHARIOT; board[9][0] = board[9][8] = RED_CHARIOT;
 		board[0][1] = board[0][7] = BLACK_HORSE; board[9][1] = board[9][7] = RED_HORSE;
@@ -200,31 +201,31 @@ public:
 		int chess_type = gameBoard.getChess(x, y);
 		if (chess_type == BLACK_GENERAL || chess_type == RED_GENERAL) {
 			General general(x, y, current_player);
-			general.moveable(x, y, chess_type, cango);
+			general.moveable(x, y, chess_type, cango, gameBoard);
 		}
 		else if (chess_type == BLACK_ADVISOR || chess_type == RED_ADVISOR) {
 			Advisor advisor(x, y, current_player);
-			advisor.moveable(x, y, chess_type, cango);
+			advisor.moveable(x, y, chess_type, cango, gameBoard);
 		}
 		else if (chess_type == BLACK_ELEPHANT || chess_type == RED_ELEPHANT) {
 			Elephant elephant(x, y, current_player);
-			elephant.moveable(x, y, chess_type, cango);
+			elephant.moveable(x, y, chess_type, cango, gameBoard);
 		}
 		else if (chess_type == BLACK_CHARIOT || chess_type == RED_CHARIOT) {
 			Chariot chariot(x, y, current_player);
-			chariot.moveable(x, y, chess_type, cango);
+			chariot.moveable(x, y, chess_type, cango, gameBoard);
 		}
 		else if (chess_type == BLACK_HORSE || chess_type == RED_HORSE) {
 			Horse horse(x, y, current_player);
-			horse.moveable(x, y, chess_type, cango);
+			horse.moveable(x, y, chess_type, cango, gameBoard);
 		}
 		else if (chess_type == BLACK_CANNON || chess_type == RED_CANNON) {
 			Cannon cannon(x, y, current_player);
-			cannon.moveable(x, y, chess_type, cango);
+			cannon.moveable(x, y, chess_type, cango, gameBoard);
 		}
 		else if (chess_type == BLACK_SOLDIER || chess_type == RED_SOLDIER) {
 			Soldier soldier(x, y, current_player);
-			soldier.moveable(x, y, chess_type, cango);
+			soldier.moveable(x, y, chess_type, cango, gameBoard);
 		}
 	}
 
