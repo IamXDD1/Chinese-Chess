@@ -123,7 +123,7 @@ public:
 		board[6][0] = board[6][2] = board[6][4] = board[6][6] = board[6][8] = RED_SOLDIER;
 		return;
 	}
-	int getChess(int& x, int& y) { return board[y][x]; }
+	int getChess(int x, int y) { return board[y][x]; }
 	bool checkChess(int chess, int& color, string& character) {
 		switch (chess)
 		{
