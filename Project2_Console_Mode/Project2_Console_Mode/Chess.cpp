@@ -1,6 +1,17 @@
 #include "Chess.h"
 
 // Chess
+void Chess::move(int x, int y)
+{
+	checkDeath(x, y);
+	pos.x = x;
+	pos.y = y;
+}
+
+void Chess::checkDeath(int x, int y)
+{
+	return;
+}
 
 vector<pair<int, int>> Chess::checkCompanion(int type, vector<pair<int, int>>& cango, Board board)
 {
@@ -75,10 +86,6 @@ void General::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Boa
 
 }
 
-bool General::move(int x, int y)
-{
-	return false;
-}
 
 bool General::checkmate(int x, int y)
 {
@@ -114,11 +121,6 @@ void Advisor::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Boa
 	cango = checkCompanion(num, cango, board);
 }
 
-bool Advisor::move(int x, int y)
-{
-	return false;
-}
-
 bool Advisor::checkmate(int x, int y)
 {
 	return false;
@@ -145,11 +147,6 @@ void Elephant::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Bo
 		cango.push_back({ y - 2,x + 2 });
 	}
 	cango = checkCompanion(num, cango, board);
-}
-
-bool Elephant::move(int x, int y)
-{
-	return false;
 }
 
 bool Elephant::checkmate(int x, int y)
@@ -212,11 +209,6 @@ void Chariot::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Boa
 	cango = checkCompanion(num, cango, board);
 }
 
-bool Chariot::move(int x, int y)
-{
-	return false;
-}
-
 bool Chariot::checkmate(int x, int y)
 {
 	return false;
@@ -259,11 +251,6 @@ void Horse::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board
 		}
 	}
 	cango = checkCompanion(num, cango, board);
-}
-
-bool Horse::move(int x, int y)
-{
-	return false;
 }
 
 bool Horse::checkmate(int x, int y)
@@ -361,10 +348,7 @@ void Cannon::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Boar
 	}
 	cango = checkCompanion(num, cango, board);
 }
-bool Cannon::move(int x, int y) {
 
-	return true;
-}
 bool Cannon::checkmate(int x, int y) {
 	return true;
 }
@@ -380,18 +364,7 @@ void Soldier::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Boa
 	cango = checkCompanion(num, cango, board);
 }
 
-bool Soldier::move(int x, int y)
-{
-
-	return false;
-}
-
 bool Soldier::checkmate(int x, int y)
-{
-	return false;
-}
-
-bool Chess::move(int x, int y)
 {
 	return false;
 }

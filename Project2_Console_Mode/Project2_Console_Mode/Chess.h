@@ -27,7 +27,8 @@ public:
 
 	virtual void moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board) {};  // Gabriel
 	virtual vector<pair<int, int>> checkCompanion(int type, vector<pair<int, int>>& cango,Board board);
-	virtual bool move(int x, int y);
+	virtual void move(int x, int y);
+	virtual void checkDeath(int x, int y);
 	virtual bool checkmate(int x, int y) = 0;
 };
 
@@ -39,7 +40,7 @@ public:
 		color = player;
 	}
 	void moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board);
-	bool move(int x, int y);
+	void move(int x, int y);
 	bool checkmate(int x, int y);
 };
 
@@ -51,7 +52,6 @@ public:
 		color = player;
 	}
 	void moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board);
-	bool move(int x, int y);
 	bool checkmate(int x, int y);
 };
 
@@ -63,7 +63,6 @@ public:
 		color = player;
 	}
 	void moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board);
-	bool move(int x, int y);
 	bool checkmate(int x, int y);
 };
 
@@ -75,7 +74,6 @@ public:
 		color = player;
 	}
 	void moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board);
-	bool move(int x, int y);
 	bool checkmate(int x, int y);
 };
 
@@ -87,7 +85,6 @@ public:
 		color = player;
 	}
 	void moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board);
-	bool move(int x, int y);
 	bool checkmate(int x, int y);
 };
 
@@ -99,7 +96,6 @@ public:
 		color = player;
 	}
 	void moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board);
-	bool move(int x, int y);
 	bool checkmate(int x, int y);
 };
 
@@ -111,6 +107,5 @@ public:
 		color = player;
 	}
 	void moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board);
-	bool move(int x, int y);
 	bool checkmate(int x, int y);
 };
