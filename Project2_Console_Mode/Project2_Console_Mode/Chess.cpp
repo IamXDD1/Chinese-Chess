@@ -1,16 +1,35 @@
 #include "Chess.h"
 
 // Chess
-void Chess::move(int x, int y)
+void Chess::move(int x, int y, Board board)
 {
-	checkDeath(x, y);
+	checkDeath(x, y, board);
 	pos.x = x;
 	pos.y = y;
+	board.modify(x,y,0);
 }
 
-void Chess::checkDeath(int x, int y)
+void Chess::checkDeath(int x, int y, Board board)
 {
-	return;
+	if (board.getChess(x, y) != 0)
+	{
+		//kill
+	}
+}
+
+bool Chess::checkmate(int x, int y, Board board)
+{
+	int type;
+	vector<pair<int, int>> cango = this->moveable(x, y, chess_type, cango, board);
+	for (int i = 0; i < cango.size(); i++)
+	{
+		type = board.getChess(cango[i].first, cango[i].second);
+		if (type / 10 != chess_type && type % 10 == 7)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 vector<pair<int, int>> Chess::checkCompanion(int type, vector<pair<int, int>>& cango, Board board)
@@ -38,7 +57,7 @@ vector<pair<int, int>> Chess::checkCompanion(int type, vector<pair<int, int>>& c
 }
 
 // General
-void General::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
+vector<pair<int, int>> General::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
 {
 	if (num / 10 != 0) // RED
 	{
@@ -83,21 +102,15 @@ void General::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Boa
 		}
 	}
 	cango = checkCompanion(num, cango, board);
-
-}
-
-
-bool General::checkmate(int x, int y)
-{
-	return false;
+	return cango;
 }
 
 
 // Advisor
-void Advisor::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
+vector<pair<int, int>> Advisor::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
 {
 	if (num / 10 != 0)   // RED	
-	{ 
+	{
 		if (x != 4) cango.push_back({ 1, 4 });
 		else
 		{
@@ -105,7 +118,7 @@ void Advisor::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Boa
 			cango.push_back({ y - 1, x - 1 });
 			cango.push_back({ y + 1, x + 1 });
 			cango.push_back({ y + 1, x - 1 });
-		}	
+		}
 	}
 	else                 // BLACK
 	{
@@ -119,16 +132,12 @@ void Advisor::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Boa
 		}
 	}
 	cango = checkCompanion(num, cango, board);
-}
-
-bool Advisor::checkmate(int x, int y)
-{
-	return false;
+	return cango;
 }
 
 
 // Elephant
-void Elephant::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
+vector<pair<int, int>> Elephant::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
 {
 	if (x > 1 && y > 1)
 	{
@@ -146,17 +155,13 @@ void Elephant::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Bo
 	{
 		cango.push_back({ y - 2,x + 2 });
 	}
-	cango = checkCompanion(num, cango, board);
-}
-
-bool Elephant::checkmate(int x, int y)
-{
-	return false;
+	cango = checkCompanion(num, cango, board);	
+	return cango;
 }
 
 
 // Chariot
-void Chariot::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
+vector<pair<int, int>> Chariot::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
 {
 	if (y != 8)
 	{
@@ -207,16 +212,12 @@ void Chariot::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Boa
 		}
 	}
 	cango = checkCompanion(num, cango, board);
-}
-
-bool Chariot::checkmate(int x, int y)
-{
-	return false;
+	return cango;
 }
 
 
 // Horse
-void Horse::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
+vector<pair<int, int>> Horse::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
 {
 	if (y < 8)
 	{
@@ -238,7 +239,7 @@ void Horse::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board
 	{
 		if (board.getChess(y, x + 1) == 0)
 		{
-			if( y > 0) cango.push_back({ y + 1,x + 2 }); // ¥k¥k¤W
+			if (y > 0) cango.push_back({ y + 1,x + 2 }); // ¥k¥k¤W
 			if (y < 9) cango.push_back({ y - 1,x + 2 }); // ¥k¥k¥ª
 		}
 	}
@@ -251,6 +252,7 @@ void Horse::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board
 		}
 	}
 	cango = checkCompanion(num, cango, board);
+	return cango;
 }
 
 bool Horse::checkmate(int x, int y)
@@ -259,7 +261,7 @@ bool Horse::checkmate(int x, int y)
 }
 
 // Cannon
-void Cannon::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
+vector<pair<int, int>> Cannon::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
 {
 	vector<pair<int, int>> temp;
 	if (y != 8)
@@ -347,24 +349,17 @@ void Cannon::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Boar
 		}
 	}
 	cango = checkCompanion(num, cango, board);
-}
-
-bool Cannon::checkmate(int x, int y) {
-	return true;
+	return cango;
 }
 
 
 // Soldier
-void Soldier::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
+vector<pair<int, int>> Soldier::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
 {
 	if (y != 8) cango.push_back({ y + 1,x });
 	if (y != 0) cango.push_back({ y - 1,x });
 	if (x != 9) cango.push_back({ y,x + 1 });
 	if (x != 0) cango.push_back({ y,x - 1 });
 	cango = checkCompanion(num, cango, board);
-}
-
-bool Soldier::checkmate(int x, int y)
-{
-	return false;
+	return cango;
 }
