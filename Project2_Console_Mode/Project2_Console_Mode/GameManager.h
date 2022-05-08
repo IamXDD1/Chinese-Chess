@@ -10,13 +10,13 @@
 #define BLACK 2
 #define RED 1
 
-#define BLACK_GENERAL	7
-#define BLACK_ADVISOR	6
-#define BLACK_ELEPHANT	5
-#define BLACK_CHARIOT	4
-#define BLACK_HORSE		3
-#define BLACK_CANNON	2
-#define BLACK_SOLDIER	1
+#define BLACK_GENERAL	27
+#define BLACK_ADVISOR	26
+#define BLACK_ELEPHANT	25
+#define BLACK_CHARIOT	24
+#define BLACK_HORSE		23
+#define BLACK_CANNON	22
+#define BLACK_SOLDIER	21
 
 #define RED_GENERAL		17
 #define RED_ADVISOR		16
@@ -25,6 +25,14 @@
 #define RED_HORSE		13
 #define RED_CANNON		12
 #define RED_SOLDIER		11
+
+#define GENERAL		7
+#define ADVISOR		6
+#define ELEPHANT	5
+#define CHARIOT		4
+#define HORSE		3
+#define CANNON		2
+#define SOLDIER		1
 
 using namespace std;
 
@@ -63,6 +71,7 @@ public:
 		bool player = false;
 		bool action = false;
 		int action_count = 0;
+		cout << data;
 		for (; ss >> part;) {
 			if (part == "Player:") {
 				player = true;
@@ -92,6 +101,10 @@ public:
 				}
 			}
 		}
+		if (x1 == -1 || x2 == -1 || y1 == -1 || y2 == -1 || color == -1 || character == "") {
+			cout << x1 << ' ' << x2 << ' ' << y1 << ' ' << y2 << ' ' << color << ' ' << character << '\n';
+			throw "Wrong input format.";
+		}
 	}
 	inline void Output() {
 		for (int i = 0; i < gameRecord.size(); i++)
@@ -102,29 +115,42 @@ public:
 
 class Board {
 protected:
-	int** board;
+	Chess** board;
 public:
 	Board() {
-		board = new int* [10];
+		board = new Chess* [10];
 		for (int i = 0; i < 10; i++) {
-			board[i] = new int[9]{};
+			board[i] = new Chess[9]{};
 		}
 		initialization(board);
 	}
-	void initialization(int** board) {
-		board[0][0] = board[0][8] = BLACK_CHARIOT; board[9][0] = board[9][8] = RED_CHARIOT;
-		board[0][1] = board[0][7] = BLACK_HORSE; board[9][1] = board[9][7] = RED_HORSE;
-		board[0][2] = board[0][6] = BLACK_ELEPHANT; board[9][2] = board[9][6] = RED_ELEPHANT;
-		board[0][3] = board[0][5] = BLACK_ADVISOR; board[9][3] = board[9][5] = RED_ADVISOR;
-		board[0][4] = BLACK_GENERAL; board[9][4] = RED_GENERAL;
-		board[2][1] = board[2][7] = BLACK_CANNON; board[7][1] = board[7][7] = RED_CANNON;
-		board[3][0] = board[3][2] = board[3][4] = board[3][6] = board[3][8] = BLACK_SOLDIER;
-		board[6][0] = board[6][2] = board[6][4] = board[6][6] = board[6][8] = RED_SOLDIER;
+	void initialization(Chess** board) {
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 9; j++) {
+				board[i][j] = Null(i,j);
+			}
+		}
+
+		board[0][0] = Chariot(0, 0, BLACK_CHARIOT); board[0][8] = Chariot(0, 8, BLACK_CHARIOT); 
+		board[9][0] = Chariot(9, 0, RED_CHARIOT);   board[9][8] = Chariot(9, 8, RED_CHARIOT);
+		board[0][1] = Horse(0, 1, BLACK_HORSE); board[0][7] = Horse(0, 7, BLACK_HORSE); 
+		board[9][1] = Horse(9, 1, RED_HORSE);   board[9][7] = Horse(9, 7, RED_HORSE);
+		board[0][2] = Elephant(0, 2, BLACK_ELEPHANT); board[0][6] = Elephant(0, 6, BLACK_ELEPHANT);
+		board[9][2] = Elephant(9, 2, RED_ELEPHANT);	  board[9][6] = Elephant(9, 6, RED_ELEPHANT);
+		board[0][3] = Advisor(0, 3, BLACK_ADVISOR); board[0][5] = Advisor(0, 5, BLACK_ADVISOR);
+		board[9][3] = Advisor(9, 3, RED_ADVISOR);   board[9][5] = Advisor(9, 5, RED_ADVISOR);
+		board[0][4] = General(0, 4, BLACK_GENERAL); board[9][4] = General(9, 4, RED_GENERAL);
+		board[2][1] = Cannon(2, 1, BLACK_CANNON); board[2][7] = Cannon(2, 7, BLACK_CANNON);
+		board[7][1] = Cannon(7, 1, RED_CANNON);   board[7][7] = Cannon(7, 7, RED_CANNON);
+		board[3][0] = Soldier(3, 0, BLACK_SOLDIER); board[3][2] = Soldier(3, 2, BLACK_SOLDIER); board[3][4] = Soldier(3, 4, BLACK_SOLDIER);
+		board[3][6] = Soldier(3, 6, BLACK_SOLDIER); board[3][8] = Soldier(3, 8, BLACK_SOLDIER);
+		board[6][0] = Soldier(6, 0, RED_SOLDIER); board[6][2] = Soldier(6, 2, RED_SOLDIER); board[6][4] = Soldier(6, 4, RED_SOLDIER);
+		board[6][6] = Soldier(6, 6, RED_SOLDIER); board[6][8] = Soldier(6, 8, RED_SOLDIER);
 		return;
 	}
-	int getChess(int& x, int& y) { return board[y][x]; }
-	bool checkChess(int chess, int& color, string& character) {
-		switch (chess)
+	Chess getChess(int& x, int& y) { return board[y][x]; }
+	bool checkChess(Chess chess, int& color, string& character) {
+		switch (chess.chess_type)
 		{
 		case BLACK_GENERAL: if (color == BLACK && character == "General") return true; break;
 		case RED_GENERAL:	if (color == RED && character == "General") return true; break;
@@ -146,12 +172,13 @@ public:
 		}
 	}
 	void moveChess(File& file, int& color, string& character, int& x1, int& y1, int& x2, int& y2) {
-		if (checkChess(board[y1][x1], color, character)) {
+		if (checkChess(getChess(x1,y1), color, character)) {
 			board[y2][x2] = board[y1][x1];  //move
-			board[y1][x1] = 0;
+			board[y1][x1] = Null(x1, y1);
 			string str = "Player: " + to_string(color) + ", Action: " + character + 
 				" (" + to_string(x1) + ", " + to_string(y1) + ") -> (" + to_string(x2) + ", " + to_string(y2) + ")     \n";
 			file.gameRecord.push_back(str);
+			gotoxy(20, 3);
 			cout << str;
 		}
 		else throw "Move chess fail, for wrong color or chess";
@@ -160,8 +187,7 @@ public:
 		gotoxy(0, 0);
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 9; j++) {
-				switch (board[i][j]) {
-				case 0: cout << "　"; break;
+				switch (board[i][j].chess_type) {
 				case BLACK_GENERAL: cout << "將"; break;
 				case RED_GENERAL:	cout << "帥"; break;
 				case BLACK_ADVISOR: cout << "士"; break;
@@ -176,6 +202,7 @@ public:
 				case RED_CANNON:	cout << "炮"; break;
 				case BLACK_SOLDIER: cout << "卒"; break;
 				case RED_SOLDIER:	cout << "兵"; break;
+				default: cout << "　"; break;
 				}
 			}
 			cout << '\n';
@@ -197,32 +224,32 @@ public:
 	Viewer viewer;
 	int checkChess(int x, int y) {
 		vector<pair<int, int>> cango;
-		int chess_type = gameBoard.getChess(x, y);
-		if (chess_type == BLACK_GENERAL || chess_type == RED_GENERAL) {
+		Chess chess = gameBoard.getChess(x, y);
+		if (chess.chess_type == BLACK_GENERAL || chess.chess_type == RED_GENERAL) {
 			General general(x, y, current_player);
 			general.moveable(x, y, cango);
 		}
-		else if (chess_type == BLACK_ADVISOR || chess_type == RED_ADVISOR) {
+		else if (chess.chess_type == BLACK_ADVISOR || chess.chess_type == RED_ADVISOR) {
 			Advisor advisor(x, y, current_player);
 			advisor.moveable(x, y, cango);
 		}
-		else if (chess_type == BLACK_ELEPHANT || chess_type == RED_ELEPHANT) {
+		else if (chess.chess_type == BLACK_ELEPHANT || chess.chess_type == RED_ELEPHANT) {
 			Elephant elephant(x, y, current_player);
 			elephant.moveable(x, y, cango);
 		}
-		else if (chess_type == BLACK_CHARIOT || chess_type == RED_CHARIOT) {
+		else if (chess.chess_type == BLACK_CHARIOT || chess.chess_type == RED_CHARIOT) {
 			Chariot chariot(x, y, current_player);
 			chariot.moveable(x, y, cango);
 		}
-		else if (chess_type == BLACK_HORSE || chess_type == RED_HORSE) {
+		else if (chess.chess_type == BLACK_HORSE || chess.chess_type == RED_HORSE) {
 			Horse horse(x, y, current_player);
 			horse.moveable(x, y, cango);
 		}
-		else if (chess_type == BLACK_CANNON || chess_type == RED_CANNON) {
+		else if (chess.chess_type == BLACK_CANNON || chess.chess_type == RED_CANNON) {
 			Cannon cannon(x, y, current_player);
 			cannon.moveable(x, y, cango);
 		}
-		else if (chess_type == BLACK_SOLDIER || chess_type == RED_SOLDIER) {
+		else if (chess.chess_type == BLACK_SOLDIER || chess.chess_type == RED_SOLDIER) {
 			Soldier soldier(x, y, current_player);
 			soldier.moveable(x, y, cango);
 		}

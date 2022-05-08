@@ -20,87 +20,104 @@ struct Pos {
 class Chess {
 protected:
 	Pos pos;
-	bool death;
 	int color;
 public:
+	int chess_type;
 	Chess() {
 		pos.x = 0;
 		pos.y = 0;
-		bool death = false;
 		color = -1;
+		chess_type = -1;
 	}
 
-	virtual void moveable(int x, int y, vector<pair<int, int>>& cango) = 0;  // Gabriel
-	virtual bool move(int x, int y) = 0;
-	virtual bool checkmate(int x, int y) = 0;
+	virtual void moveable(int x, int y, vector<pair<int, int>>& cango) { return; };  // Gabriel
+	virtual bool move(int x, int y) { return false; };
+	virtual bool checkmate(int x, int y) { return false; };
+};
+
+class Null : public Chess {
+public:
+	Null(int x, int y) : Chess() {
+		pos.x = x;
+		pos.y = y;
+	}
+	void moveable(int x, int y, vector<pair<int, int>>& cango) { return; }
+	bool move(int x, int y) { return false; }
+	bool checkmate(int x, int y) { return false; }
 };
 
 class General : public Chess {
 public:
-	General(int x, int y, int player) : Chess() {
+	General(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = player;
+		color = type/10;
+		chess_type = type;
 	}
 	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) {}
-	bool checkmate(int x, int y) {}
+	bool move(int x, int y) { return false; }
+	bool checkmate(int x, int y) { return false; }
 };
 
 class Advisor : public Chess {
 public:
-	Advisor(int x, int y, int player) : Chess() {
+	Advisor(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = player;
+		color = type / 10;
+		chess_type = type;
 	}
 	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) {}
-	bool checkmate(int x, int y) {}
+	bool move(int x, int y) { return false; }
+	bool checkmate(int x, int y) { return false; }
 };
 
 class Elephant : public Chess {
 public:
-	Elephant(int x, int y, int player) : Chess() {
+	Elephant(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = player;
+		color = type / 10;
+		chess_type = type;
 	}
 	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) {}
-	bool checkmate(int x, int y) {}
+	bool move(int x, int y) { return false; }
+	bool checkmate(int x, int y) { return false; }
 };
 
 class Chariot : public Chess {
 public:
-	Chariot(int x, int y, int player) : Chess() {
+	Chariot(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = player;
+		color = type / 10;
+		chess_type = type;
 	}
 	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) {}
-	bool checkmate(int x, int y) {}
+	bool move(int x, int y) { return false; }
+	bool checkmate(int x, int y) { return false; }
 };
 
 class Horse : public Chess {
 public:
-	Horse(int x, int y, int player) : Chess() {
+	Horse(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = player;
+		color = type / 10;
+		chess_type = type;
 	}
 	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) {}
-	bool checkmate(int x, int y) {}
+	bool move(int x, int y) { return false; }
+	bool checkmate(int x, int y) { return false; }
 };
 
 class Cannon : public Chess {
 public:
-	Cannon(int x, int y, int player) : Chess() {
+	Cannon(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = player;
+		color = type / 10;
+		chess_type = type;
 	}
 	void moveable(int x, int y, vector<pair<int, int>>& cango) {
 		bool object = false;
@@ -119,22 +136,19 @@ public:
 		}
 		return;
 	}
-	bool move(int x, int y) {
-		return true;
-	}
-	bool checkmate(int x, int y) {
-		return true;
-	}
+	bool move(int x, int y) { return false; }
+	bool checkmate(int x, int y) { return false; }
 };
 
 class Soldier : public Chess {
 public:
-	Soldier(int x, int y, int player) : Chess() {
+	Soldier(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = player;
+		color = type / 10;
+		chess_type = type;
 	}
 	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) {}
-	bool checkmate(int x, int y) {}
+	bool move(int x, int y) { return false; }
+	bool checkmate(int x, int y) { return false; }
 };
