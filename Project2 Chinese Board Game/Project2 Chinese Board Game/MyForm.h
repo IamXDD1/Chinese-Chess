@@ -81,6 +81,7 @@ namespace Project2ChineseBoardGame {
 			// 
 			// GameStart
 			// 
+			this->GameStart->BackColor = System::Drawing::Color::Transparent;
 			this->GameStart->Font = (gcnew System::Drawing::Font(L"華康竹風體W4", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->GameStart->Location = System::Drawing::Point(74, 277);
@@ -88,13 +89,14 @@ namespace Project2ChineseBoardGame {
 			this->GameStart->Size = System::Drawing::Size(204, 86);
 			this->GameStart->TabIndex = 1;
 			this->GameStart->Text = L"開始遊戲";
-			this->GameStart->UseVisualStyleBackColor = true;
+			this->GameStart->UseVisualStyleBackColor = false;
 			this->GameStart->Click += gcnew System::EventHandler(this, &MyForm::GameStart_Click);
 			// 
 			// LoadGame
 			// 
 			this->LoadGame->Font = (gcnew System::Drawing::Font(L"華康竹風體W4", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
+			this->LoadGame->ForeColor = System::Drawing::SystemColors::ControlText;
 			this->LoadGame->Location = System::Drawing::Point(74, 385);
 			this->LoadGame->Name = L"LoadGame";
 			this->LoadGame->Size = System::Drawing::Size(204, 86);
@@ -145,6 +147,7 @@ namespace Project2ChineseBoardGame {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 15);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->BackColor = System::Drawing::SystemColors::Control;
 			this->ClientSize = System::Drawing::Size(800, 688);
 			this->Controls->Add(this->Github);
 			this->Controls->Add(this->author);

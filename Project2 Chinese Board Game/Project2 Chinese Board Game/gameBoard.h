@@ -39,10 +39,19 @@ namespace Project2ChineseBoardGame {
 					btnGrid[i, j]->Width = buttonSize;
 					// add click event
 					btnGrid[i, j]->Click += gcnew System::EventHandler(this, &gameBoard::Grid_btn_click);
-
+					// add button to chess board
 					chessBoard->Controls->Add(btnGrid[i, j]);
 					btnGrid[i, j]->Location = Point(i * buttonSize, j * buttonSize);
 					btnGrid[i, j]->Text = i + "/" + j;
+					// set button's view to transparent
+					btnGrid[i, j]->BackColor = Color::FromArgb(0, 255, 255, 255);
+					btnGrid[i, j]->BringToFront();
+					btnGrid[i, j]->FlatStyle = FlatStyle::Flat;
+					btnGrid[i, j]->FlatAppearance->BorderSize = 0;
+					// set button highlight when mouse hovering
+					btnGrid[i, j]->FlatAppearance->MouseOverBackColor = Color::FromArgb(50, 32, 80, 191);
+					btnGrid[i, j]->FlatAppearance->MouseDownBackColor = Color::Transparent;
+					
 				}
 			}
 		}
@@ -59,6 +68,9 @@ namespace Project2ChineseBoardGame {
 			}
 		}
 	private: System::Windows::Forms::Panel^ chessBoard;
+
+
+
 
 
 	protected:
@@ -78,11 +90,14 @@ namespace Project2ChineseBoardGame {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(gameBoard::typeid));
 			this->chessBoard = (gcnew System::Windows::Forms::Panel());
 			this->SuspendLayout();
 			// 
 			// chessBoard
 			// 
+			this->chessBoard->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"chessBoard.BackgroundImage")));
+			this->chessBoard->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Center;
 			this->chessBoard->ImeMode = System::Windows::Forms::ImeMode::Off;
 			this->chessBoard->Location = System::Drawing::Point(12, 12);
 			this->chessBoard->Name = L"chessBoard";
