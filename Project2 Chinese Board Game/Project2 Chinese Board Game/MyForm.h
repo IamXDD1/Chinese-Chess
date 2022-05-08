@@ -113,6 +113,7 @@ namespace Project2ChineseBoardGame {
 			this->EndGame->TabIndex = 3;
 			this->EndGame->Text = L"¹CÀ¸µ²§ô";
 			this->EndGame->UseVisualStyleBackColor = true;
+			this->EndGame->Click += gcnew System::EventHandler(this, &MyForm::EndGame_Click);
 			// 
 			// author
 			// 
@@ -173,6 +174,9 @@ namespace Project2ChineseBoardGame {
 	private: System::Void Github_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
 		this->Github->LinkVisited = true;
 		System::Diagnostics::Process::Start("https://github.com/IamXDD1/Chinese-Chess");
+	}
+	private: System::Void EndGame_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->Close();
 	}
 };
 }

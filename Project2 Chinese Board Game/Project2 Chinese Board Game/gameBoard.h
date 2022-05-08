@@ -16,7 +16,7 @@ namespace Project2ChineseBoardGame {
 	public ref class gameBoard : public System::Windows::Forms::Form
 	{
 	public: 
-		array<Button^, 2>^ btnGrid = gcnew array<Button^, 2>(10, 9);
+		array<Button^, 2>^ btnGrid = gcnew array<Button^, 2>(9, 10);
 		gameBoard(void)
 		{
 			
@@ -32,8 +32,8 @@ namespace Project2ChineseBoardGame {
 			// make board match size
 			chessBoard->Width = chessBoard->Height * 0.9;
 
-			for (int i = 0; i < 10; i++) {
-				for (int j = 0; j < 9; j++) {
+			for (int i = 0; i < 9; i++) {
+				for (int j = 0; j < 10; j++) {
 					btnGrid[i, j] = gcnew Button();
 					btnGrid[i, j]->Height = buttonSize;
 					btnGrid[i, j]->Width = buttonSize;
@@ -41,7 +41,8 @@ namespace Project2ChineseBoardGame {
 					btnGrid[i, j]->Click += gcnew System::EventHandler(this, &gameBoard::Grid_btn_click);
 
 					chessBoard->Controls->Add(btnGrid[i, j]);
-					btnGrid[i, j]->Location = gcnew Point(i * buttonSize, j * buttonSize);
+					btnGrid[i, j]->Location = Point(i * buttonSize, j * buttonSize);
+					btnGrid[i, j]->Text = i + "/" + j;
 				}
 			}
 		}
@@ -90,9 +91,8 @@ namespace Project2ChineseBoardGame {
 			// 
 			// gameBoard
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(8, 15);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1070, 824);
+			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
+			this->ClientSize = System::Drawing::Size(1096, 855);
 			this->Controls->Add(this->chessBoard);
 			this->Name = L"gameBoard";
 			this->Text = L"gameBoard";
