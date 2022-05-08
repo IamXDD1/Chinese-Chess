@@ -21,4 +21,5 @@ public:
 	void startGame();
 	void loadFile();
 	void leaveGame();
+	void GameRun(GameManager& GM, File& file);
 };
