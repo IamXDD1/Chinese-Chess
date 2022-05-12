@@ -29,5 +29,8 @@
     <ClInclude Include="gameBoard.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="RoundButton.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
