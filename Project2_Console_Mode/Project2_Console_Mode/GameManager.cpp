@@ -3,7 +3,7 @@
 Chess Board::board[10][9];
 
 //File
-
+//load file
 bool File::Load(vector<string>& data) {  //XDD
 	file.open(filename);
 	if (!file) {
@@ -21,7 +21,7 @@ bool File::Load(vector<string>& data) {  //XDD
 		return true;
 	}
 }
-
+//divide input. ex: Player: 1, Action: Cannon (x1, y1) -> (x2, y2)
 void File::Input(string& data, int& color, string& character, int& x1, int& y1, int& x2, int& y2) {
 	gotoxy(30, 20); cout << "Error:                                                  ";
 	stringstream ss(data);
@@ -62,7 +62,7 @@ void File::Input(string& data, int& color, string& character, int& x1, int& y1, 
 		throw "Wrong input format.";
 	}
 }
-
+//output to a file
 void File::Output() {
 	fstream out(filename, ios::out | ios::trunc);
 	for (int i = 0; i < gameRecord.size(); i++)
@@ -102,7 +102,7 @@ void Board::initialization() {
 	board[6][6] = Soldier(6, 6, RED_SOLDIER); board[6][8] = Soldier(8, 6, RED_SOLDIER);
 	return;
 }
-
+//check input player, chess_type is correspnding to the chess on the board[y][x]
 bool Board::checkChess(Chess chess, int& color, string& character) {
 	switch (chess.chess_type)
 	{
@@ -126,7 +126,7 @@ bool Board::checkChess(Chess chess, int& color, string& character) {
 	}
 	return false;
 }
-
+//to move choosed chess 
 void Board::moveChess(File& file, int& color, string& character, int& x1, int& y1, int& x2, int& y2) {
 	if (checkChess(getChess(x1, y1), color, character)) {
 		//show moveable path
@@ -180,7 +180,7 @@ void Board::showBoard() {
 //====================================================================================================
 
 //GameManager
-
+//no use
 int GameManager::checkChess(int x, int y) {
 	vector<Pos> cango;
 	Chess chess = gameBoard.getChess(x, y);

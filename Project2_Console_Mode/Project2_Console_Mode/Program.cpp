@@ -30,7 +30,7 @@ int Program::chooseOption()
 		else cout << "wrong option! Please choose again.\nYour option : ";
 	}
 }
-
+//new game
 void Program::startGame()
 {
 	GameManager GM;
@@ -52,7 +52,7 @@ void Program::startGame()
 
 	playagain();
 }
-
+//read file's input to move chess
 void Program::loadFile()
 {
 	GameManager GM;
@@ -117,7 +117,7 @@ void Program::leaveGame()
 {
 	return;
 }
-
+//input cmd to move chess
 void Program::GameRun(GameManager& GM, File& file)
 {
 	for (; true;) {
