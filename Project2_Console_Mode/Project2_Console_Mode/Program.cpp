@@ -49,6 +49,8 @@ void Program::startGame()
 	//keep playing
 	GameRun(GM, file);
 	file.Output();
+
+	playagain();
 }
 
 void Program::loadFile()
@@ -80,7 +82,7 @@ void Program::loadFile()
 				|| file.gameRecord[file.gameRecord.size() - 1] == "Red Win") {
 				Sleep(2000);
 				clearScreen();
-				cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1];
+				cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << '\n';
 				keep_playing = false;
 				break;
 			}
@@ -107,6 +109,8 @@ void Program::loadFile()
 		GameRun(GM, file);
 	}
 	file.Output();
+
+	playagain();
 }
 
 void Program::leaveGame()
@@ -135,13 +139,36 @@ void Program::GameRun(GameManager& GM, File& file)
 				|| file.gameRecord[file.gameRecord.size() - 1] == "Red Win") {
 				Sleep(2000);
 				clearScreen();
-				cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1];
+				cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << '\n';
 				break;
 			}
 		}
 		catch (const char* error) {
 			gotoxy(36, 20);
 			cout << error << " Please input again.         \n";
+		}
+	}
+}
+
+void Program::playagain()
+{
+	cout << "Wanna start a new game? (Y/N) : ";
+	for (;;)
+	{
+		char choice;
+		cin >> choice;
+		if (choice == 'Y') {
+			clearScreen();
+			startGame();
+			return;
+		}
+		else if (choice == 'N') {
+			clearScreen();
+			Run();
+			return;
+		}
+		else {
+			cout << "Wrong command. Please input again. (Y/N) : ";
 		}
 	}
 }

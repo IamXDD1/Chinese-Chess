@@ -3,7 +3,6 @@
 #define RED 1
 #include <vector>
 #include <algorithm>
-#include "GameManager.h"
 
 using namespace std;
 
@@ -29,10 +28,12 @@ public:
 		color = -1;
 		chess_type = -1;
 	}
-
-	virtual void moveable(int x, int y, vector<pair<int, int>>& cango) { return; };  // Gabriel
-	virtual bool move(int x, int y) { return false; };
-	virtual bool checkmate(int x, int y) { return false; };
+	virtual void kingKing(vector<Pos>& cango); // д¤дгигд¤
+	virtual int getColor() { return color; }
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango) { return cango; };
+	void checkCompanion(vector<Pos>& cango);
+	virtual bool move(int x, int y);
+	virtual bool checkmate(int x, int y);
 };
 
 class Null : public Chess {
@@ -41,9 +42,6 @@ public:
 		pos.x = x;
 		pos.y = y;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) { return; }
-	bool move(int x, int y) { return false; }
-	bool checkmate(int x, int y) { return false; }
 };
 
 class General : public Chess {
@@ -54,9 +52,7 @@ public:
 		color = type/10;
 		chess_type = type;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) { return false; }
-	bool checkmate(int x, int y) { return false; }
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Advisor : public Chess {
@@ -67,9 +63,7 @@ public:
 		color = type / 10;
 		chess_type = type;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) { return false; }
-	bool checkmate(int x, int y) { return false; }
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Elephant : public Chess {
@@ -80,9 +74,7 @@ public:
 		color = type / 10;
 		chess_type = type;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) { return false; }
-	bool checkmate(int x, int y) { return false; }
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Chariot : public Chess {
@@ -93,9 +85,7 @@ public:
 		color = type / 10;
 		chess_type = type;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) { return false; }
-	bool checkmate(int x, int y) { return false; }
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Horse : public Chess {
@@ -106,9 +96,7 @@ public:
 		color = type / 10;
 		chess_type = type;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) { return false; }
-	bool checkmate(int x, int y) { return false; }
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Cannon : public Chess {
@@ -119,25 +107,7 @@ public:
 		color = type / 10;
 		chess_type = type;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) {
-		bool object = false;
-		for (int i = 0; i < 9; i++) {
-			if (object) {
-				if (move(i, pos.y) == false) {
-					cango.push_back({ i,pos.y });
-				}
-			}
-			else if (move(i, pos.y)) {
-				cango.push_back({ i,pos.y });
-			}
-			else {
-				object = true;
-			}
-		}
-		return;
-	}
-	bool move(int x, int y) { return false; }
-	bool checkmate(int x, int y) { return false; }
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Soldier : public Chess {
@@ -148,7 +118,5 @@ public:
 		color = type / 10;
 		chess_type = type;
 	}
-	void moveable(int x, int y, vector<pair<int, int>>& cango) {}
-	bool move(int x, int y) { return false; }
-	bool checkmate(int x, int y) { return false; }
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
 };
