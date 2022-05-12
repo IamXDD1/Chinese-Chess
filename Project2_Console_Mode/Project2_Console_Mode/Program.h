@@ -1,8 +1,6 @@
 #pragma once
 #include <fstream>
-#include "Clock.h"
 #include "GameManager.h"
-#include "Clock.h"
 
 class Program {
 public:
@@ -21,4 +19,6 @@ public:
 	void startGame();
 	void loadFile();
 	void leaveGame();
+	void GameRun(GameManager& GM, File& file);
+	void playagain();
 };
