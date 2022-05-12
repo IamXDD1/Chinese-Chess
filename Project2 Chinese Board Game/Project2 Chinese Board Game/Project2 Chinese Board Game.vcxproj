@@ -131,6 +131,7 @@
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="RoundButton.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gameBoard.resx">

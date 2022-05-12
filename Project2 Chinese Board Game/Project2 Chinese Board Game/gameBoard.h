@@ -1,4 +1,5 @@
 #pragma once
+#include "RoundButton.h"
 
 namespace Project2ChineseBoardGame {
 
@@ -8,15 +9,18 @@ namespace Project2ChineseBoardGame {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Drawing::Drawing2D;
 	using namespace cli;
 
 	/// <summary>
 	/// gameBoard ªººK­n
 	/// </summary>
+
+	
 	public ref class gameBoard : public System::Windows::Forms::Form
 	{
 	public: 
-		array<Button^, 2>^ btnGrid = gcnew array<Button^, 2>(9, 10);
+		array<RoundButton^, 2>^ btnGrid = gcnew array<RoundButton^, 2>(9, 10);
 		gameBoard(void)
 		{
 			
@@ -34,7 +38,7 @@ namespace Project2ChineseBoardGame {
 
 			for (int i = 0; i < 9; i++) {
 				for (int j = 0; j < 10; j++) {
-					btnGrid[i, j] = gcnew Button();
+					btnGrid[i, j] = gcnew RoundButton();
 					btnGrid[i, j]->Height = buttonSize;
 					btnGrid[i, j]->Width = buttonSize;
 					// add click event
@@ -107,7 +111,7 @@ namespace Project2ChineseBoardGame {
 			// gameBoard
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
-			this->ClientSize = System::Drawing::Size(1096, 855);
+			this->ClientSize = System::Drawing::Size(1139, 855);
 			this->Controls->Add(this->chessBoard);
 			this->Name = L"gameBoard";
 			this->Text = L"gameBoard";
