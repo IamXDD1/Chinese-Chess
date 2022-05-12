@@ -19,6 +19,6 @@ public:
 	void startGame();
 	void loadFile();
 	void leaveGame();
-	void GameRun(GameManager& GM, File& file);
+	void GameRun(GameManager& GM, File& file, int& round);
 	void playagain();
 };

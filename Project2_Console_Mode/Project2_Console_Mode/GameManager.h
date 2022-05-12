@@ -64,7 +64,10 @@ public:
 	void initialization();
 	static Chess getChess(int x, int y) { return board[y][x]; }
 	bool checkChess(Chess chess, int& color, string& character);
-	void moveChess(File& file, int& color, string& character, int& x1, int& y1, int& x2, int& y2);
+	void moveChess(File& file, int& color, string& character, int& x1, int& y1, int& x2, int& y2, bool loading = false);
+	void useChess(Chess& temp_chess, vector<Pos>& cango);
+	void showPath(vector<Pos>& cango);
+	bool checkcango(int& x2, int& y2, vector<Pos>& cango);
 	void showBoard();
 	~Board() {};
 };
@@ -75,8 +78,6 @@ public:
 	int current_player;
 	Board gameBoard;
 	Viewer viewer;
-
-	int checkChess(int x, int y);
 
 	bool endGame();
 	
