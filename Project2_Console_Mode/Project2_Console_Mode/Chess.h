@@ -1,15 +1,19 @@
-#pragma once
+﻿#pragma once
 #define BLACK 0
 #define RED 1
 #include <vector>
 #include <algorithm>
-#include "GameManager.h"
 
 using namespace std;
 
 struct Pos {
 	int x;
 	int y;
+
+	bool operator == (Pos a) {
+		if (x == a.x && y == a.y) return true;
+		return false;
+	}
 };
 
 class Chess {
@@ -24,82 +28,94 @@ public:
 		color = -1;
 		chess_type = -1;
 	}
-
-	virtual vector<pair<int, int>> moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board) {};  // Gabriel
-	vector<pair<int, int>> checkCompanion(int type, vector<pair<int, int>>& cango, Board board);
-	void move(int x, int y, Board board);
-	virtual void checkDeath(int x, int y, Board board);
-	virtual bool checkmate(int x, int y, Board board);
+	virtual bool kingKing(vector<Pos>& cango); // ¤ý¤£¨£¤ý
+	virtual int getColor() { return color; }
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango) { return cango; };
+	void checkCompanion(vector<Pos>& cango);
+	virtual bool checkmate(int x, int y, vector<Pos>& cango);
 };
 
+class Null : public Chess {
+public:
+	Null(int x, int y) : Chess() {
+		pos.x = x;
+		pos.y = y;
+	}
+};
 
 class General : public Chess {
 public:
-	General(int x, int y, int player) : Chess() {
+	General(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = player;
+		color = type / 10;
+		chess_type = type;
 	}
-	vector<pair<int, int>> moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board);
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Advisor : public Chess {
 public:
-	Advisor(int x, int y, int player) : Chess() {
+	Advisor(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = player;
+		color = type / 10;
+		chess_type = type;
 	}
-	vector<pair<int, int>> moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board);
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Elephant : public Chess {
 public:
-	Elephant(int x, int y, int player) : Chess() {
+	Elephant(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = player;
+		color = type / 10;
+		chess_type = type;
 	}
-	vector<pair<int, int>> moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board);
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Chariot : public Chess {
 public:
-	Chariot(int x, int y, int player) : Chess() {
+	Chariot(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = player;
+		color = type / 10;
+		chess_type = type;
 	}
-	vector<pair<int, int>> moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board);
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Horse : public Chess {
 public:
-	Horse(int x, int y, int player) : Chess() {
+	Horse(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = player;
+		color = type / 10;
+		chess_type = type;
 	}
-	vector<pair<int, int>> moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board);
-	bool checkmate(int x, int y);
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Cannon : public Chess {
 public:
-	Cannon(int x, int y, int player) : Chess() {
+	Cannon(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = player;
+		color = type / 10;
+		chess_type = type;
 	}
-	vector<pair<int, int>> moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board);
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Soldier : public Chess {
 public:
-	Soldier(int x, int y, int player) : Chess() {
+	Soldier(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = player;
+		color = type / 10;
+		chess_type = type;
 	}
-	vector<pair<int, int>> moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board);
+	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
 };

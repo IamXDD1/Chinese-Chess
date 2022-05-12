@@ -1,365 +1,504 @@
 #include "Chess.h"
+#include "GameManager.h"
 
 // Chess
-void Chess::move(int x, int y, Board board)
+bool Chess::kingKing(vector<Pos>& cango) 
 {
-	checkDeath(x, y, board);
-	pos.x = x;
-	pos.y = y;
-	board.modify(x,y,0);
-}
-
-void Chess::checkDeath(int x, int y, Board board)
-{
-	if (board.getChess(x, y) != 0)
+	if (chess_type % 10 == 7)
 	{
-		//kill
-	}
-}
-
-bool Chess::checkmate(int x, int y, Board board)
-{
-	int type;
-	vector<pair<int, int>> cango = this->moveable(x, y, chess_type, cango, board);
-	for (int i = 0; i < cango.size(); i++)
-	{
-		type = board.getChess(cango[i].first, cango[i].second);
-		if (type / 10 != chess_type && type % 10 == 7)
+		for (int i = 0; i < cango.size(); i++)
 		{
-			return true;
+			if (cango[i].x < 8)
+			{
+				for (int j = cango[i].x; j < 9; j++)
+				{
+					if (Board::getChess(j, cango[i].y).chess_type % 10 != -1)
+					{
+						if (Board::getChess(j, cango[i].y).chess_type % 10 == 7)
+						{
+							cango.erase(cango.begin() + i);
+							return true;
+						}
+						break;
+					}
+				}
+			}
+			if (cango[i].x > 0)
+			{
+				for (int j = cango[i].x; j >= 0; j--)
+				{
+					if (Board::getChess(j, cango[i].y).chess_type != -1)
+					{
+						if (Board::getChess(j, cango[i].y).chess_type % 10 == 7)
+						{
+							cango.erase(cango.begin() + i);
+							return true;
+						}
+						break;
+					}
+				}
+			}
+			if (cango[i].y < 9)
+			{
+				for (int j = cango[i].y; j < 10; j++)
+				{
+					if (Board::getChess(cango[i].x, j).chess_type != -1)
+					{
+						if (Board::getChess(cango[i].x, j).chess_type % 10 == 7)
+						{
+							cango.erase(cango.begin() + i);
+							return true;
+						}
+						break;
+					}
+				}
+			}
+			if (cango[i].y > 0)
+			{
+				for (int j = cango[i].y; j >= 0; j--)
+				{
+					if (Board::getChess(cango[i].x, j).chess_type != -1)
+					{
+						if (Board::getChess(cango[i].x, j).chess_type % 10 == 7)
+						{
+							cango.erase(cango.begin() + i);
+							return true;
+						}
+						break;
+					}
+				}
+			}
 		}
+		return false;
 	}
-	return false;
+	else if(chess_type % 10 != -1)
+	{
+		int toBreak = 0;
+		if (pos.x < 8)
+		{
+			for (int j = pos.x; j < 9; j++)
+			{
+				if (Board::getChess(j, pos.y).chess_type != -1)
+				{
+					if (Board::getChess(j, pos.y).chess_type % 10 == 7) toBreak++;
+					return;
+				}
+			}
+		}
+		if (pos.x > 0)
+		{
+			for (int j = pos.x; j >= 0; j--)
+			{
+				if (Board::getChess(j, pos.y).chess_type != -1)
+				{
+					if (Board::getChess(j, pos.y).chess_type % 10 == 7) toBreak++;
+					return;
+				}
+			}
+			if (toBreak == 2)
+			{
+				cango.clear();
+				return;
+			}
+		}
+		if (pos.y < 9)
+		{
+			for (int j = pos.y; j < 10; j++)
+			{
+				if (Board::getChess(pos.x, j).chess_type != -1)
+				{
+					if (Board::getChess(pos.x, j).chess_type % 10 == 7) toBreak++;
+					return;
+				}
+			}
+			if (toBreak == 2)
+			{
+				cango.clear();
+				return;
+			}
+		}
+		if (pos.y > 0)
+		{
+			for (int j = pos.y; j >= 0; j--)
+			{
+				if (Board::getChess(pos.x, j).chess_type != -1)
+				{
+					if (Board::getChess(pos.x, j).chess_type % 10 == 7) toBreak++;
+					return;
+				}
+			}
+			if (toBreak == 2)
+			{
+				cango.clear();
+				return;
+			}
+		}
+		
+	}
 }
 
-vector<pair<int, int>> Chess::checkCompanion(int type, vector<pair<int, int>>& cango, Board board)
+bool Chess::checkmate(int x, int y, vector<Pos>& cango)
+{
+		int type;
+		for (int i = 0; i < cango.size(); i++)
+		{
+			type = Board::getChess(cango[i].x, cango[i].y).chess_type;
+			if (type / 10 != chess_type && type % 10 == 7) return true;
+		}
+		return false;
+}
+
+void Chess::checkCompanion(vector<Pos>& cango)
 {
 	for (int i = 0; i < cango.size(); i++)
 	{
-		if (type / 10 != 0)
+		if (color == RED)
 		{
-			if (board.getChess(cango[i].first, cango[i].second) / 10 != 0)
+			if (Board::getChess(cango[i].x, cango[i].y).color == RED)
 			{
 				cango.erase(cango.begin() + i);
 				i--;
 			}
 		}
-		else
+		else if(color == BLACK)
 		{
-			if (board.getChess(cango[i].first, cango[i].second) / 10 == 0)
+			if (Board::getChess(cango[i].x, cango[i].y).color == BLACK)
 			{
 				cango.erase(cango.begin() + i);
 				i--;
 			}
 		}
 	}
-	return cango;
+	return;
 }
 
 // General
-vector<pair<int, int>> General::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
+vector<Pos> General::moveable(int x, int y, vector<Pos>& cango)
 {
-	if (num / 10 != 0) // RED
+	if (color == RED) // RED
 	{
 		if (x == 3) {
-			cango.push_back({ y,x + 1 }); // y == 1 2 0
-			if (y != 0) cango.push_back({ y - 1 ,x }); // y == 1 2
-			if (y != 2) cango.push_back({ y + 1,x }); // y == 1 0
+			cango.push_back({ x + 1, y }); // y == 1 2 0
+			if (y != 0) cango.push_back({ x,y - 1 }); // y == 1 2
+			if (y != 2) cango.push_back({ x, y + 1 }); // y == 1 0
 		}
 		else if (x == 4)
 		{
-			cango.push_back({ y,x - 1 }); // y == 1 2 0
-			cango.push_back({ y,x + 1 }); // y == 1 2 0
-			if (y != 0) cango.push_back({ y - 1,x }); // y == 1 2
-			if (y != 2) cango.push_back({ y + 1,x }); // y == 1 0
+			cango.push_back({ x - 1, y }); // y == 1 2 0
+			cango.push_back({ x + 1, y }); // y == 1 2 0
+			if (y != 0) cango.push_back({ x, y - 1 }); // y == 1 2
+			if (y != 2) cango.push_back({ x, y + 1 }); // y == 1 0
 		}
 		else if (x == 5)
 		{
 			cango.push_back({ y,x - 1 }); // y == 1 2 0
-			if (y != 0) cango.push_back({ y - 1 ,x }); // y == 1 2
-			if (y != 2) cango.push_back({ y + 1,x }); // y == 1 0
+			if (y != 0) cango.push_back({ x, y - 1 }); // y == 1 2
+			if (y != 2) cango.push_back({ x, y + 1 }); // y == 1 0
 		}
 	}
-	else               // BLACK
+	else if(color == BLACK)             // BLACK
 	{
 		if (x == 3) {
 			cango.push_back({ y,x + 1 }); // y == 1 2 0
-			if (y != 9) cango.push_back({ y - 1 ,x }); // y == 1 2
-			if (y != 7) cango.push_back({ y + 1,x }); // y == 1 0
+			if (y != 9) cango.push_back({ x, y - 1 }); // y == 1 2
+			if (y != 7) cango.push_back({ x, y + 1 }); // y == 1 0
 		}
 		else if (x == 4)
 		{
-			cango.push_back({ y,x - 1 }); // y == 1 2 0
-			cango.push_back({ y,x + 1 }); // y == 1 2 0
-			if (y != 9) cango.push_back({ y - 1,x }); // y == 1 2
-			if (y != 7) cango.push_back({ y + 1,x }); // y == 1 0
+			cango.push_back({ x - 1, y }); // y == 1 2 0
+			cango.push_back({ x + 1, y }); // y == 1 2 0
+			if (y != 9) cango.push_back({ x, y - 1 }); // y == 1 2
+			if (y != 7) cango.push_back({ x, y + 1 }); // y == 1 0
 		}
 		else if (x == 5)
 		{
-			cango.push_back({ y,x - 1 }); // y == 1 2 0
-			if (y != 9) cango.push_back({ y - 1 ,x }); // y == 1 2
-			if (y != 7) cango.push_back({ y + 1,x }); // y == 1 0
+			cango.push_back({ x - 1, y }); // y == 1 2 0
+			if (y != 9) cango.push_back({ x, y - 1 }); // y == 1 2
+			if (y != 7) cango.push_back({ x, y + 1 }); // y == 1 0
 		}
 	}
-	cango = checkCompanion(num, cango, board);
+	checkCompanion(cango);
+	kingKing(cango);
 	return cango;
 }
-
 
 // Advisor
-vector<pair<int, int>> Advisor::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
+vector<Pos> Advisor::moveable(int x, int y, vector<Pos>& cango)
 {
-	if (num / 10 != 0)   // RED	
+	if (!kingKing(cango))
 	{
-		if (x != 4) cango.push_back({ 1, 4 });
-		else
+		if (color == RED)   // RED	
 		{
-			cango.push_back({ y - 1, x + 1 });
-			cango.push_back({ y - 1, x - 1 });
-			cango.push_back({ y + 1, x + 1 });
-			cango.push_back({ y + 1, x - 1 });
+			if (x != 4) cango.push_back({ 1, 4 });
+			else
+			{
+				cango.push_back({ x + 1, y - 1 });
+				cango.push_back({ x - 1, y - 1 });
+				cango.push_back({ x + 1, y + 1 });
+				cango.push_back({ x - 1, y + 1 });
+			}
 		}
-	}
-	else                 // BLACK
-	{
-		if (x != 4) cango.push_back({ 8, 4 });
-		else
+		else if(color == BLACK)             // BLACK
 		{
-			cango.push_back({ y - 1, x + 1 });
-			cango.push_back({ y - 1, x - 1 });
-			cango.push_back({ y + 1, x + 1 });
-			cango.push_back({ y + 1, x - 1 });
+			if (x != 4) cango.push_back({ 8, 4 });
+			else
+			{
+				cango.push_back({ x + 1, y - 1 });
+				cango.push_back({ x - 1, y - 1 });
+				cango.push_back({ x + 1, y + 1 });
+				cango.push_back({ x - 1, y + 1 });
+			}
 		}
+		checkCompanion(cango);
 	}
-	cango = checkCompanion(num, cango, board);
 	return cango;
 }
-
 
 // Elephant
-vector<pair<int, int>> Elephant::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
+vector<Pos> Elephant::moveable(int x, int y, vector<Pos>& cango)
 {
-	if (x > 1 && y > 1)
+	if (!kingKing(cango))
 	{
-		cango.push_back({ y - 2,x - 2 });
+		if (x > 1 && y > 1)
+		{
+			if (Board::getChess(x - 1, y - 1).chess_type == -1) cango.push_back({ x - 2, y - 2 });
+		}
+		if (x < 6 && y < 7)
+		{
+			if (Board::getChess(x + 1, y + 1).chess_type == -1) cango.push_back({ x + 2 , y + 2 });
+		}
+		if (x > 1 && y < 7)
+		{
+			if (Board::getChess(x - 1, y + 1).chess_type == -1) cango.push_back({ x - 2,  y + 2 });
+		}
+		if (x < 6 && y > 1)
+		{
+			if (Board::getChess(x + 1, y - 1).chess_type == -1) cango.push_back({ x + 2,  y - 2 });
+		}
+		checkCompanion(cango);
 	}
-	if (x < 6 && y < 7)
-	{
-		cango.push_back({ y + 2,x + 2 });
-	}
-	if (x > 1 && y < 7)
-	{
-		cango.push_back({ y + 2,x - 2 });
-	}
-	if (x < 6 && y > 1)
-	{
-		cango.push_back({ y - 2,x + 2 });
-	}
-	cango = checkCompanion(num, cango, board);	
 	return cango;
 }
-
 
 // Chariot
-vector<pair<int, int>> Chariot::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
+vector<Pos> Chariot::moveable(int x, int y, vector<Pos>& cango)
 {
-	if (y != 8)
+	if (!kingKing(cango))
 	{
-		for (int i = y + 1; i < 9; i++)
+		if (y != 8)
 		{
-			cango.push_back({ i, x });
-			int chessType = board.getChess(i, x);
-			if (chessType != 0)
+			for (int i = y + 1; i < 9; i++)
 			{
-				break;
+				cango.push_back({ x, i });
+				int chessType = Board::getChess(x, i).chess_type;
+				if (chessType != -1)
+				{
+					break;
+				}
 			}
 		}
-	}
-	if (y != 0)
-	{
-		for (int i = y - 1; i >= 0; i--)
+		if (y != 0)
 		{
-			cango.push_back({ i, x });
-			int chessType = board.getChess(i, x);
-			if (chessType != 0)
+			for (int i = y - 1; i >= 0; i--)
 			{
-				break;
+				cango.push_back({ x, i });
+				int chessType = Board::getChess(x, i).chess_type;
+				if (chessType != -1)
+				{
+					break;
+				}
 			}
 		}
-	}
-	if (x != 9)
-	{
-		for (int i = x + 1; i < 9; i++)
+		if (x != 9)
 		{
-			cango.push_back({ y, i });
-			int chessType = board.getChess(y, i);
-			if (chessType != 0)
+			for (int i = x + 1; i < 9; i++)
 			{
-				break;
+				cango.push_back({ i, y });
+				int chessType = Board::getChess(i, y).chess_type;
+				if (chessType != -1)
+				{
+					break;
+				}
 			}
 		}
-	}
-	if (x != 0)
-	{
-		for (int i = x - 1; i >= 0; i--)
+		if (x != 0)
 		{
-			cango.push_back({ y, i });
-			int chessType = board.getChess(y, i);
-			if (chessType != 0)
+			for (int i = x - 1; i >= 0; i--)
 			{
-				break;
+				cango.push_back({ i, y });
+				int chessType = Board::getChess(i, y).chess_type;
+				if (chessType != -1)                                  // chesstype = -1 ?
+				{
+					break;
+				}
 			}
 		}
+		checkCompanion(cango);
 	}
-	cango = checkCompanion(num, cango, board);
 	return cango;
 }
-
 
 // Horse
-vector<pair<int, int>> Horse::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
+vector<Pos> Horse::moveable(int x, int y, vector<Pos>& cango)
 {
-	if (y < 8)
+	if (!kingKing(cango))
 	{
-		if (board.getChess(y + 1, x) == 0)
+		if (y < 8)
 		{
-			if (x < 8) cango.push_back({ y + 2,x + 1 }); // 下下右
-			if (x > 0) cango.push_back({ y + 2,x - 1 }); // 下下左
+			if (Board::getChess(x, y + 1).chess_type == -1)
+			{
+				if (x < 8) cango.push_back({ x + 1, y + 2 }); // 下下右
+				if (x > 0) cango.push_back({ x - 1, y + 2 }); // 下下左
+			}
 		}
-	}
-	if (y > 1)
-	{
-		if (board.getChess(y - 1, x) == 0)
+		if (y > 1)
 		{
-			if (x < 8) cango.push_back({ y - 2,x + 1 }); // 上上右
-			if (x > 0) cango.push_back({ y - 2,x - 1 }); // 上上左
+			if (Board::getChess(y - 1, x).chess_type == -1)
+			{
+				if (x < 8) cango.push_back({ x + 1, y - 2 }); // 上上右
+				if (x > 0) cango.push_back({ x - 1, y - 2 }); // 上上左
+			}
 		}
-	}
-	if (x < 7)
-	{
-		if (board.getChess(y, x + 1) == 0)
+		if (x < 7)
 		{
-			if (y > 0) cango.push_back({ y + 1,x + 2 }); // 右右上
-			if (y < 9) cango.push_back({ y - 1,x + 2 }); // 右右左
+			if (Board::getChess(y, x + 1).chess_type == -1)
+			{
+				if (y > 0) cango.push_back({ x + 2, y + 1 }); // 右右上
+				if (y < 9) cango.push_back({ x + 2, y - 1 }); // 右右左
+			}
 		}
-	}
-	if (x > 1)
-	{
-		if (board.getChess(y, x - 1) == 0)
+		if (x > 1)
 		{
-			if (y > 0) cango.push_back({ y + 1,x - 2 }); // 左左上
-			if (y < 9) cango.push_back({ y - 1,x - 2 }); // 左左下
+			if (Board::getChess(y, x - 1).chess_type == -1)
+			{
+				if (y > 0) cango.push_back({ x - 2, y + 1 }); // 左左上
+				if (y < 9) cango.push_back({ x - 2, y - 1 }); // 左左下
+			}
 		}
+		checkCompanion(cango);
 	}
-	cango = checkCompanion(num, cango, board);
 	return cango;
-}
-
-bool Horse::checkmate(int x, int y)
-{
-	return false;
 }
 
 // Cannon
-vector<pair<int, int>> Cannon::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
+vector<Pos> Cannon::moveable(int x, int y, vector<Pos>& cango)
 {
-	vector<pair<int, int>> temp;
-	if (y != 8)
+	if (!kingKing(cango))
 	{
-		for (int i = y + 1; i < 9; i++)
+		vector<Pos> temp;
+		if (y != 8)
 		{
-			int chessType = board.getChess(i, x);
-			if (chessType != 0)
+			for (int i = y + 1; i < 9; i++)
 			{
-				for (int j = j + 1; j < 9; j++)
+				int chessType = Board::getChess(x, i).chess_type;
+				if (chessType != -1)
 				{
-					chessType = board.getChess(j, x);
-					if (chessType != 0)
+					for (int j = i + 1; j < 9; j++)
 					{
-						cango.push_back({ j , x });
-						break;
+						chessType = Board::getChess(x, j).chess_type;
+						if (chessType != -1)
+						{
+							cango.push_back({ x, j });
+							break;
+						}
 					}
+					break;
 				}
-				break;
+				cango.push_back({ x, i });
 			}
-			cango.push_back({ i, x });
 		}
-	}
-	if (y != 0)
-	{
-		for (int i = y - 1; i >= 0; i--)
+		if (y != 0)
 		{
-			int chessType = board.getChess(i, x);
-			if (chessType != 0)
+			for (int i = y - 1; i >= 0; i--)
 			{
-				for (int j = i - 1; j >= 0; j--)
+				int chessType = Board::getChess(x, i).chess_type;
+				if (chessType != -1)
 				{
-					chessType = board.getChess(j, x);
-					if (chessType != 0)
+					for (int j = i - 1; j >= 0; j--)
 					{
-						cango.push_back({ j , x });
-						break;
+						chessType = Board::getChess(x, j).chess_type;
+						if (chessType != -1)
+						{
+							cango.push_back({ x, j });
+							break;
+						}
 					}
+					break;
 				}
-				break;
+				cango.push_back({ x, i });
 			}
-			cango.push_back({ i, x });
 		}
-	}
-	if (x != 9)
-	{
-		for (int i = x + 1; i < 9; i++)
+		if (x != 9)
 		{
-			int chessType = board.getChess(y, i);
-			if (chessType != 0)
+			for (int i = x + 1; i < 9; i++)
 			{
-				for (int j = i + 1; j < 9; j++)
+				int chessType = Board::getChess(i, y).chess_type;
+				if (chessType != -1)
 				{
-					chessType = board.getChess(y, j);
-					if (chessType != 0)
+					for (int j = i + 1; j < 9; j++)
 					{
-						cango.push_back({ y , j });
-						break;
+						chessType = Board::getChess(j, y).chess_type;
+						if (chessType != -1)
+						{
+							cango.push_back({ j, y });
+							break;
+						}
 					}
+					break;
 				}
-				break;
+				cango.push_back({ i, y });
 			}
-			cango.push_back({ y, i });
 		}
-	}
-	if (x != 0)
-	{
-		for (int i = x - 1; i >= 0; i--)
+		if (x != 0)
 		{
-			int chessType = board.getChess(y, i);
-			if (chessType != 0)
+			for (int i = x - 1; i >= 0; i--)
 			{
-				for (int j = i - 1; j >= 0; j--)
+				int chessType = Board::getChess(i, y).chess_type;
+				if (chessType != -1)
 				{
-					chessType = board.getChess(y, j);
-					if (chessType != 0)
+					for (int j = i - 1; j >= 0; j--)
 					{
-						cango.push_back({ y , j });
-						break;
+						chessType = Board::getChess(j, y).chess_type;
+						if (chessType != -1)
+						{
+							cango.push_back({ j, y });
+							break;
+						}
 					}
+					break;
 				}
-				break;
+				cango.push_back({ i, y });
 			}
-			cango.push_back({ y, i });
 		}
+		checkCompanion(cango);
 	}
-	cango = checkCompanion(num, cango, board);
 	return cango;
 }
 
-
 // Soldier
-vector<pair<int, int>> Soldier::moveable(int x, int y, int num, vector<pair<int, int>>& cango, Board board)
+vector<Pos> Soldier::moveable(int x, int y, vector<Pos>& cango)
 {
-	if (y != 8) cango.push_back({ y + 1,x });
-	if (y != 0) cango.push_back({ y - 1,x });
-	if (x != 9) cango.push_back({ y,x + 1 });
-	if (x != 0) cango.push_back({ y,x - 1 });
-	cango = checkCompanion(num, cango, board);
+	if (!kingKing(cango))
+	{
+		if (color == 1)
+		{
+			if (y != 0) cango.push_back({ x, y - 1 });
+			if (y < 5) // cross the river
+			{
+				if (x != 9) cango.push_back({ x + 1, y });
+				if (x != 0) cango.push_back({ x - 1, y });
+			}
+		}
+		else if (color == 2)
+		{
+			if (y != 8) cango.push_back({ x, y + 1 });
+			if (y > 4)// cross the river
+			{
+				if (x != 9) cango.push_back({ x + 1, y });
+				if (x != 0) cango.push_back({ x - 1, y });
+			}
+		}
+		checkCompanion(cango);
+	}
 	return cango;
 }
