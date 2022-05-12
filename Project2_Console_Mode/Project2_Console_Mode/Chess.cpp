@@ -81,8 +81,13 @@ bool Chess::kingKing(vector<Pos>& cango)
 				if (Board::getChess(j, pos.y).chess_type != -1)
 				{
 					if (Board::getChess(j, pos.y).chess_type % 10 == 7) toBreak++;
-					return;
+					break;
 				}
+			}
+			if (toBreak == 2)
+			{
+				cango.clear();
+				return true;
 			}
 		}
 		if (pos.x > 0)
@@ -92,13 +97,13 @@ bool Chess::kingKing(vector<Pos>& cango)
 				if (Board::getChess(j, pos.y).chess_type != -1)
 				{
 					if (Board::getChess(j, pos.y).chess_type % 10 == 7) toBreak++;
-					return;
+					break;
 				}
 			}
 			if (toBreak == 2)
 			{
 				cango.clear();
-				return;
+				return true;
 			}
 		}
 		if (pos.y < 9)
@@ -108,13 +113,13 @@ bool Chess::kingKing(vector<Pos>& cango)
 				if (Board::getChess(pos.x, j).chess_type != -1)
 				{
 					if (Board::getChess(pos.x, j).chess_type % 10 == 7) toBreak++;
-					return;
+					break;
 				}
 			}
 			if (toBreak == 2)
 			{
 				cango.clear();
-				return;
+				return true;
 			}
 		}
 		if (pos.y > 0)
@@ -124,16 +129,17 @@ bool Chess::kingKing(vector<Pos>& cango)
 				if (Board::getChess(pos.x, j).chess_type != -1)
 				{
 					if (Board::getChess(pos.x, j).chess_type % 10 == 7) toBreak++;
-					return;
+					break;
 				}
 			}
 			if (toBreak == 2)
 			{
 				cango.clear();
-				return;
+				return true;
 			}
 		}
 		
+		return false;
 	}
 }
 
@@ -169,11 +175,10 @@ void Chess::checkCompanion(vector<Pos>& cango)
 			}
 		}
 	}
-	return;
 }
 
 // General
-vector<Pos> General::moveable(int x, int y, vector<Pos>& cango)
+void General::moveable(int x, int y, vector<Pos>& cango)
 {
 	if (color == RED) // RED
 	{
@@ -219,11 +224,10 @@ vector<Pos> General::moveable(int x, int y, vector<Pos>& cango)
 	}
 	checkCompanion(cango);
 	kingKing(cango);
-	return cango;
 }
 
 // Advisor
-vector<Pos> Advisor::moveable(int x, int y, vector<Pos>& cango)
+void Advisor::moveable(int x, int y, vector<Pos>& cango)
 {
 	if (!kingKing(cango))
 	{
@@ -251,11 +255,10 @@ vector<Pos> Advisor::moveable(int x, int y, vector<Pos>& cango)
 		}
 		checkCompanion(cango);
 	}
-	return cango;
 }
 
 // Elephant
-vector<Pos> Elephant::moveable(int x, int y, vector<Pos>& cango)
+void Elephant::moveable(int x, int y, vector<Pos>& cango)
 {
 	if (!kingKing(cango))
 	{
@@ -277,11 +280,10 @@ vector<Pos> Elephant::moveable(int x, int y, vector<Pos>& cango)
 		}
 		checkCompanion(cango);
 	}
-	return cango;
 }
 
 // Chariot
-vector<Pos> Chariot::moveable(int x, int y, vector<Pos>& cango)
+void Chariot::moveable(int x, int y, vector<Pos>& cango)
 {
 	if (!kingKing(cango))
 	{
@@ -335,11 +337,10 @@ vector<Pos> Chariot::moveable(int x, int y, vector<Pos>& cango)
 		}
 		checkCompanion(cango);
 	}
-	return cango;
 }
 
 // Horse
-vector<Pos> Horse::moveable(int x, int y, vector<Pos>& cango)
+void Horse::moveable(int x, int y, vector<Pos>& cango)
 {
 	if (!kingKing(cango))
 	{
@@ -377,11 +378,10 @@ vector<Pos> Horse::moveable(int x, int y, vector<Pos>& cango)
 		}
 		checkCompanion(cango);
 	}
-	return cango;
 }
 
 // Cannon
-vector<Pos> Cannon::moveable(int x, int y, vector<Pos>& cango)
+void Cannon::moveable(int x, int y, vector<Pos>& cango)
 {
 	if (!kingKing(cango))
 	{
@@ -472,11 +472,10 @@ vector<Pos> Cannon::moveable(int x, int y, vector<Pos>& cango)
 		}
 		checkCompanion(cango);
 	}
-	return cango;
 }
 
 // Soldier
-vector<Pos> Soldier::moveable(int x, int y, vector<Pos>& cango)
+void Soldier::moveable(int x, int y, vector<Pos>& cango)
 {
 	if (!kingKing(cango))
 	{
@@ -500,5 +499,4 @@ vector<Pos> Soldier::moveable(int x, int y, vector<Pos>& cango)
 		}
 		checkCompanion(cango);
 	}
-	return cango;
 }

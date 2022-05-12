@@ -1,5 +1,5 @@
 ﻿#pragma once
-#define BLACK 0
+#define BLACK 2
 #define RED 1
 #include <vector>
 #include <algorithm>
@@ -18,9 +18,9 @@ struct Pos {
 
 class Chess {
 protected:
-	Pos pos;
 	int color;
 public:
+	Pos pos;
 	int chess_type;
 	Chess() {
 		pos.x = 0;
@@ -30,7 +30,7 @@ public:
 	}
 	virtual bool kingKing(vector<Pos>& cango); // ¤ý¤£¨£¤ý
 	virtual int getColor() { return color; }
-	vector<Pos> moveable(int x, int y, vector<Pos>& cango) { return cango; };
+	void moveable(int x, int y, vector<Pos>& cango) { return; };
 	void checkCompanion(vector<Pos>& cango);
 	virtual bool checkmate(int x, int y, vector<Pos>& cango);
 };
@@ -51,7 +51,7 @@ public:
 		color = type / 10;
 		chess_type = type;
 	}
-	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
+	void moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Advisor : public Chess {
@@ -62,7 +62,7 @@ public:
 		color = type / 10;
 		chess_type = type;
 	}
-	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
+	void moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Elephant : public Chess {
@@ -73,7 +73,7 @@ public:
 		color = type / 10;
 		chess_type = type;
 	}
-	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
+	void moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Chariot : public Chess {
@@ -84,7 +84,7 @@ public:
 		color = type / 10;
 		chess_type = type;
 	}
-	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
+	void moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Horse : public Chess {
@@ -95,7 +95,7 @@ public:
 		color = type / 10;
 		chess_type = type;
 	}
-	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
+	void moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Cannon : public Chess {
@@ -106,7 +106,7 @@ public:
 		color = type / 10;
 		chess_type = type;
 	}
-	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
+	void moveable(int x, int y, vector<Pos>& cango);
 };
 
 class Soldier : public Chess {
@@ -117,5 +117,5 @@ public:
 		color = type / 10;
 		chess_type = type;
 	}
-	vector<Pos> moveable(int x, int y, vector<Pos>& cango);
+	void moveable(int x, int y, vector<Pos>& cango);
 };

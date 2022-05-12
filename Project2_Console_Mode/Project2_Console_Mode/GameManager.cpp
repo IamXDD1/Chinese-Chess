@@ -3,7 +3,7 @@
 Chess Board::board[10][9];
 
 //File
-
+//load file
 bool File::Load(vector<string>& data) {  //XDD
 	file.open(filename);
 	if (!file) {
@@ -21,7 +21,7 @@ bool File::Load(vector<string>& data) {  //XDD
 		return true;
 	}
 }
-
+//divide input. ex: Player: 1, Action: Cannon (x1, y1) -> (x2, y2)
 void File::Input(string& data, int& color, string& character, int& x1, int& y1, int& x2, int& y2) {
 	gotoxy(30, 20); cout << "Error:                                                  ";
 	stringstream ss(data);
@@ -61,8 +61,9 @@ void File::Input(string& data, int& color, string& character, int& x1, int& y1, 
 	if (x1 == -1 || x2 == -1 || y1 == -1 || y2 == -1 || color == -1 || character == "") {
 		throw "Wrong input format.";
 	}
+	return;
 }
-
+//output to a file
 void File::Output() {
 	fstream out(filename, ios::out | ios::trunc);
 	for (int i = 0; i < gameRecord.size(); i++)
@@ -102,7 +103,7 @@ void Board::initialization() {
 	board[6][6] = Soldier(6, 6, RED_SOLDIER); board[6][8] = Soldier(8, 6, RED_SOLDIER);
 	return;
 }
-
+//check input player, chess_type is correspnding to the chess on the board[y][x]
 bool Board::checkChess(Chess chess, int& color, string& character) {
 	switch (chess.chess_type)
 	{
@@ -126,18 +127,44 @@ bool Board::checkChess(Chess chess, int& color, string& character) {
 	}
 	return false;
 }
-
-void Board::moveChess(File& file, int& color, string& character, int& x1, int& y1, int& x2, int& y2) {
-	if (checkChess(getChess(x1, y1), color, character)) {
-		//show moveable path
-		//cin >> x2 >> y2
-
+//to move choosed chess 
+void Board::moveChess(File& file, int& color, string& character, int& x1, int& y1, int& x2, int& y2, bool loading) {
+	Chess temp_chess = getChess(x1, y1);
+	if (checkChess(temp_chess, color, character)) { // input chess (x1, y1)
 		bool general_death = false;
-		if (board[y2][x2].chess_type == GENERAL) general_death = true;
-		else if (board[y2][x2].chess_type != -1) //kill
-		board[y2][x2] = board[y1][x1];  //move
-		board[y1][x1] = Null(x1, y1);
+		if (loading == false) {
+			vector<Pos> cango;
+			useChess(temp_chess, cango);  //load moveable path
+			showPath(cango);
 
+			for (;;)
+			{
+				gotoxy(0, 21);
+				cout << "x2 = ";
+				cin >> x2;
+				cout << "y2 = ";
+				cin >> y2;			//click point to move
+				if ((x2 >= 0 && x2 <= 8) && (y2 >= 0 && y2 <= 9)) break;
+				else "position is out of range. please input again!";
+			}
+
+			if (checkcango(x2, y2, cango)) {
+				if (board[y2][x2].chess_type % 10 == GENERAL) general_death = true;
+				//else if(board[y2][x2].chess_type != -1) GM.on_board.push_back(board[y2][x2]);
+				board[y2][x2] = board[y1][x1];  //move
+				board[y1][x1] = Null(x1, y1);
+			}
+			else {
+				throw "can't go to x2 y2";
+				return;
+			}
+		}
+		else {
+			if (board[y2][x2].chess_type % 10 == GENERAL) general_death = true;
+			//else if(board[y2][x2].chess_type != -1) GM.on_board.push_back(board[y2][x2]);
+			board[y2][x2] = board[y1][x1];  //move
+			board[y1][x1] = Null(x1, y1);
+		}
 
 		string str = "Player: " + to_string(color) + ", Action: " + character +
 			" (" + to_string(x1) + ", " + to_string(y1) + ") -> (" + to_string(x2) + ", " + to_string(y2) + ")     ";
@@ -150,6 +177,22 @@ void Board::moveChess(File& file, int& color, string& character, int& x1, int& y
 		cout << str;
 	}
 	else throw "Move chess fail, for wrong color or chess";
+}
+
+void Board::showPath(vector<Pos>& cango) {
+	gotoxy(0, 20);
+	for (int i = 0; i < cango.size(); i++) {
+
+		cout << '(' << cango[i].x << ',' << cango[i].y << ')' << ' ';
+	}
+	return;
+}
+
+bool Board::checkcango(int& x2, int& y2, vector<Pos>& cango) {
+	for (int i = 0; i < cango.size(); i++) {
+		if (x2 == cango[i].x && y2 == cango[i].y) return true;
+	}
+	return false;
 }
 
 void Board::showBoard() {
@@ -178,40 +221,39 @@ void Board::showBoard() {
 	}
 }
 
+void Board::useChess(Chess& temp_chess, vector<Pos>& cango) {
+	int x = temp_chess.pos.x, y = temp_chess.pos.y;
+	if (temp_chess.chess_type % 10 == GENERAL) {
+		General general(x, y, temp_chess.chess_type);
+		general.moveable(x, y, cango);
+	}
+	else if (temp_chess.chess_type % 10 == ADVISOR) {
+		Advisor advisor(x, y, temp_chess.chess_type);
+		advisor.moveable(x, y, cango);
+	}
+	else if (temp_chess.chess_type % 10 == ELEPHANT) {
+		Elephant elephant(x, y, temp_chess.chess_type);
+		elephant.moveable(x, y, cango);
+	}
+	else if (temp_chess.chess_type % 10 == CHARIOT) {
+		Chariot chariot(x, y, temp_chess.chess_type);
+		chariot.moveable(x, y, cango);
+	}
+	else if (temp_chess.chess_type % 10 == HORSE) {
+		Horse horse(x, y, temp_chess.chess_type);
+		horse.moveable(x, y, cango);
+	}
+	else if (temp_chess.chess_type % 10 == CANNON) {
+		Cannon cannon(x, y, temp_chess.chess_type);
+		cannon.moveable(x, y, cango);
+	}
+	else if (temp_chess.chess_type % 10 == SOLDIER) {
+		Soldier soldier(x, y, temp_chess.chess_type);
+		soldier.moveable(x, y, cango);
+	}
+}
+
 //====================================================================================================
 
 //GameManager
-
-int GameManager::checkChess(int x, int y) {
-	vector<Pos> cango;
-	Chess chess = gameBoard.getChess(x, y);
-	if (chess.chess_type == BLACK_GENERAL || chess.chess_type == RED_GENERAL) {
-		General general(x, y, current_player);
-		general.moveable(x, y, cango);
-	}
-	else if (chess.chess_type == BLACK_ADVISOR || chess.chess_type == RED_ADVISOR) {
-		Advisor advisor(x, y, current_player);
-		advisor.moveable(x, y, cango);
-	}
-	else if (chess.chess_type == BLACK_ELEPHANT || chess.chess_type == RED_ELEPHANT) {
-		Elephant elephant(x, y, current_player);
-		elephant.moveable(x, y, cango);
-	}
-	else if (chess.chess_type == BLACK_CHARIOT || chess.chess_type == RED_CHARIOT) {
-		Chariot chariot(x, y, current_player);
-		chariot.moveable(x, y, cango);
-	}
-	else if (chess.chess_type == BLACK_HORSE || chess.chess_type == RED_HORSE) {
-		Horse horse(x, y, current_player);
-		horse.moveable(x, y, cango);
-	}
-	else if (chess.chess_type == BLACK_CANNON || chess.chess_type == RED_CANNON) {
-		Cannon cannon(x, y, current_player);
-		cannon.moveable(x, y, cango);
-	}
-	else if (chess.chess_type == BLACK_SOLDIER || chess.chess_type == RED_SOLDIER) {
-		Soldier soldier(x, y, current_player);
-		soldier.moveable(x, y, cango);
-	}
-	return 0;
-}
+//no use

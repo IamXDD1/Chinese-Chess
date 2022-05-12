@@ -1,4 +1,5 @@
-#include "Clock.h"
+﻿#include "Clock.h"
+//haven't bind to GM
 
 void gotoxy(int x, int y) {
 	COORD pos = { x,y };
@@ -49,7 +50,7 @@ string checkChess(int& player, GameClock& GameTime, PlayerClock& PlayerTime)
 				base_time = time;
 			}
 			else {
-				PlayerTime.black_time = playertime + time; // �P|?^??1800
+				PlayerTime.black_time = playertime + time; // ·|¦^¨ì1800
 			}
 			printTime(GameTime, PlayerTime, base_time, player);
 		}
