@@ -1,4 +1,5 @@
 #include "Clock.h"
+//haven't bind to GM
 
 void gotoxy(int x, int y) {
 	COORD pos = { x,y };
