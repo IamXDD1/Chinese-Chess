@@ -18,10 +18,78 @@
     <ClCompile Include="MyForm.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="gameBoard.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyForm.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="gameBoard.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="RoundButton.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="general.bmp">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="Genera%3b.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\general.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="general.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\generalR.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\advisorR.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\cannonB.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\cannonR.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\chariotB.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\chariotR.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\elephantB.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\elephantR.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\horseB.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\horseR.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\soldierB.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\soldierR.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\advisorB.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="..\image_source\wikichessboard.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="chessboard.png">
+      <Filter>資源檔</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -66,7 +66,7 @@ void File::Input(string& data, int& color, string& character, int& x1, int& y1, 
 //output to a file
 void File::Output() {
 	fstream out(filename, ios::out | ios::trunc);
-	for (int i = 0; i < gameRecord.size(); i++)
+	for (size_t i = 0; i < gameRecord.size(); i++)
 		out << gameRecord[i] << '\n';
 	out.close();
 }
@@ -80,8 +80,8 @@ Board::Board() {
 }
 
 void Board::initialization() {
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 9; j++) {
+	for (size_t i = 0; i < 10; i++) {
+		for (size_t j = 0; j < 9; j++) {
 			board[i][j] = Null(j, i);
 		}
 	}
@@ -183,15 +183,16 @@ void Board::moveChess(File& file, int& color, string& character, int& x1, int& y
 
 void Board::showPath(vector<Pos>& cango) {
 	gotoxy(0, 20);
-	for (int i = 0; i < cango.size(); i++) {
-
+	cout << "                                                                                                ";
+	gotoxy(0, 20);
+	for (size_t i = 0; i < cango.size(); i++) {
 		cout << '(' << cango[i].x << ',' << cango[i].y << ')' << ' ';
 	}
 	return;
 }
 
 bool Board::checkcango(int& x2, int& y2, vector<Pos>& cango) {
-	for (int i = 0; i < cango.size(); i++) {
+	for (size_t i = 0; i < cango.size(); i++) {
 		if (x2 == cango[i].x && y2 == cango[i].y) return true;
 	}
 	return false;
@@ -202,21 +203,21 @@ void Board::showBoard() {
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 9; j++) {
 			switch (board[i][j].chess_type) {
-			case BLACK_GENERAL: cout << "±N"; break;
-			case RED_GENERAL:	cout << "«Ó"; break;
-			case BLACK_ADVISOR: cout << "¤h"; break;
-			case RED_ADVISOR:	cout << "¥K"; break;
-			case BLACK_ELEPHANT:cout << "¶H"; break;
-			case RED_ELEPHANT:	cout << "¬Û"; break;
-			case BLACK_CHARIOT: cout << "¨®"; break;
-			case RED_CHARIOT:	cout << "¨®"; break;
-			case BLACK_HORSE:	cout << "°¨"; break;
-			case RED_HORSE:		cout << "ØX"; break;
-			case BLACK_CANNON:	cout << "¯¥"; break;
-			case RED_CANNON:	cout << "¬¶"; break;
-			case BLACK_SOLDIER: cout << "¨ò"; break;
-			case RED_SOLDIER:	cout << "§L"; break;
-			default: cout << "¡@"; break;
+			case BLACK_GENERAL: cout << "å°‡"; break;
+			case RED_GENERAL:	cout << "å¸¥"; break;
+			case BLACK_ADVISOR: cout << "å£«"; break;
+			case RED_ADVISOR:	cout << "ä»•"; break;
+			case BLACK_ELEPHANT:cout << "è±¡"; break;
+			case RED_ELEPHANT:	cout << "ç›¸"; break;
+			case BLACK_CHARIOT: cout << "è»Š"; break;
+			case RED_CHARIOT:	cout << "è»Š"; break;
+			case BLACK_HORSE:	cout << "é¦¬"; break;
+			case RED_HORSE:		cout << "å‚Œ"; break;
+			case BLACK_CANNON:	cout << "ç ²"; break;
+			case RED_CANNON:	cout << "ç‚®"; break;
+			case BLACK_SOLDIER: cout << "å’"; break;
+			case RED_SOLDIER:	cout << "å…µ"; break;
+			default: cout << "ã€€"; break;
 			}
 		}
 		cout << '\n';

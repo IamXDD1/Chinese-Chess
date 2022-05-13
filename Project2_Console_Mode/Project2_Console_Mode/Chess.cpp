@@ -166,7 +166,7 @@ void Chess::checkCompanion(vector<Pos>& cango)
 				i--;
 			}
 		}
-		else if(color == BLACK)
+		else if (color == BLACK)
 		{
 			if (Board::getChess(cango[i].x, cango[i].y).color == BLACK)
 			{
@@ -370,32 +370,32 @@ void Horse::moveable(int x, int y, vector<Pos>& cango)
 		{
 			if (Board::getChess(x, y + 1).chess_type == NULL_CHESS)
 			{
-				if (x < 8) cango.push_back({ x + 1, y + 2 }); // §U§U•k
-				if (x > 0) cango.push_back({ x - 1, y + 2 }); // §U§U•™
+				if (x < 8) cango.push_back({ x + 1, y + 2 }); // ‰∏ã‰∏ãÂè≥
+				if (x > 0) cango.push_back({ x - 1, y + 2 }); // ‰∏ã‰∏ãÂ∑¶
 			}
 		}
 		if (y > 1)
 		{
 			if (Board::getChess(y - 1, x).chess_type == NULL_CHESS)
 			{
-				if (x < 8) cango.push_back({ x + 1, y - 2 }); // §W§W•k
-				if (x > 0) cango.push_back({ x - 1, y - 2 }); // §W§W•™
+				if (x < 8) cango.push_back({ x + 1, y - 2 }); // ‰∏ä‰∏äÂè≥
+				if (x > 0) cango.push_back({ x - 1, y - 2 }); // ‰∏ä‰∏äÂ∑¶
 			}
 		}
 		if (x < 7)
 		{
 			if (Board::getChess(y, x + 1).chess_type == NULL_CHESS)
 			{
-				if (y > 0) cango.push_back({ x + 2, y + 1 }); // •k•k§W
-				if (y < 9) cango.push_back({ x + 2, y - 1 }); // •k•k•™
+				if (y > 0) cango.push_back({ x + 2, y + 1 }); // Âè≥Âè≥‰∏ä
+				if (y < 9) cango.push_back({ x + 2, y - 1 }); // Âè≥Âè≥Â∑¶
 			}
 		}
 		if (x > 1)
 		{
 			if (Board::getChess(y, x - 1).chess_type == NULL_CHESS)
 			{
-				if (y > 0) cango.push_back({ x - 2, y + 1 }); // •™•™§W
-				if (y < 9) cango.push_back({ x - 2, y - 1 }); // •™•™§U
+				if (y > 0) cango.push_back({ x - 2, y + 1 }); // Â∑¶Â∑¶‰∏ä
+				if (y < 9) cango.push_back({ x - 2, y - 1 }); // Â∑¶Â∑¶‰∏ã
 			}
 		}
 		checkCompanion(cango);

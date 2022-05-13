@@ -1,0 +1,2 @@
+Player: 1, Action: Cannon (7, 7) -> (4, 7)     
+Red Win

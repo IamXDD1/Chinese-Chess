@@ -23,7 +23,6 @@ int main() {
 	//outline
 	/*
 	last turn/next turn   --->   use deque<string> to execute?
-	ProgramRun()
 	{
 		switch(chooseOption())
 		{
@@ -41,16 +40,18 @@ int main() {
 			{
 				GameClock GameTime;
 				PlayerClock PlayerTime;
-
 				while(true)
 				{
 					if(player == RED) player = BLACK;
 					if(player == BLACK) player = RED;
+
 					string record = checkChess(player, GameTime, PlayerTime);  //-> include (moveable, move, checkmate)  and  time execute
+
 					writefile(record);
-					if(endGame) {
+
+					if(endGame) { 
 						savefile;
-						cout << "more game or not?";
+
 						Y -> startGame("");
 						N -> back to ProgramRun.
 					}
@@ -58,14 +59,17 @@ int main() {
 			}
 		}
 	}
+
 	string checkChess(int player, GameClock GameTime, PlayerClock PlayerTime)
 	{
 		time_t st = time(NULL);
 		time_t base_time = 120;
+
 		while(true)
 		{
 			time_t curr_time = time(NULL);
 			GameTime.TotalTime = curr_time - GameTime.StartTime;
+
 			if(player == BLACK){
 				if (base_time != 0) {
 					base_time = TIME_LIMIT - (curr_time - st);
