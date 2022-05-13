@@ -2,7 +2,7 @@
 #include "GameManager.h"
 
 // Chess
-bool Chess::kingKing(vector<Pos>& cango) 
+bool Chess::kingKing(vector<Pos>& cango)
 {
 	if (chess_type % 10 == 7)
 	{
@@ -71,7 +71,7 @@ bool Chess::kingKing(vector<Pos>& cango)
 		}
 		return false;
 	}
-	else if(chess_type % 10 != NULL_CHESS)
+	else if (chess_type % 10 != NULL_CHESS)
 	{
 		int toBreak = 0;
 		if (pos.x < 8)
@@ -138,20 +138,20 @@ bool Chess::kingKing(vector<Pos>& cango)
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 }
 
 bool Chess::checkmate(int x, int y, vector<Pos>& cango)
 {
-		int type;
-		for (int i = 0; i < cango.size(); i++)
-		{
-			type = Board::getChess(cango[i].x, cango[i].y).chess_type;
-			if (type / 10 != chess_type && type % 10 == 7) return true;
-		}
-		return false;
+	int type;
+	for (int i = 0; i < cango.size(); i++)
+	{
+		type = Board::getChess(cango[i].x, cango[i].y).chess_type;
+		if (type / 10 != color && type % 10 == 7) return true;
+	}
+	return false;
 }
 
 void Chess::checkCompanion(vector<Pos>& cango)
@@ -180,7 +180,7 @@ void Chess::checkCompanion(vector<Pos>& cango)
 // General
 void General::moveable(int x, int y, vector<Pos>& cango)
 {
-	if (color == RED) // RED
+	if (color == BLACK) // RED
 	{
 		if (x == 3) {
 			cango.push_back({ x + 1, y }); // y == 1 2 0
@@ -201,7 +201,7 @@ void General::moveable(int x, int y, vector<Pos>& cango)
 			if (y != 2) cango.push_back({ x, y + 1 }); // y == 1 0
 		}
 	}
-	else if(color == BLACK)             // BLACK
+	else if (color == RED)             // BLACK
 	{
 		if (x == 3) {
 			cango.push_back({ y,x + 1 }); // y == 1 2 0
@@ -242,7 +242,7 @@ void Advisor::moveable(int x, int y, vector<Pos>& cango)
 				cango.push_back({ x - 1, y + 1 });
 			}
 		}
-		else if(color == BLACK)             // BLACK
+		else if (color == BLACK)             // BLACK
 		{
 			if (x != 4) cango.push_back({ 8, 4 });
 			else

@@ -24,7 +24,7 @@ class PlayerClock {
 public:
 	int black_time;
 	int red_time;
-	PlayerClock() { 
+	PlayerClock() {
 		black_time = PLAYER_BASE_TIME;
 		red_time = PLAYER_BASE_TIME;
 	}
