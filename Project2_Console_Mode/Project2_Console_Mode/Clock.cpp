@@ -52,7 +52,7 @@ string countingTime(int& player, GameClock& GameTime, PlayerClock& PlayerTime)
 				else base_time = time;
 			}
 			else {
-				PlayerTime.black_time = playertime + time; // ·|¦^¨ì1800
+				PlayerTime.black_time = playertime + time; // ï¿½|ï¿½^ï¿½ï¿½1800
 			}
 			printTime(GameTime, PlayerTime, base_time, player);
 		}
