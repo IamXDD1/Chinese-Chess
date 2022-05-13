@@ -2,7 +2,7 @@
 #include "GameManager.h"
 
 // Chess
-bool Chess::kingKing(vector<Pos>& cango) 
+bool Chess::kingKing(vector<Pos>& cango)
 {
 	if (chess_type % 10 == 7) // tested
 	{
@@ -88,7 +88,7 @@ bool Chess::kingKing(vector<Pos>& cango)
 		}
 		return false;
 	}
-	else if(chess_type % 10 != NULL_CHESS)  // tested
+	else if (chess_type % 10 != NULL_CHESS)
 	{
 		int toErase = 0;
 		if (pos.x < 8)
@@ -167,20 +167,20 @@ bool Chess::kingKing(vector<Pos>& cango)
 				}
 			}
 		}
-		
+
 		return false;
 	}
 }
 
 bool Chess::checkmate(int x, int y, vector<Pos>& cango)
 {
-		int type;
-		for (int i = 0; i < cango.size(); i++)
-		{
-			type = Board::getChess(cango[i].x, cango[i].y).chess_type;
-			if (type / 10 != color && type % 10 == 7) return true;
-		}
-		return false;
+	int type;
+	for (int i = 0; i < cango.size(); i++)
+	{
+		type = Board::getChess(cango[i].x, cango[i].y).chess_type;
+		if (type / 10 != color && type % 10 == 7) return true;
+	}
+	return false;
 }
 
 void Chess::checkCompanion(vector<Pos>& cango)
