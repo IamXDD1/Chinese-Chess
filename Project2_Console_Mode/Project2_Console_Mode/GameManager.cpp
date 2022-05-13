@@ -66,7 +66,7 @@ void File::Input(string& data, int& color, string& character, int& x1, int& y1, 
 //output to a file
 void File::Output() {
 	fstream out(filename, ios::out | ios::trunc);
-	for (int i = 0; i < gameRecord.size(); i++)
+	for (size_t i = 0; i < gameRecord.size(); i++)
 		out << gameRecord[i] << '\n';
 	out.close();
 }
@@ -80,8 +80,8 @@ Board::Board() {
 }
 
 void Board::initialization() {
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 9; j++) {
+	for (size_t i = 0; i < 10; i++) {
+		for (size_t j = 0; j < 9; j++) {
 			board[i][j] = Null(j, i);
 		}
 	}
@@ -153,6 +153,8 @@ void Board::moveChess(File& file, int& color, string& character, int& x1, int& y
 				//else if(board[y2][x2].chess_type != -1) GM.on_board.push_back(board[y2][x2]);
 				board[y2][x2] = board[y1][x1];  //move
 				board[y1][x1] = Null(x1, y1);
+				board[y2][x2].pos.x = x2;
+				board[y2][x2].pos.y = y2;
 			}
 			else {
 				throw "can't go to x2 y2";
@@ -181,15 +183,16 @@ void Board::moveChess(File& file, int& color, string& character, int& x1, int& y
 
 void Board::showPath(vector<Pos>& cango) {
 	gotoxy(0, 20);
-	for (int i = 0; i < cango.size(); i++) {
-		
+	cout << "                                                                                                ";
+	gotoxy(0, 20);
+	for (size_t i = 0; i < cango.size(); i++) {
 		cout << '(' << cango[i].x << ',' << cango[i].y << ')' << ' ';
 	}
 	return;
 }
 
 bool Board::checkcango(int& x2, int& y2, vector<Pos>& cango) {
-	for (int i = 0; i < cango.size(); i++) {
+	for (size_t i = 0; i < cango.size(); i++) {
 		if (x2 == cango[i].x && y2 == cango[i].y) return true;
 	}
 	return false;

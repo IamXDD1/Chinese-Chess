@@ -29,3 +29,6 @@ public:
 		red_time = PLAYER_BASE_TIME;
 	}
 };
+
+void printTime(GameClock& GameTime, PlayerClock& PlayerTime, time_t& base_time, int& player);
+string countingTime(int& player, GameClock& GameTime, PlayerClock& PlayerTime);

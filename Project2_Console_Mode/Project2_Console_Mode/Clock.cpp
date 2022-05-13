@@ -12,29 +12,30 @@ void change_formate(int& min, int& sec, time_t total) {
 	sec = total % 60;
 }
 
-void printTime(GameClock& GameTime, PlayerClock& PlayerTime, time_t& base_time, int& player) {
-	gotoxy(0, 10);
+void printTime(GameClock& GameTime, PlayerClock& PlayerTime, time_t& base_time, int& player)
+{
+	gotoxy(40, 21);
 	cout << "Total time : " << GameTime.TotalTime;
 
 	if (player == RED) {
-		gotoxy(0, 0);
+		gotoxy(40, 22);
 		cout << "black use time : " << TIME_LIMIT << " + " << PlayerTime.black_time;
-		gotoxy(0, 20);
+		gotoxy(40, 23);
 		cout << "red use time : " << base_time << " + " << PlayerTime.red_time;
-		gotoxy(0, 25);
+		gotoxy(40, 24);
 		cout << " RED  TURN";
 	}
 	else {
-		gotoxy(0, 0);
+		gotoxy(40, 22);
 		cout << "black use time : " << base_time << " + " << PlayerTime.black_time;
-		gotoxy(0, 20);
+		gotoxy(40, 23);
 		cout << "red use time : " << TIME_LIMIT << " + " << PlayerTime.red_time;
-		gotoxy(0, 25);
+		gotoxy(40, 24);
 		cout << "BLACK TURN";
 	}
 }
 
-string checkChess(int& player, GameClock& GameTime, PlayerClock& PlayerTime)
+string countingTime(int& player, GameClock& GameTime, PlayerClock& PlayerTime)
 {
 	time_t st = time(NULL);
 	time_t base_time = TIME_LIMIT;
@@ -47,7 +48,8 @@ string checkChess(int& player, GameClock& GameTime, PlayerClock& PlayerTime)
 
 		if (player == BLACK) {
 			if (base_time > 0) {
-				base_time = time;
+				if (time <= 0) base_time = 0;
+				else base_time = time;
 			}
 			else {
 				PlayerTime.black_time = playertime + time; // ·|¦^¨ì1800
@@ -56,7 +58,8 @@ string checkChess(int& player, GameClock& GameTime, PlayerClock& PlayerTime)
 		}
 		else if (player == RED) {
 			if (base_time > 0) {
-				base_time = time;
+				if (time <= 0) base_time = 0;
+				else base_time = time;
 			}
 			else {
 				PlayerTime.red_time = playertime + time;
@@ -65,7 +68,7 @@ string checkChess(int& player, GameClock& GameTime, PlayerClock& PlayerTime)
 		}
 
 		char a = getchar();
-		if (a == 's') break;
+		//if (a == 's') break;
 	}
 	return "";
 }

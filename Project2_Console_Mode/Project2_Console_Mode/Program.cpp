@@ -136,8 +136,12 @@ void Program::leaveGame()
 //input cmd to move chess
 void Program::GameRun(GameManager& GM, File& file, int& round)
 {
+	GameClock GameTime;
+	PlayerClock PlayerTime;
 	for (; true;) {
 		try {
+			//timer(GameTime, PlayerTime, round);
+
 			//Game keep run
 			string charactor;
 			gotoxy(0, 11);
@@ -201,4 +205,13 @@ void Program::playagain()
 			cout << "Wrong command. Please input again. (Y/N) : ";
 		}
 	}
+}
+
+void Program::timer(GameClock& GameTime, PlayerClock& PlayerTime, int& round)
+{
+	int player = (round % 2 == 0) ? BLACK : RED;
+
+	//while (true);
+
+	string record = countingTime(player, GameTime, PlayerTime);  //-> include (moveable, move, checkmate)  and  time execute
 }

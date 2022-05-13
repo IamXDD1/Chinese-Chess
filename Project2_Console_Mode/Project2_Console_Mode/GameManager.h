@@ -33,6 +33,7 @@
 #define HORSE		3
 #define CANNON		2
 #define SOLDIER		1
+#define NULL_CHESS -1
 
 using namespace std;
 
