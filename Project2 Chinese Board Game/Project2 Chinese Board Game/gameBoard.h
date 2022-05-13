@@ -32,6 +32,7 @@ namespace Project2ChineseBoardGame {
 		}
 
 		void generateButton() {
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(gameBoard::typeid));
 			int buttonSize = chessBoard->Width / 9;
 			// make board match size
 			chessBoard->Width = chessBoard->Height * 0.9;
@@ -39,17 +40,17 @@ namespace Project2ChineseBoardGame {
 			for (int i = 0; i < 9; i++) {
 				for (int j = 0; j < 10; j++) {
 					btnGrid[i, j] = gcnew RoundButton();
-					btnGrid[i, j]->Height = buttonSize;
-					btnGrid[i, j]->Width = buttonSize;
+					btnGrid[i, j]->Height = 70;
+					btnGrid[i, j]->Width = 70;
 					// add click event
 					btnGrid[i, j]->Click += gcnew System::EventHandler(this, &gameBoard::Grid_btn_click);
 					// add button to chess board
 					chessBoard->Controls->Add(btnGrid[i, j]);
-					btnGrid[i, j]->Location = Point(i * buttonSize, j * buttonSize);
-					btnGrid[i, j]->Text = i + "/" + j;
+					btnGrid[i, j]->Location = Point(i * buttonSize + 5, j * buttonSize + 5);
 					// set button's view to transparent
 					btnGrid[i, j]->BackColor = Color::FromArgb(0, 255, 255, 255);
 					btnGrid[i, j]->BringToFront();
+					btnGrid[i, j]->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Center;
 					btnGrid[i, j]->FlatStyle = FlatStyle::Flat;
 					btnGrid[i, j]->FlatAppearance->BorderSize = 0;
 					// set button highlight when mouse hovering
@@ -58,6 +59,41 @@ namespace Project2ChineseBoardGame {
 					
 				}
 			}
+
+			// initialize chess position
+			btnGrid[0, 0]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"chariotB")));
+			btnGrid[8, 0]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"chariotB")));
+			btnGrid[0, 9]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"chariotR")));
+			btnGrid[8, 9]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"chariotR")));
+			btnGrid[1, 0]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"horseB")));
+			btnGrid[7, 0]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"horseB")));
+			btnGrid[1, 9]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"horseR")));
+			btnGrid[7, 9]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"horseR")));
+			btnGrid[2, 0]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"elephantB")));
+			btnGrid[6, 0]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"elephantB")));
+			btnGrid[2, 9]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"elephantR")));
+			btnGrid[6, 9]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"elephantR")));
+			btnGrid[3, 0]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"advisorB")));
+			btnGrid[5, 0]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"advisorB")));
+			btnGrid[3, 9]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"advisorR"))); 
+			btnGrid[5, 9]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"advisorR")));
+			btnGrid[4, 0]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"generalB")));
+			btnGrid[4, 9]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"generalR")));
+			btnGrid[1, 2]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"cannonB")));
+			btnGrid[7, 2]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"cannonB")));
+			btnGrid[1, 7]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"cannonR")));
+			btnGrid[7, 7]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"cannonR")));
+			btnGrid[0, 3]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"soldierB")));
+			btnGrid[2, 3]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"soldierB")));
+			btnGrid[4, 3]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"soldierB")));
+			btnGrid[6, 3]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"soldierB")));
+			btnGrid[8, 3]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"soldierB")));
+			btnGrid[0, 6]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"soldierR")));
+			btnGrid[2, 6]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"soldierR")));
+			btnGrid[4, 6]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"soldierR")));
+			btnGrid[6, 6]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"soldierR")));
+			btnGrid[8, 6]->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"soldierR")));
+
 		}
 
 	protected:
@@ -111,7 +147,7 @@ namespace Project2ChineseBoardGame {
 			// gameBoard
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
-			this->ClientSize = System::Drawing::Size(1139, 855);
+			this->ClientSize = System::Drawing::Size(1234, 827);
 			this->Controls->Add(this->chessBoard);
 			this->Name = L"gameBoard";
 			this->Text = L"gameBoard";
