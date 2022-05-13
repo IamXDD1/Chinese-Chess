@@ -10,7 +10,7 @@ namespace Project2ChineseBoardGame {
 	using namespace System::Drawing::Drawing2D;
 	using namespace cli;
 
-	public ref class RoundButton : Button {
+	public ref class RoundButton : Button { // circle button method
 	protected:
 		void OnPaint(PaintEventArgs^ e) override {
 			GraphicsPath^ grPath = gcnew GraphicsPath();
