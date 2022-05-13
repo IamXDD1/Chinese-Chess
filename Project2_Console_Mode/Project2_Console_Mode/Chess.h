@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #define BLACK 2
 #define RED 1
 #include <vector>
