@@ -153,6 +153,8 @@ void Board::moveChess(File& file, int& color, string& character, int& x1, int& y
 				//else if(board[y2][x2].chess_type != -1) GM.on_board.push_back(board[y2][x2]);
 				board[y2][x2] = board[y1][x1];  //move
 				board[y1][x1] = Null(x1, y1);
+				board[y2][x2].pos.x = x2;
+				board[y2][x2].pos.y = y2;
 			}
 			else {
 				throw "can't go to x2 y2";
@@ -180,6 +182,8 @@ void Board::moveChess(File& file, int& color, string& character, int& x1, int& y
 }
 
 void Board::showPath(vector<Pos>& cango) {
+	gotoxy(0, 20);
+	cout << "                                                                                                ";
 	gotoxy(0, 20);
 	for (size_t i = 0; i < cango.size(); i++) {
 		cout << '(' << cango[i].x << ',' << cango[i].y << ')' << ' ';

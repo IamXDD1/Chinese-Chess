@@ -140,7 +140,7 @@ void Program::GameRun(GameManager& GM, File& file, int& round)
 	PlayerClock PlayerTime;
 	for (; true;) {
 		try {
-			timer(GameTime, PlayerTime, round);
+			//timer(GameTime, PlayerTime, round);
 
 			//Game keep run
 			string charactor;
