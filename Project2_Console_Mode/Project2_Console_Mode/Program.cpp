@@ -42,7 +42,7 @@ void Program::startGame()
 
 	cout << "Please input a file name to output : ";
 	getline(cin, filename);
-	file.setFilename(filename+".txt");
+	file.setFilename(filename + ".txt");
 
 	clearScreen();
 	GM.gameBoard.showBoard();
@@ -68,7 +68,7 @@ void Program::loadFile()
 		cout << "Please input a file name to load : ";
 		getline(cin, filename);
 
-		file.setFilename(filename+".txt");
+		file.setFilename(filename + ".txt");
 		if (file.Load(data)) break;
 	}
 	file.closeFile();
@@ -95,7 +95,7 @@ void Program::loadFile()
 			Sleep(1000);
 			clearScreen();
 			cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << " because ";
-			if(data[i][0] == 'R') cout << "Black surrender." << '\n';
+			if (data[i][0] == 'R') cout << "Black surrender." << '\n';
 			else cout << "Red surrender." << '\n';
 			keep_playing = false;
 			break;
@@ -103,7 +103,7 @@ void Program::loadFile()
 
 		int choice;
 		gotoxy(20, 0); cout << "1.any input to next turn (except 2).";
-		gotoxy(20, 1); cout << "2.start from here."; 
+		gotoxy(20, 1); cout << "2.start from here.";
 		gotoxy(20, 2); cout << "Input option : ";
 		cin >> choice;
 		if (choice == 2) break;
@@ -164,7 +164,7 @@ void Program::GameRun(GameManager& GM, File& file, int& round)
 			}
 			else {
 				color = (round % 2 == 1) ? RED : BLACK;
-				if(color == BLACK) file.gameRecord.push_back("Red Win");
+				if (color == BLACK) file.gameRecord.push_back("Red Win");
 				else file.gameRecord.push_back("Black Win");
 			}
 
