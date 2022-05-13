@@ -28,12 +28,11 @@ public:
 		color = -1;
 		chess_type = -1;
 	}
-	virtual void kingKing(vector<Pos>& cango); // ¤ý¤£¨£¤ý
+	virtual bool kingKing(vector<Pos>& cango); // Â¤Ã½Â¤Â£Â¨Â£Â¤Ã½
 	virtual int getColor() { return color; }
-	vector<Pos> moveable(int x, int y, vector<Pos>& cango) { return cango; };
+	void moveable(int x, int y, vector<Pos>& cango) { return; };
 	void checkCompanion(vector<Pos>& cango);
-	virtual bool move(int x, int y);
-	virtual bool checkmate(int x, int y);
+	virtual bool checkmate(int x, int y, vector<Pos>& cango);
 };
 
 class Null : public Chess {
@@ -49,7 +48,7 @@ public:
 	General(int x, int y, int type) : Chess() {
 		pos.x = x;
 		pos.y = y;
-		color = type/10;
+		color = type / 10;
 		chess_type = type;
 	}
 	void moveable(int x, int y, vector<Pos>& cango);

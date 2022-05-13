@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -73,7 +73,7 @@ public:
 	~Board() {};
 };
 
-class GameManager{
+class GameManager {
 public:
 	vector<Chess> on_board;
 	int current_player;
@@ -81,5 +81,5 @@ public:
 	Viewer viewer;
 
 	bool endGame();
-	
+
 };
