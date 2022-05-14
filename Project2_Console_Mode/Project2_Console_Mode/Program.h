@@ -8,9 +8,9 @@ public:
 		menu();
 		switch (chooseOption())
 		{
-			case 1: startGame(); break;
-			case 2: loadFile();  break;
-			case 3: leaveGame(); return;
+		case 1: startGame(); break;
+		case 2: loadFile();  break;
+		case 3: leaveGame(); return;
 		}
 	}
 	void menu();
