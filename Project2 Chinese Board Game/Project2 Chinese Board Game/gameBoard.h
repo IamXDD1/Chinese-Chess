@@ -21,6 +21,7 @@ namespace Project2ChineseBoardGame {
 	{
 	public: 
 		array<RoundButton^, 2>^ btnGrid = gcnew array<RoundButton^, 2>(9, 10);
+		int timeleft;
 		gameBoard(void)
 		{
 			
@@ -108,6 +109,12 @@ namespace Project2ChineseBoardGame {
 			}
 		}
 	private: System::Windows::Forms::Panel^ chessBoard;
+	private: System::Windows::Forms::Label^ label1;
+	private: System::Windows::Forms::Label^ PlayerNow;
+	private: System::Windows::Forms::Label^ label3;
+	private: System::Windows::Forms::Label^ TimeText;
+	private: System::Windows::Forms::Timer^ timer1;
+	private: System::ComponentModel::IContainer^ components;
 
 
 
@@ -121,7 +128,7 @@ namespace Project2ChineseBoardGame {
 		/// <summary>
 		/// 設計工具所需的變數。
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -130,8 +137,14 @@ namespace Project2ChineseBoardGame {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(gameBoard::typeid));
 			this->chessBoard = (gcnew System::Windows::Forms::Panel());
+			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->PlayerNow = (gcnew System::Windows::Forms::Label());
+			this->label3 = (gcnew System::Windows::Forms::Label());
+			this->TimeText = (gcnew System::Windows::Forms::Label());
+			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->SuspendLayout();
 			// 
 			// chessBoard
@@ -144,19 +157,85 @@ namespace Project2ChineseBoardGame {
 			this->chessBoard->Size = System::Drawing::Size(720, 800);
 			this->chessBoard->TabIndex = 0;
 			// 
+			// label1
+			// 
+			this->label1->AutoSize = true;
+			this->label1->Font = (gcnew System::Drawing::Font(L"標楷體", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(136)));
+			this->label1->Location = System::Drawing::Point(795, 165);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(202, 40);
+			this->label1->TabIndex = 1;
+			this->label1->Text = L"現在回合:";
+			// 
+			// PlayerNow
+			// 
+			this->PlayerNow->AutoSize = true;
+			this->PlayerNow->Font = (gcnew System::Drawing::Font(L"標楷體", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(136)));
+			this->PlayerNow->Location = System::Drawing::Point(1003, 165);
+			this->PlayerNow->Name = L"PlayerNow";
+			this->PlayerNow->Size = System::Drawing::Size(181, 40);
+			this->PlayerNow->TabIndex = 2;
+			this->PlayerNow->Text = L"黑方玩家";
+			// 
+			// label3
+			// 
+			this->label3->AutoSize = true;
+			this->label3->Font = (gcnew System::Drawing::Font(L"標楷體", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(136)));
+			this->label3->Location = System::Drawing::Point(795, 80);
+			this->label3->Name = L"label3";
+			this->label3->Size = System::Drawing::Size(202, 40);
+			this->label3->TabIndex = 3;
+			this->label3->Text = L"剩餘時間:";
+			// 
+			// TimeText
+			// 
+			this->TimeText->AutoSize = true;
+			this->TimeText->Font = (gcnew System::Drawing::Font(L"標楷體", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(136)));
+			this->TimeText->Location = System::Drawing::Point(1003, 80);
+			this->TimeText->Name = L"TimeText";
+			this->TimeText->Size = System::Drawing::Size(38, 40);
+			this->TimeText->TabIndex = 4;
+			this->TimeText->Text = L"0";
+			// 
+			// timer1
+			// 
+			this->timer1->Interval = 1000;
+			this->timer1->Tick += gcnew System::EventHandler(this, &gameBoard::timer1_Tick);
+			// 
 			// gameBoard
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
-			this->ClientSize = System::Drawing::Size(1234, 827);
+			this->ClientSize = System::Drawing::Size(1244, 827);
+			this->Controls->Add(this->TimeText);
+			this->Controls->Add(this->label3);
+			this->Controls->Add(this->PlayerNow);
+			this->Controls->Add(this->label1);
 			this->Controls->Add(this->chessBoard);
 			this->Name = L"gameBoard";
 			this->Text = L"gameBoard";
+			this->Load += gcnew System::EventHandler(this, &gameBoard::gameBoard_Load);
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion
 	private: System::Void Grid_btn_click(System::Object^ sender, System::EventArgs^ e) {
 
 	}
-	};
+	private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) {
+		if (timeleft > 0) {
+			timeleft--;
+			TimeText->Text = timeleft + "秒";
+		}
+	}
+	private: System::Void gameBoard_Load(System::Object^ sender, System::EventArgs^ e) {
+		timeleft = 30;
+		TimeText->Text = L"30秒";
+		timer1->Start();
+	}
+};
 }

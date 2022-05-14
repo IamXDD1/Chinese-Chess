@@ -5,7 +5,6 @@ using namespace std;
 
 int main() {
 	Program exe;
-
 	exe.Run();
 	//=============================================================================================================================
 	//clock test
@@ -17,15 +16,12 @@ int main() {
 	{
 		if (player == RED) player = BLACK;
 		else if (player == BLACK) player = RED;
-
 		string record = checkChess(player, GameTime, PlayerTime);  //-> include (moveable, move, checkmate)  and  time execute
 	}*/
 	//=============================================================================================================================
 	//outline
 	/*
 	last turn/next turn   --->   use deque<string> to execute?
-
-	ProgramRun() 
 	{
 		switch(chooseOption())
 		{
@@ -34,7 +30,6 @@ int main() {
 			case 3: leaveGame(); break;
 		}
 	}
-
 	startGame(filename)
 	{
 		if(filename == "") {
@@ -44,7 +39,6 @@ int main() {
 			{
 				GameClock GameTime;
 				PlayerClock PlayerTime;
-				
 				while(true)
 				{
 					if(player == RED) player = BLACK;
@@ -57,7 +51,6 @@ int main() {
 					if(endGame) { 
 						savefile;
 
-						cout << "more game or not?"; 
 						Y -> startGame("");
 						N -> back to ProgramRun.
 					}

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -33,6 +33,7 @@
 #define HORSE		3
 #define CANNON		2
 #define SOLDIER		1
+#define NULL_CHESS -1
 
 using namespace std;
 
@@ -72,7 +73,7 @@ public:
 	~Board() {};
 };
 
-class GameManager{
+class GameManager {
 public:
 	vector<Chess> on_board;
 	int current_player;
@@ -80,5 +81,5 @@ public:
 	Viewer viewer;
 
 	bool endGame();
-	
+
 };

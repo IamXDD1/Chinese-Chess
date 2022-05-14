@@ -1,6 +1,6 @@
 #pragma once
-#include <fstream>
 #include "GameManager.h"
+#include "Clock.h"
 
 class Program {
 public:
@@ -8,9 +8,9 @@ public:
 		menu();
 		switch (chooseOption())
 		{
-			case 1: startGame(); break;
-			case 2: loadFile();  break;
-			case 3: leaveGame(); return;
+		case 1: startGame(); break;
+		case 2: loadFile();  break;
+		case 3: leaveGame(); return;
 		}
 	}
 	void menu();
@@ -21,4 +21,5 @@ public:
 	void leaveGame();
 	void GameRun(GameManager& GM, File& file, int& round);
 	void playagain();
+	void timer(GameClock& GameTime, PlayerClock& PlayerTime, int& round);
 };
