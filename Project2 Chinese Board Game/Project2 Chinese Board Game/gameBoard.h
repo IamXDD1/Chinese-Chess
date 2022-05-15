@@ -1,8 +1,9 @@
 #pragma once
 #include "RoundButton.h"
 #include <string>
+#include <utility>
 #define TIME_LIMIT 10
-#define PLAYER_BASE_TIME 10
+#define PLAYER_BASE_TIME 1800
 
 namespace Project2ChineseBoardGame {
 
@@ -31,13 +32,14 @@ namespace Project2ChineseBoardGame {
 		int redTIME;
 		bool exceed2MIN = false;
 		bool buttonClicked = false;
-	private: System::Windows::Forms::GroupBox^ TotalTIME;
-	public:
-	private: System::Windows::Forms::Label^ RedTotalTime;
-	private: System::Windows::Forms::Label^ BlackTotalTime;
-	private: System::Windows::Forms::Label^ label4;
-	private: System::Windows::Forms::Button^ TurnChangeTest;
-	private: System::Windows::Forms::Label^ label2;
+		// button for chess board click event
+		Button^ current;
+		Button^ target;
+		double disx;
+		double disy;
+		int stepcount = 0;
+		Point temp;
+		//
 	public:
 		String^ playerNow = "black";
 		gameBoard(void)
@@ -152,6 +154,13 @@ namespace Project2ChineseBoardGame {
 			RedTotalTime->Text = minutes + "分" + second + "秒";
 		}
 
+		void buttonMove(Button^ current, Button^ target) {
+			temp = current->Location;
+			disx = target->Location.X - current->Location.X;
+			disy = target->Location.Y - current->Location.Y;
+			animation->Start();
+		}
+
 	protected:
 		/// <summary>
 		/// 清除任何使用中的資源。
@@ -163,6 +172,7 @@ namespace Project2ChineseBoardGame {
 				delete components;
 			}
 		}
+
 	private: System::Windows::Forms::Panel^ chessBoard;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Label^ PlayerNow;
@@ -172,6 +182,13 @@ namespace Project2ChineseBoardGame {
 	private: System::ComponentModel::IContainer^ components;
 	private: System::Windows::Forms::Button^ surrender;
 	private: System::Windows::Forms::Button^ exit;
+	private: System::Windows::Forms::GroupBox^ TotalTIME;
+	private: System::Windows::Forms::Label^ RedTotalTime;
+	private: System::Windows::Forms::Label^ BlackTotalTime;
+	private: System::Windows::Forms::Label^ label4;
+	private: System::Windows::Forms::Button^ TurnChangeTest;
+	private: System::Windows::Forms::Label^ label2;
+	private: System::Windows::Forms::Timer^ animation;
 
 	protected:
 
@@ -206,6 +223,7 @@ namespace Project2ChineseBoardGame {
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->TurnChangeTest = (gcnew System::Windows::Forms::Button());
+			this->animation = (gcnew System::Windows::Forms::Timer(this->components));
 			this->TotalTIME->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -364,6 +382,11 @@ namespace Project2ChineseBoardGame {
 			this->TurnChangeTest->UseVisualStyleBackColor = true;
 			this->TurnChangeTest->Click += gcnew System::EventHandler(this, &gameBoard::TurnChangeTest_Click);
 			// 
+			// animation
+			// 
+			this->animation->Interval = 40;
+			this->animation->Tick += gcnew System::EventHandler(this, &gameBoard::animation_Tick);
+			// 
 			// gameBoard
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
@@ -389,7 +412,16 @@ namespace Project2ChineseBoardGame {
 		}
 #pragma endregion
 	private: System::Void Grid_btn_click(System::Object^ sender, System::EventArgs^ e) {
-
+		Button^ btn = (Button^)sender;
+		if (buttonClicked) {
+			target = btn;
+			buttonMove(current, target);
+			buttonClicked = false;
+		}
+		else {
+			current = btn;
+			buttonClicked = true;
+		}
 	}
 	private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) {
 		if (!exceed2MIN) {
@@ -399,13 +431,13 @@ namespace Project2ChineseBoardGame {
 			TimeText->Text = minutes + "分" + second + "秒";
 		}
 		else {
-			if (playerNow == "black") {
+			if (playerNow == "black") { // count black
 				blackTIME--;
 				minutes = blackTIME / 60;
 				second = blackTIME % 60;
 				BlackTotalTime->Text = minutes + "分" + second + "秒";
 			}
-			else {
+			else { // count red
 				redTIME--;
 				minutes = redTIME / 60;
 				second = redTIME % 60;
@@ -421,12 +453,12 @@ namespace Project2ChineseBoardGame {
 		}
 		if (redTIME == 0) {
 			timer1->Stop();
-			MessageBox::Show("黑方玩家獲勝!");
+			MessageBox::Show("紅方時間耗盡，黑方玩家獲勝!");
 			this->Close();
 		}
 		if (blackTIME == 0) {
 			timer1->Stop();
-			MessageBox::Show("紅方玩家獲勝!");
+			MessageBox::Show("黑方時間耗盡，紅方玩家獲勝!");
 			this->Close();
 		}
 	}
@@ -446,6 +478,22 @@ namespace Project2ChineseBoardGame {
 	}
 	private: System::Void TurnChangeTest_Click(System::Object^ sender, System::EventArgs^ e) {
 		turnChange();
+	}
+	private: System::Void animation_Tick(System::Object^ sender, System::EventArgs^ e) {
+		stepcount++;
+		current->Location = Point(current->Location.X + (disx / 24.0), current->Location.Y + (disy / 24.0));
+		current->BringToFront();
+		if (current->Location == target->Location) {
+			stepcount = 0;
+			target->Location = temp;
+			animation->Stop();
+		}
+		if (stepcount == 24) {
+			current->Location = target->Location;
+			stepcount = 0;
+			target->Location = temp;
+			animation->Stop();
+		}
 	}
 };
 }

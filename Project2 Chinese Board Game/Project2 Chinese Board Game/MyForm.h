@@ -72,7 +72,7 @@ namespace Project2ChineseBoardGame {
 			this->Title->AutoSize = true;
 			this->Title->Font = (gcnew System::Drawing::Font(L"µÿ±d¶À≠∑≈ÈW4", 48, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
-			this->Title->Location = System::Drawing::Point(222, 106);
+			this->Title->Location = System::Drawing::Point(241, 116);
 			this->Title->Name = L"Title";
 			this->Title->Size = System::Drawing::Size(358, 80);
 			this->Title->TabIndex = 0;
@@ -122,11 +122,12 @@ namespace Project2ChineseBoardGame {
 			this->author->AutoSize = true;
 			this->author->Font = (gcnew System::Drawing::Font(L"Consolas", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->author->Location = System::Drawing::Point(554, 277);
+			this->author->Location = System::Drawing::Point(582, 277);
 			this->author->Name = L"author";
 			this->author->Size = System::Drawing::Size(207, 56);
 			this->author->TabIndex = 4;
 			this->author->Text = L"Author:\r\nB11030037ßd™√øŒ";
+			this->author->Click += gcnew System::EventHandler(this, &MyForm::author_Click);
 			// 
 			// Github
 			// 
@@ -135,7 +136,7 @@ namespace Project2ChineseBoardGame {
 				static_cast<System::Byte>(0)));
 			this->Github->LinkBehavior = System::Windows::Forms::LinkBehavior::HoverUnderline;
 			this->Github->LinkColor = System::Drawing::Color::Black;
-			this->Github->Location = System::Drawing::Point(581, 546);
+			this->Github->Location = System::Drawing::Point(609, 546);
 			this->Github->Name = L"Github";
 			this->Github->Size = System::Drawing::Size(180, 33);
 			this->Github->TabIndex = 5;
@@ -148,7 +149,7 @@ namespace Project2ChineseBoardGame {
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 15);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::Control;
-			this->ClientSize = System::Drawing::Size(800, 688);
+			this->ClientSize = System::Drawing::Size(838, 643);
 			this->Controls->Add(this->Github);
 			this->Controls->Add(this->author);
 			this->Controls->Add(this->EndGame);
@@ -181,5 +182,7 @@ namespace Project2ChineseBoardGame {
 	private: System::Void EndGame_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
 	}
+private: System::Void author_Click(System::Object^ sender, System::EventArgs^ e) {
+}
 };
 }
