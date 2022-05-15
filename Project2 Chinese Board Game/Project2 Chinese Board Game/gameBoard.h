@@ -2,6 +2,7 @@
 #include "RoundButton.h"
 #include <string>
 #include <utility>
+#include <cmath>
 #define TIME_LIMIT 10
 #define PLAYER_BASE_TIME 1800
 
@@ -384,7 +385,7 @@ namespace Project2ChineseBoardGame {
 			// 
 			// animation
 			// 
-			this->animation->Interval = 40;
+			this->animation->Interval = 20;
 			this->animation->Tick += gcnew System::EventHandler(this, &gameBoard::animation_Tick);
 			// 
 			// gameBoard
@@ -481,7 +482,9 @@ namespace Project2ChineseBoardGame {
 	}
 	private: System::Void animation_Tick(System::Object^ sender, System::EventArgs^ e) {
 		stepcount++;
-		current->Location = Point(current->Location.X + (disx / 24.0), current->Location.Y + (disy / 24.0));
+		double stepDISx = round(disx / 24.0);
+		double stepDISy = round(disy / 24.0);
+		current->Location = Point(current->Location.X + stepDISx, current->Location.Y + stepDISy);
 		current->BringToFront();
 		if (current->Location == target->Location) {
 			stepcount = 0;
