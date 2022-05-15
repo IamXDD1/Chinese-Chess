@@ -131,36 +131,41 @@
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RoundButton.h" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="chessImage.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="gameBoard.resx">
       <DependentUpon>gameBoard.h</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MyForm.resx">
       <DependentUpon>MyForm.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\image_source\advisorB.png" />
-    <Image Include="..\image_source\advisorR.png" />
-    <Image Include="..\image_source\cannonB.png" />
-    <Image Include="..\image_source\cannonR.png" />
-    <Image Include="..\image_source\chariotB.png" />
-    <Image Include="..\image_source\chariotR.png" />
-    <Image Include="..\image_source\elephantB.png" />
-    <Image Include="..\image_source\elephantR.png" />
-    <Image Include="..\image_source\general.png" />
-    <Image Include="..\image_source\generalR.png" />
-    <Image Include="..\image_source\horseB.png" />
-    <Image Include="..\image_source\horseR.png" />
-    <Image Include="..\image_source\soldierB.png" />
-    <Image Include="..\image_source\soldierR.png" />
     <Image Include="..\image_source\wikichessboard.png" />
     <Image Include="chessboard.png" />
-    <Image Include="Genera%3b.png" />
-    <Image Include="general.bmp" />
-    <Image Include="general.png" />
+    <Image Include="image_source\advisorB.png" />
+    <Image Include="image_source\advisorR.png" />
+    <Image Include="image_source\cannonB.png" />
+    <Image Include="image_source\cannonR.png" />
+    <Image Include="image_source\chariotB.png" />
+    <Image Include="image_source\chariotR.png" />
+    <Image Include="image_source\elephantB.png" />
+    <Image Include="image_source\elephantR.png" />
+    <Image Include="image_source\generalB.png" />
+    <Image Include="image_source\generalR.png" />
+    <Image Include="image_source\horseB.png" />
+    <Image Include="image_source\horseR.png" />
+    <Image Include="image_source\soldierB.png" />
+    <Image Include="image_source\soldierR.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Project2 Chinese Board Game1.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
