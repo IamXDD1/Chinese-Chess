@@ -21,5 +21,4 @@ public:
 	void leaveGame();
 	void GameRun(GameManager& GM, File& file, int& round);
 	void playagain();
-	void timer(GameClock& GameTime, PlayerClock& PlayerTime, int& round);
 };

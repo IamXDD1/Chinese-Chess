@@ -10,6 +10,9 @@ struct Pos {
 	int x;
 	int y;
 
+	Pos() {};
+	Pos(int a, int b) : x(a), y(b) {};
+
 	bool operator == (Pos a) {
 		if (x == a.x && y == a.y) return true;
 		return false;
