@@ -170,7 +170,7 @@ void Board::moveChess(File& file, int& color, string& character, int& x1, int& y
 			board[y2][x2].pos.y = y2;
 		}
 
-		string str = "Player: " + to_string(color) + ", Action: " + character +
+		string str = "Player: " + to_string(color) + ", Action: " + chessname(board[y2][x2].chess_type % 10) +
 			" (" + to_string(x1) + ", " + to_string(y1) + ") -> (" + to_string(x2) + ", " + to_string(y2) + ")     ";
 		file.gameRecord.push_back(str);
 		if (general_death) {
@@ -257,6 +257,20 @@ void Board::load_all_chess_cango()
 			}
 		}
 	}
+}
+
+string Board::chessname(int type)
+{
+	switch (type) {
+	case GENERAL: return "General";
+	case ADVISOR: return "Advisor";
+	case ELEPHANT:return "Elephant";
+	case CHARIOT: return "Chariot";
+	case HORSE:	return "Horse";
+	case CANNON:	return "Cannon";
+	case SOLDIER:	return "Soldier";
+	}
+	return string();
 }
 
 void Board::useChess(Chess& temp_chess, vector<Pos>& cango) {

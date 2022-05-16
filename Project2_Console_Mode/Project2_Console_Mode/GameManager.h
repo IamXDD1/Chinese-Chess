@@ -74,6 +74,7 @@ public:
 	void showBoard();
 	void showallPath();
 	void load_all_chess_cango();
+	string chessname(int num);
 	~Board() {};
 };
 
