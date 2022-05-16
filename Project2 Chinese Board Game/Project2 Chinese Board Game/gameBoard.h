@@ -1,10 +1,12 @@
 #pragma once
 #include "RoundButton.h"
 #include <string>
-#include <utility>
 #include <cmath>
+#include <algorithm>
+#include "Program.h"
 #define TIME_LIMIT 10
 #define PLAYER_BASE_TIME 1800
+
 
 namespace Project2ChineseBoardGame {
 
@@ -22,11 +24,12 @@ namespace Project2ChineseBoardGame {
 	/// gameBoard ªººK­n
 	/// </summary>
 
-	
 	public ref class gameBoard : public System::Windows::Forms::Form
 	{
 	public: 
-		array<RoundButton^, 2>^ btnGrid = gcnew array<RoundButton^, 2>(9, 10);
+		GameManager* GM = new GameManager();
+		File* file = new File();
+		cli::array<RoundButton^, 2>^ btnGrid = gcnew cli::array<RoundButton^, 2>(9, 10);
 		int timeleft;
 		int minutes, second;
 		int blackTIME;
@@ -45,7 +48,9 @@ namespace Project2ChineseBoardGame {
 		String^ playerNow = "red";
 		gameBoard(void)
 		{
-			
+			srand(time(NULL));
+			string filename = "log_" + to_string(rand()) + ".txt";
+			file->setFilename(filename);
 			InitializeComponent();
 			generateButton();
 
@@ -69,6 +74,8 @@ namespace Project2ChineseBoardGame {
 					btnGrid[i, j]->Click += gcnew System::EventHandler(this, &gameBoard::Grid_btn_click);
 					// add button to chess board
 					chessBoard->Controls->Add(btnGrid[i, j]);
+					btnGrid[i, j]->x = i;
+					btnGrid[i, j]->y = j;
 					btnGrid[i, j]->Location = Point(i * buttonSize + 5, j * buttonSize + 5);
 					// set button's view to transparent
 					btnGrid[i, j]->BackColor = Color::FromArgb(0, 255, 255, 255);
@@ -161,9 +168,18 @@ namespace Project2ChineseBoardGame {
 			if (!current->movable) {
 				return;
 			}
+			int tempx = current->x;
+			int tempy = current->y;
+			current->x = target->x;
+			current->y = target->y;
+			target->x = tempx;
+			target->y = tempy;
 			temp = current->Location;
 			disx = target->Location.X - current->Location.X;
 			disy = target->Location.Y - current->Location.Y;
+			RoundButton^ SwapT = btnGrid[tempx, tempy];
+			btnGrid[tempx, tempy] = btnGrid[current->x, current->y];
+			btnGrid[current->x, current->y] = SwapT;
 			animation->Start();
 		}
 
@@ -443,12 +459,16 @@ namespace Project2ChineseBoardGame {
 #pragma endregion
 	private: System::Void Grid_btn_click(System::Object^ sender, System::EventArgs^ e) {
 		RoundButton^ btn = (RoundButton^)sender;
+		
 		if (buttonClicked) {
 			target = btn;
 			buttonMove(current, target);
 			buttonClicked = false;
 		}
 		else {
+			if (!btn->movable) {
+				return;
+			}
 			current = btn;
 			buttonClicked = true;
 		}
@@ -506,6 +526,11 @@ namespace Project2ChineseBoardGame {
 	}
 	private: System::Void gameBoard_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
 		timer1->Enabled = false;
+		animation->Enabled = false;
+		file->Output();
+		file->closeFile();
+		delete GM;
+		delete file;
 	}
 	private: System::Void TurnChangeTest_Click(System::Object^ sender, System::EventArgs^ e) {
 		turnChange();
@@ -520,12 +545,16 @@ namespace Project2ChineseBoardGame {
 			stepcount = 0;
 			target->Location = temp;
 			animation->Stop();
+			turnChange();
+			return;
 		}
 		if (stepcount == 24) {
 			current->Location = target->Location;
 			stepcount = 0;
 			target->Location = temp;
 			animation->Stop();
+			turnChange();
+			return;
 		}
 	}
 	private: System::Void Btn_Enter(System::Object^ sender, System::EventArgs^ e) {

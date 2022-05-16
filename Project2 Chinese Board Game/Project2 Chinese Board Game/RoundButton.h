@@ -15,6 +15,7 @@ namespace Project2ChineseBoardGame {
 		bool isChessB = false;
 		bool isChessR = false;
 		bool movable = false;
+		int x, y;
 	protected:
 		void OnPaint(PaintEventArgs^ e) override {
 			GraphicsPath^ grPath = gcnew GraphicsPath();

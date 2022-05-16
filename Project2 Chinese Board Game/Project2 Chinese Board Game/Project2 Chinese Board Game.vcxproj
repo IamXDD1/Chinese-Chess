@@ -115,7 +115,12 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies />
+      <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -125,17 +130,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Chess.cpp" />
+    <ClCompile Include="Clock.cpp" />
     <ClCompile Include="gameBoard.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="MyForm.cpp" />
+    <ClCompile Include="Program.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Chess.h" />
+    <ClInclude Include="Clock.h" />
     <ClInclude Include="gameBoard.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Program.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="RoundButton.h" />
   </ItemGroup>
   <ItemGroup>
