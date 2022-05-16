@@ -33,6 +33,8 @@ public:
 	void moveable(int x, int y, vector<Pos>& cango) { return; };
 	void checkCompanion(vector<Pos>& cango);
 	virtual bool checkmate(int x, int y, vector<Pos>& cango);
+	//欠行
+	virtual bool ifMoveThenLose();
 };
 
 class Null : public Chess {

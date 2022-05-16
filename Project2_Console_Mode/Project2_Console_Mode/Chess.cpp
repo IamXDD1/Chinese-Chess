@@ -4,7 +4,8 @@
 // Chess
 bool Chess::kingKing(vector<Pos>& cango)
 {
-	if (chess_type % 10 == 7) // tested
+	// tested
+	if (chess_type % 10 == 7) // general 
 	{
 		for (int i = 0; i < cango.size(); i++)
 		{
@@ -88,10 +89,10 @@ bool Chess::kingKing(vector<Pos>& cango)
 		}
 		return false;
 	}
-	else if (chess_type % 10 != NULL_CHESS)
+	else if (chess_type % 10 != NULL_CHESS) // pieces other than general
 	{
 		int toErase = 0;
-		if (pos.x < 8)
+		if (pos.x < 8) // go right
 		{
 			for (int j = pos.x; j < 9; j++)
 			{
@@ -110,7 +111,7 @@ bool Chess::kingKing(vector<Pos>& cango)
 				}
 			}
 		}
-		if (pos.x > 0)
+		if (pos.x > 0) // go left
 		{
 			for (int j = pos.x; j >= 0; j--)
 			{
@@ -129,7 +130,7 @@ bool Chess::kingKing(vector<Pos>& cango)
 				}
 			}
 		}
-		if (pos.y < 9)
+		if (pos.y < 9) // go down
 		{
 			for (int j = pos.y; j < 10; j++)
 			{
@@ -148,7 +149,7 @@ bool Chess::kingKing(vector<Pos>& cango)
 				}
 			}
 		}
-		if (pos.y > 0)
+		if (pos.y > 0) // go up
 		{
 			for (int j = pos.y; j >= 0; j--)
 			{
@@ -204,6 +205,53 @@ void Chess::checkCompanion(vector<Pos>& cango)
 			}
 		}
 	}
+}
+
+bool Chess::ifMoveThenLose()
+{
+	/*vector<Pos> allCanGo;
+	for (int y = 0; y < 10; y++)
+	{
+		for (int x = 0; x < 9; x++)
+		{
+			Chess temp_chess;
+			if (x == pos.x && y == pos.y) temp_chess = Null(x, y);
+			else temp_chess = Board::getChess(x, y);
+
+			if (temp_chess.color != color && temp_chess.color != NULL_COLOR)
+			{
+				if (temp_chess.chess_type % 10 == GENERAL) {
+					General general(x, y, temp_chess.chess_type);
+					general.moveable(x, y, allCanGo);
+				}
+				else if (temp_chess.chess_type % 10 == ADVISOR) {
+					Advisor advisor(x, y, temp_chess.chess_type);
+					advisor.moveable(x, y, allCanGo);
+				}
+				else if (temp_chess.chess_type % 10 == ELEPHANT) {
+					Elephant elephant(x, y, temp_chess.chess_type);
+					elephant.moveable(x, y, allCanGo);
+				}
+				else if (temp_chess.chess_type % 10 == CHARIOT) {
+					Chariot chariot(x, y, temp_chess.chess_type);
+					chariot.moveable(x, y, allCanGo);
+				}
+				else if (temp_chess.chess_type % 10 == HORSE) {
+					Horse horse(x, y, temp_chess.chess_type);
+					horse.moveable(x, y, allCanGo);
+				}
+				else if (temp_chess.chess_type % 10 == CANNON) {
+					Cannon cannon(x, y, temp_chess.chess_type);
+					cannon.moveable(x, y, allCanGo);
+				}
+				else if (temp_chess.chess_type % 10 == SOLDIER) {
+					Soldier soldier(x, y, temp_chess.chess_type);
+					soldier.moveable(x, y, allCanGo);
+				}
+			}
+		}
+	}*/
+	return false;
 }
 
 // General
@@ -344,7 +392,7 @@ void Chariot::moveable(int x, int y, vector<Pos>& cango) // tested
 {
 	if (!kingKing(cango))
 	{
-		if (y < 9)
+		if (y < 9) // go down
 		{
 			for (int i = y + 1; i < 10; i++)
 			{
@@ -356,7 +404,7 @@ void Chariot::moveable(int x, int y, vector<Pos>& cango) // tested
 				}
 			}
 		}
-		if (y > 0)
+		if (y > 0) // go up
 		{
 			for (int i = y - 1; i >= 0; i--)
 			{
@@ -368,7 +416,7 @@ void Chariot::moveable(int x, int y, vector<Pos>& cango) // tested
 				}
 			}
 		}
-		if (x < 8)
+		if (x < 8) // go right
 		{
 			for (int i = x + 1; i < 9; i++)
 			{
@@ -380,7 +428,7 @@ void Chariot::moveable(int x, int y, vector<Pos>& cango) // tested
 				}
 			}
 		}
-		if (x > 0)
+		if (x > 0) // go left
 		{
 			for (int i = x - 1; i >= 0; i--)
 			{
@@ -443,14 +491,14 @@ void Cannon::moveable(int x, int y, vector<Pos>& cango) // tested
 	if (!kingKing(cango))
 	{
 		vector<Pos> temp;
-		if (y != 8) // go down
+		if (y < 9) // go down
 		{
-			for (int i = y + 1; i < 9; i++)
+			for (int i = y + 1; i < 10; i++)
 			{
 				int chessType = Board::getChess(x, i).chess_type;
 				if (chessType != NULL_CHESS)
 				{
-					for (int j = i + 1; j < 9; j++)
+					for (int j = i + 1; j < 10; j++)
 					{
 						chessType = Board::getChess(x, j).chess_type;
 						if (chessType != NULL_CHESS)
@@ -485,7 +533,7 @@ void Cannon::moveable(int x, int y, vector<Pos>& cango) // tested
 				cango.push_back({ x, i });
 			}
 		}
-		if (x != 9) // go right
+		if (x < 8) // go right
 		{
 			for (int i = x + 1; i < 9; i++)
 			{

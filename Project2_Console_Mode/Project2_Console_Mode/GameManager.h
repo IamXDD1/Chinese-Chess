@@ -9,6 +9,7 @@
 
 #define BLACK 2
 #define RED 1
+#define NULL_COLOR -1
 
 #define BLACK_GENERAL	27
 #define BLACK_ADVISOR	26
