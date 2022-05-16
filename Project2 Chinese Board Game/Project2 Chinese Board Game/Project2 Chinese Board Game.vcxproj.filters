@@ -21,6 +21,18 @@
     <ClCompile Include="gameBoard.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="Chess.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Program.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Clock.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyForm.h">
@@ -36,6 +48,18 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="resource1.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Chess.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Program.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Clock.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

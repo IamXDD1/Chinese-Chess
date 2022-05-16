@@ -1,5 +1,6 @@
 #pragma once
 #include "gameBoard.h"
+#include "Program.h"
 
 namespace Project2ChineseBoardGame {
 
@@ -43,6 +44,8 @@ namespace Project2ChineseBoardGame {
 	private: System::Windows::Forms::Button^ EndGame;
 	private: System::Windows::Forms::Label^ author;
 	private: System::Windows::Forms::LinkLabel^ Github;
+	private: System::Windows::Forms::OpenFileDialog^ FileLoading;
+
 
 
 
@@ -65,6 +68,7 @@ namespace Project2ChineseBoardGame {
 			this->EndGame = (gcnew System::Windows::Forms::Button());
 			this->author = (gcnew System::Windows::Forms::Label());
 			this->Github = (gcnew System::Windows::Forms::LinkLabel());
+			this->FileLoading = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->SuspendLayout();
 			// 
 			// Title
@@ -124,7 +128,7 @@ namespace Project2ChineseBoardGame {
 				static_cast<System::Byte>(0)));
 			this->author->Location = System::Drawing::Point(582, 277);
 			this->author->Name = L"author";
-			this->author->Size = System::Drawing::Size(207, 56);
+			this->author->Size = System::Drawing::Size(207, 112);
 			this->author->TabIndex = 4;
 			this->author->Text = L"Author:\r\nB11030037§dªÃ¿Î\r\nB11030021´åµ¾ÀM\r\nB11030001¸­­lÄY";
 			this->author->Click += gcnew System::EventHandler(this, &MyForm::author_Click);
@@ -164,15 +168,20 @@ namespace Project2ChineseBoardGame {
 		}
 #pragma endregion
 	private: System::Void GameStart_Click(System::Object^ sender, System::EventArgs^ e) {
-		gameBoard^ board = gcnew gameBoard{};
-		this->Hide();
-		board->ShowDialog();
+		do {
+			gameBoard^ board = gcnew gameBoard{};
+			this->Hide();
+			board->ShowDialog();
+			delete board;
+		} while (MessageBox::Show("Next game?","", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes);
 		this->Show();
 		
 	}
 
 	private: System::Void LoadGame_Click(System::Object^ sender, System::EventArgs^ e) {
-
+		if (FileLoading->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+			String^ fname = FileLoading->FileName;
+		}
 	}
 	
 	private: System::Void Github_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
@@ -182,7 +191,7 @@ namespace Project2ChineseBoardGame {
 	private: System::Void EndGame_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
 	}
-private: System::Void author_Click(System::Object^ sender, System::EventArgs^ e) {
-}
+	private: System::Void author_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
 };
 }
