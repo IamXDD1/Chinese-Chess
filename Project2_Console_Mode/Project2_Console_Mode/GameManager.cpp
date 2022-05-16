@@ -166,6 +166,8 @@ void Board::moveChess(File& file, int& color, string& character, int& x1, int& y
 			//else if(board[y2][x2].chess_type != -1) GM.on_board.push_back(board[y2][x2]);
 			board[y2][x2] = board[y1][x1];  //move
 			board[y1][x1] = Null(x1, y1);
+			board[y2][x2].pos.x = x2;
+			board[y2][x2].pos.y = y2;
 		}
 
 		string str = "Player: " + to_string(color) + ", Action: " + character +
@@ -187,6 +189,20 @@ void Board::showPath(vector<Pos>& cango) {
 	gotoxy(0, 20);
 	for (size_t i = 0; i < cango.size(); i++) {
 		cout << '(' << cango[i].x << ',' << cango[i].y << ')' << ' ';
+	}
+	return;
+}
+
+void Board::showallPath() {
+	gotoxy(0, 20);
+	cout << "                                                                                                ";
+	gotoxy(0, 20);
+	for (auto it : all_chess_cango) {
+		cout << '(' << it.first.x << ',' << it.first.y << ')' << " : ";
+		for (auto cango : it.second) {
+			cout << '(' << cango.x << ',' << cango.y << ')' << ' ';
+		}
+		cout << '\n';
 	}
 	return;
 }
@@ -221,6 +237,25 @@ void Board::showBoard() {
 			}
 		}
 		cout << endl;
+	}
+}
+
+void Board::load_all_chess_cango()
+{
+	all_chess_cango.clear();
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 10; j++) {
+			vector<Pos> cango;
+			if (board[j][i].chess_type != NULL_CHESS) {
+				useChess(board[j][i], cango);
+				all_chess_cango.push_back({ Pos(i,j), cango });
+				/*
+				cout << j << ',' << i << ' ';
+				for (int x = 0; x < cango.size(); x++) cout << cango[x].x << ',' << cango[x].y << ' ';
+				cout << '\n';
+				*/
+			}
+		}
 	}
 }
 

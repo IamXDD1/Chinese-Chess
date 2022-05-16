@@ -171,7 +171,7 @@ bool Chess::kingKing(vector<Pos>& cango)
 		return false;
 	}
 }
-
+//after move
 bool Chess::checkmate(int x, int y, vector<Pos>& cango)
 {
 	int type;
@@ -445,12 +445,12 @@ void Cannon::moveable(int x, int y, vector<Pos>& cango) // tested
 		vector<Pos> temp;
 		if (y != 8) // go down
 		{
-			for (int i = y + 1; i < 9; i++)
+			for (int i = y + 1; i < 10; i++)
 			{
 				int chessType = Board::getChess(x, i).chess_type;
 				if (chessType != NULL_CHESS)
 				{
-					for (int j = i + 1; j < 9; j++)
+					for (int j = i + 1; j < 10; j++)
 					{
 						chessType = Board::getChess(x, j).chess_type;
 						if (chessType != NULL_CHESS)
