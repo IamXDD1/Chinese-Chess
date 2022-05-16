@@ -149,7 +149,8 @@ void Program::GameRun(GameManager& GM, File& file, int& round)
 			//getline(cin, cmd);
 			cin >> charactor;
 			if (cin.eof()) break;
-
+			GM.gameBoard.load_all_chess_cango();
+			GM.gameBoard.showallPath();
 			int x1, x2, y1, y2, color;
 			if (charactor != "surrender") {
 				cout << "x1 = ";
@@ -205,13 +206,4 @@ void Program::playagain()
 			cout << "Wrong command. Please input again. (Y/N) : ";
 		}
 	}
-}
-
-void Program::timer(GameClock& GameTime, PlayerClock& PlayerTime, int& round)
-{
-	int player = (round % 2 == 0) ? BLACK : RED;
-
-	//while (true);
-
-	string record = countingTime(player, GameTime, PlayerTime);  //-> include (moveable, move, checkmate)  and  time execute
 }
