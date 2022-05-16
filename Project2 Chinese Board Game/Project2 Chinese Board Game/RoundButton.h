@@ -11,6 +11,10 @@ namespace Project2ChineseBoardGame {
 	using namespace cli;
 
 	public ref class RoundButton : Button { // circle button method
+	public:
+		bool isChessB = false;
+		bool isChessR = false;
+		bool movable = false;
 	protected:
 		void OnPaint(PaintEventArgs^ e) override {
 			GraphicsPath^ grPath = gcnew GraphicsPath();
@@ -18,5 +22,6 @@ namespace Project2ChineseBoardGame {
 			this->Region = gcnew System::Drawing::Region(grPath);
 			Button::OnPaint(e);
 		}
+	
 	};
 }
