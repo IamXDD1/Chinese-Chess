@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <map>
 #include "Clock.h"
 #include "Chess.h"
 
@@ -62,6 +63,7 @@ class Board {
 protected:
 	static Chess board[10][9];
 public:
+	vector<pair<Pos, vector<Pos>>> all_chess_cango;
 	Board();
 	void initialization();
 	static Chess getChess(int x, int y) { return board[y][x]; }
@@ -71,6 +73,9 @@ public:
 	void showPath(vector<Pos>& cango);
 	bool checkcango(int& x2, int& y2, vector<Pos>& cango);
 	void showBoard();
+	void showallPath();
+	void load_all_chess_cango();
+	string chessname(int num);
 	~Board() {};
 };
 

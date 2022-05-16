@@ -172,7 +172,7 @@ bool Chess::kingKing(vector<Pos>& cango)
 		return false;
 	}
 }
-
+//after move
 bool Chess::checkmate(int x, int y, vector<Pos>& cango)
 {
 	int type;
