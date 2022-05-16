@@ -1,5 +1,6 @@
 #pragma once
 #include "gameBoard.h"
+#include "Program.h"
 
 namespace Project2ChineseBoardGame {
 
@@ -168,7 +169,6 @@ namespace Project2ChineseBoardGame {
 		this->Hide();
 		board->ShowDialog();
 		this->Show();
-		
 	}
 
 	private: System::Void LoadGame_Click(System::Object^ sender, System::EventArgs^ e) {

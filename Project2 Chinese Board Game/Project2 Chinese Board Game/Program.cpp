@@ -35,17 +35,11 @@ void Program::startGame()
 {
 	GameManager GM;
 	File file;
-	string filename;
+	srand(time(NULL));
+	string filename = "log_" + to_string(rand()) + ".txt";
 	int round = 1;
 
-	cin.get();
-
-	cout << "Please input a file name to output : ";
-	getline(cin, filename);
-	file.setFilename(filename + ".txt");
-
-	clearScreen();
-	GM.gameBoard.showBoard();
+	file.setFilename(filename);
 
 	//keep playing
 	GameRun(GM, file, round);
