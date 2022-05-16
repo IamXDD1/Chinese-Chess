@@ -169,7 +169,7 @@ namespace Project2ChineseBoardGame {
 
 		void lockNonPlayerNowBtn() {
 			for (int i = 0; i < 9; i++) {
-				for (int j = 0; j < 9; j++) {
+				for (int j = 0; j < 10; j++) {
 					if (playerNow == "black") {
 						if (btnGrid[i, j]->isChessB) {
 							btnGrid[i, j]->movable = true;

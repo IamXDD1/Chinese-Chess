@@ -126,7 +126,7 @@ namespace Project2ChineseBoardGame {
 			this->author->Name = L"author";
 			this->author->Size = System::Drawing::Size(207, 56);
 			this->author->TabIndex = 4;
-			this->author->Text = L"Author:\r\nB11030037§dªÃ¿Î";
+			this->author->Text = L"Author:\r\nB11030037§dªÃ¿Î\r\nB11030021´åµ¾ÀM\r\nB11030001¸­­lÄY";
 			this->author->Click += gcnew System::EventHandler(this, &MyForm::author_Click);
 			// 
 			// Github
@@ -168,7 +168,7 @@ namespace Project2ChineseBoardGame {
 		this->Hide();
 		board->ShowDialog();
 		this->Show();
-
+		
 	}
 
 	private: System::Void LoadGame_Click(System::Object^ sender, System::EventArgs^ e) {
