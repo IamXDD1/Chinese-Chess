@@ -36,12 +36,12 @@ void Program::startGame()
 	GameManager GM;
 	File file;
 	srand(time(NULL));
-	string filename = "log_" + to_string(rand()) + ".txt";
+	string filename = "./gamedata/log_" + to_string(rand()) + ".txt";
 	int round = 1;
 
 	cin.get();
 
-	file.setFilename(filename);
+	file.setFilename(filename + ".txt");
 
 	clearScreen();
 	GM.gameBoard.showBoard();
