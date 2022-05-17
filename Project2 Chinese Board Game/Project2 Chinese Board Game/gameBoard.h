@@ -4,6 +4,7 @@
 #include <cmath>
 #include <algorithm>
 #include <ctime>
+#include <msclr\marshal_cppstd.h>
 #include "Program.h"
 #define TIME_LIMIT 10
 #define PLAYER_BASE_TIME 1800
@@ -28,7 +29,7 @@ namespace Project2ChineseBoardGame {
 
 	public ref class gameBoard : public System::Windows::Forms::Form
 	{
-	public: 
+	public:
 		GameManager* GM = new GameManager();
 		File* file = new File();
 		cli::array<RoundButton^, 2>^ btnGrid = gcnew cli::array<RoundButton^, 2>(9, 10);
@@ -50,13 +51,27 @@ namespace Project2ChineseBoardGame {
 
 		gameBoard(void)
 		{
-			//srand(time(NULL));
+			srand(time(NULL));
 			time_t now = time(0);
-			string dt = ctime(&now);
-			string filename = "./game data/log_" + dt + ".txt";
+			string dt = to_string(rand());
+			string filename = "./gamedata/log" + dt +".txt";//"./game/log_" + dt + ".txt";
 			file->setFilename(filename);
 			InitializeComponent();
 			generateButton();
+
+			//
+			//TODO:  在此加入建構函式程式碼
+			//
+		}
+
+		gameBoard(vector<string> loaded_data, String^ filename)
+		{
+			msclr::interop::marshal_context context;
+			file->setFilename(context.marshal_as<string>(filename));
+			InitializeComponent();
+			generateButton();
+
+			//this->next_step = (gcnew System::Windows::Forms::Button());
 
 			//
 			//TODO:  在此加入建構函式程式碼
@@ -169,7 +184,7 @@ namespace Project2ChineseBoardGame {
 		}
 
 		void buttonMove(RoundButton^ current, RoundButton^ target, vector<Pos>& cango) {
-			if (!current->movable || !GM->gameBoard.checkcango( target->x, target->y, cango)) {
+			if (!current->movable || !GM->gameBoard.checkcango(target->x, target->y, cango)) {
 				return;
 			}
 			int tempx = current->x;
@@ -255,6 +270,16 @@ namespace Project2ChineseBoardGame {
 			else {
 				return;
 			}
+		}
+
+		void fileOutput() {
+			String^ filename = msclr::interop::marshal_as<String^>(file->getFilename());
+			String^ str = "";
+
+			for (int i = 0; i < file->gameRecord.size(); i++) {
+				str += msclr::interop::marshal_as<String^>(file->gameRecord[i] + '\n');
+			}
+			System::IO::File::WriteAllText(filename, str);
 		}
 
 	protected:
@@ -579,6 +604,15 @@ namespace Project2ChineseBoardGame {
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ now = PlayerNow->Text;
 		MessageBox::Show(now + "投降!");
+		if (playerNow == "red") {
+			file->gameRecord.push_back("Red surrender!");
+			file->gameRecord.push_back("Black Win");
+		}
+		else {
+			file->gameRecord.push_back("Black surrender!");
+			file->gameRecord.push_back("Red Win");
+		}
+		checkIfGameEnds();
 	}
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
@@ -586,7 +620,7 @@ namespace Project2ChineseBoardGame {
 	private: System::Void gameBoard_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
 		timer1->Enabled = false;
 		animation->Enabled = false;
-		file->Output();
+		fileOutput();
 		file->closeFile();
 		delete GM;
 		delete file;
@@ -636,5 +670,5 @@ namespace Project2ChineseBoardGame {
 			btn->Height = 70;
 		}
 	}
-};
+	};
 }
