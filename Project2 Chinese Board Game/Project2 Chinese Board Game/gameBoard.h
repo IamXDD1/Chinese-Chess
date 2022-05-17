@@ -54,7 +54,7 @@ namespace Project2ChineseBoardGame {
 			srand(time(NULL));
 			time_t now = time(0);
 			string dt = to_string(rand());
-			string filename = "./gamedata/log" + dt +".txt";//"./game/log_" + dt + ".txt";
+			string filename = "./gamedata/log" + dt +".txt";
 			file->setFilename(filename);
 			InitializeComponent();
 			generateButton();
