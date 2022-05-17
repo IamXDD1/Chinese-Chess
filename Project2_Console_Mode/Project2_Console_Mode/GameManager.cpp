@@ -1,6 +1,7 @@
 #include "GameManager.h"
 
 Chess Board::board[10][9];
+vector<pair<Pos, vector<Pos>>> Board::all_chess_cango;
 
 //File
 //load file
@@ -104,7 +105,9 @@ void Board::initialization() {
 	return;
 }
 //check input player, chess_type is correspnding to the chess on the board[y][x]
-bool Board::checkChess(Chess chess, int& color, string& character) {
+bool Board::checkChess(Chess chess) {
+	int color = chess.chess_type / 10;
+	string character = chessname(chess.chess_type % 10);
 	switch (chess.chess_type)
 	{
 	case BLACK_GENERAL: if (color == BLACK && character == "General") return true; break;
@@ -128,9 +131,9 @@ bool Board::checkChess(Chess chess, int& color, string& character) {
 	return false;
 }
 //to move choosed chess 
-void Board::moveChess(File& file, int& color, string& character, int& x1, int& y1, int& x2, int& y2, bool loading) {
+void Board::moveChess(File& file, int& x1, int& y1, int& x2, int& y2, bool loading) {
 	Chess temp_chess = getChess(x1, y1);
-	if (checkChess(temp_chess, color, character)) { // input chess (x1, y1)
+	if (checkChess(temp_chess)) { // input chess (x1, y1)
 		bool general_death = false;
 		if (loading == false) {
 			vector<Pos> cango;
@@ -170,11 +173,11 @@ void Board::moveChess(File& file, int& color, string& character, int& x1, int& y
 			board[y2][x2].pos.y = y2;
 		}
 
-		string str = "Player: " + to_string(color) + ", Action: " + chessname(board[y2][x2].chess_type % 10) +
+		string str = "Player: " + to_string(board[y2][x2].chess_type/10) + ", Action: " + chessname(board[y2][x2].chess_type % 10) +
 			" (" + to_string(x1) + ", " + to_string(y1) + ") -> (" + to_string(x2) + ", " + to_string(y2) + ")     ";
 		file.gameRecord.push_back(str);
 		if (general_death) {
-			if (color == BLACK) file.gameRecord.push_back("Black Win");
+			if (board[y2][x2].chess_type / 10 == BLACK) file.gameRecord.push_back("Black Win");
 			else file.gameRecord.push_back("Red Win");
 		}
 		gotoxy(20, 3);
@@ -233,7 +236,7 @@ void Board::showBoard() {
 			case RED_CANNON:	cout << "¬¶"; break;
 			case BLACK_SOLDIER: cout << "¨ò"; break;
 			case RED_SOLDIER:	cout << "§L"; break;
-			default: cout << " €"; break;
+			default: cout << "  "; break;
 			}
 		}
 		cout << endl;
