@@ -4,6 +4,7 @@
 #include <cmath>
 #include <algorithm>
 #include <ctime>
+#include <msclr\marshal_cppstd.h>
 #include "Program.h"
 #define TIME_LIMIT 10
 #define PLAYER_BASE_TIME 1800
@@ -52,11 +53,40 @@ namespace Project2ChineseBoardGame {
 		{
 			//srand(time(NULL));
 			time_t now = time(0);
-			string dt = ctime(&now);
+			string dt = to_string(rand());  //ctime(&now);
 			string filename = "./game data/log_" + dt + ".txt";
 			file->setFilename(filename);
 			InitializeComponent();
+			nextStep->Visible = false;
+			nextStep->Enabled = false;
+			previousStep->Visible = false;
+			previousStep->Enabled = false;
 			generateButton();
+
+			//
+			//TODO:  在此加入建構函式程式碼
+			//
+		}
+
+		gameBoard(vector<string> data, File* inputfile)
+		{
+			delete file;
+			file = inputfile;
+			InitializeComponent();
+			label3->Visible = false;
+			TimeText->Visible = false;
+			timer1->Enabled = false;
+			surrender->Enabled = false;
+			surrender->Visible = false;
+			TurnChangeTest->Visible = false;
+			TurnChangeTest->Enabled = false;
+			TotalTIME->Enabled = false;
+			TotalTIME->Visible = false;
+			generateButton();
+
+			//read_loaded_data(data);
+
+			//this->next_step = (gcnew System::Windows::Forms::Button());
 
 			//
 			//TODO:  在此加入建構函式程式碼
@@ -257,6 +287,63 @@ namespace Project2ChineseBoardGame {
 			}
 		}
 
+		void fileOutput() {
+			String^ filename = msclr::interop::marshal_as<String^>(file->getFilename());
+			String^ str = "";
+
+			for (int i = 0; i < file->gameRecord.size(); i++) {
+				str += msclr::interop::marshal_as<String^>(file->gameRecord[i] + '\n');
+			}
+			System::IO::File::WriteAllText(filename, str);
+		}
+
+		void read_loaded_data(vector<string>& data){
+			bool keep_playing = true;
+			for (int i = 0; i < data.size(); i++) {
+				/*
+				if (file.gameRecord.size() > 0) {
+					if (file.gameRecord[file.gameRecord.size() - 1] == "Black Win"
+						|| file.gameRecord[file.gameRecord.size() - 1] == "Red Win") {
+						keep_playing = false;
+						break;
+					}
+				}
+
+				if (data[i] == "Red Win" || data[i] == "Black Win") {
+					file.gameRecord.push_back(data[i]);
+					Sleep(1000);
+					clearScreen();
+					cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << " because ";
+					if (data[i][0] == 'R') cout << "Black surrender." << '\n';
+					else cout << "Red surrender." << '\n';
+					keep_playing = false;
+					break;
+				}
+
+				int choice;
+				gotoxy(20, 0); cout << "1.any input to next turn (except 2).";
+				gotoxy(20, 1); cout << "2.start from here.";
+				gotoxy(20, 2); cout << "Input option : ";
+				cin >> choice;
+				if (choice == 2) break;
+
+				int x1 = -1, x2 = -1, y1 = -1, y2 = -1, color = -1;
+				string charactor;
+				file.Input(data[i], color, charactor, x1, y1, x2, y2);
+				color = (round % 2 == 1) ? RED : BLACK;
+				GM.gameBoard.moveChess(file, x1, y1, x2, y2, true);
+				GM.gameBoard.showBoard();
+				round++;
+				*/
+			}
+
+			//keep playing
+			if (keep_playing) {
+				//GameRun(GM, file, round);
+			}
+			return;
+		}
+
 	protected:
 		/// <summary>
 		/// 清除任何使用中的資源。
@@ -285,6 +372,8 @@ namespace Project2ChineseBoardGame {
 	private: System::Windows::Forms::Button^ TurnChangeTest;
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::Timer^ animation;
+	private: System::Windows::Forms::Button^ nextStep;
+	private: System::Windows::Forms::Button^ previousStep;
 
 	protected:
 
@@ -320,6 +409,8 @@ namespace Project2ChineseBoardGame {
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->TurnChangeTest = (gcnew System::Windows::Forms::Button());
 			this->animation = (gcnew System::Windows::Forms::Timer(this->components));
+			this->nextStep = (gcnew System::Windows::Forms::Button());
+			this->previousStep = (gcnew System::Windows::Forms::Button());
 			this->TotalTIME->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -484,10 +575,34 @@ namespace Project2ChineseBoardGame {
 			this->animation->Interval = 20;
 			this->animation->Tick += gcnew System::EventHandler(this, &gameBoard::animation_Tick);
 			// 
+			// nextStep
+			// 
+			this->nextStep->Font = (gcnew System::Drawing::Font(L"標楷體", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(136)));
+			this->nextStep->Location = System::Drawing::Point(1010, 257);
+			this->nextStep->Name = L"nextStep";
+			this->nextStep->Size = System::Drawing::Size(188, 63);
+			this->nextStep->TabIndex = 10;
+			this->nextStep->Text = L"下一步";
+			this->nextStep->UseVisualStyleBackColor = true;
+			// 
+			// previousStep
+			// 
+			this->previousStep->Font = (gcnew System::Drawing::Font(L"標楷體", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(136)));
+			this->previousStep->Location = System::Drawing::Point(802, 257);
+			this->previousStep->Name = L"previousStep";
+			this->previousStep->Size = System::Drawing::Size(188, 63);
+			this->previousStep->TabIndex = 11;
+			this->previousStep->Text = L"上一步";
+			this->previousStep->UseVisualStyleBackColor = true;
+			// 
 			// gameBoard
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->ClientSize = System::Drawing::Size(1244, 827);
+			this->Controls->Add(this->previousStep);
+			this->Controls->Add(this->nextStep);
 			this->Controls->Add(this->TurnChangeTest);
 			this->Controls->Add(this->TotalTIME);
 			this->Controls->Add(this->exit);
@@ -507,6 +622,7 @@ namespace Project2ChineseBoardGame {
 			this->PerformLayout();
 
 		}
+
 #pragma endregion
 	private: System::Void Grid_btn_click(System::Object^ sender, System::EventArgs^ e) {
 		RoundButton^ btn = (RoundButton^)sender;
@@ -595,7 +711,7 @@ namespace Project2ChineseBoardGame {
 	private: System::Void gameBoard_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
 		timer1->Enabled = false;
 		animation->Enabled = false;
-		file->Output();
+		fileOutput();
 		file->closeFile();
 		delete GM;
 		delete file;
