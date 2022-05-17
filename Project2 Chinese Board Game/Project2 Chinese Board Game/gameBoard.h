@@ -213,12 +213,20 @@ namespace Project2ChineseBoardGame {
 		void ShowLegalPath(vector<Pos>& cango) {
 			for (Pos it : cango) {
 				btnGrid[it.x, it.y]->BackColor = Color::FromArgb(70, 255, 0, 0);
+				if (btnGrid[it.x, it.y]->isChessB || btnGrid[it.x, it.y]->isChessR) {
+					btnGrid[it.x, it.y]->Width = 80;
+					btnGrid[it.x, it.y]->Height = 80;
+				}
 			}
 		}
 
 		void HideLegalPath(vector<Pos>& cango) {
 			for (Pos it : cango) {
 				btnGrid[it.x, it.y]->BackColor = Color::FromArgb(0, 255, 255, 255);
+				if (btnGrid[it.x, it.y]->isChessB || btnGrid[it.x, it.y]->isChessR) {
+					btnGrid[it.x, it.y]->Width = 70;
+					btnGrid[it.x, it.y]->Height = 70;
+				}
 			}
 		}
 

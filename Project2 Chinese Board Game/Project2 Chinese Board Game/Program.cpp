@@ -39,7 +39,7 @@ void Program::startGame()
 	string filename = "log_" + to_string(rand()) + ".txt";
 	int round = 1;
 
-	file.setFilename(filename);
+	file->setFilename(filename);
 
 	//keep playing
 	GameRun(GM, file, round);
