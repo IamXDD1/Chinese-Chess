@@ -27,10 +27,10 @@
     <ClCompile Include="GameManager.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="Clock.cpp">
+    <ClCompile Include="Program.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="Program.cpp">
+    <ClCompile Include="Clock.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
   </ItemGroup>

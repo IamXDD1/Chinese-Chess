@@ -3,8 +3,10 @@
 #include <string>
 #include <cmath>
 #include <algorithm>
+#include "Program.h"
 #define TIME_LIMIT 10
 #define PLAYER_BASE_TIME 1800
+
 
 namespace Project2ChineseBoardGame {
 
@@ -22,11 +24,12 @@ namespace Project2ChineseBoardGame {
 	/// gameBoard ªººK­n
 	/// </summary>
 
-	
 	public ref class gameBoard : public System::Windows::Forms::Form
 	{
 	public: 
-		array<RoundButton^, 2>^ btnGrid = gcnew array<RoundButton^, 2>(9, 10);
+		GameManager* GM = new GameManager();
+		File* file = new File();
+		cli::array<RoundButton^, 2>^ btnGrid = gcnew cli::array<RoundButton^, 2>(9, 10);
 		int timeleft;
 		int minutes, second;
 		int blackTIME;
@@ -45,7 +48,9 @@ namespace Project2ChineseBoardGame {
 		String^ playerNow = "red";
 		gameBoard(void)
 		{
-			
+			srand(time(NULL));
+			string filename = "log_" + to_string(rand()) + ".txt";
+			file->setFilename(filename);
 			InitializeComponent();
 			generateButton();
 
@@ -454,6 +459,7 @@ namespace Project2ChineseBoardGame {
 #pragma endregion
 	private: System::Void Grid_btn_click(System::Object^ sender, System::EventArgs^ e) {
 		RoundButton^ btn = (RoundButton^)sender;
+		
 		if (buttonClicked) {
 			target = btn;
 			buttonMove(current, target);
@@ -521,6 +527,10 @@ namespace Project2ChineseBoardGame {
 	private: System::Void gameBoard_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
 		timer1->Enabled = false;
 		animation->Enabled = false;
+		file->Output();
+		file->closeFile();
+		delete GM;
+		delete file;
 	}
 	private: System::Void TurnChangeTest_Click(System::Object^ sender, System::EventArgs^ e) {
 		turnChange();
