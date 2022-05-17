@@ -39,12 +39,7 @@ void Program::startGame()
 	string filename = "log_" + to_string(rand()) + ".txt";
 	int round = 1;
 
-	cin.get();
-
 	file.setFilename(filename);
-
-	clearScreen();
-	GM.gameBoard.showBoard();
 
 	//keep playing
 	GameRun(GM, file, round);
