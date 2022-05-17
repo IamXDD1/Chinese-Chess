@@ -178,8 +178,20 @@ namespace Project2ChineseBoardGame {
 	}
 
 	private: System::Void LoadGame_Click(System::Object^ sender, System::EventArgs^ e) {
+		File* file = new File();
 		if (FileLoading->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 			String^ fname = FileLoading->FileName;
+			vector<string> data;
+			file->setFilename(msclr::interop::marshal_as<string>(fname));
+			if(file->Load(data)){
+				do {
+					gameBoard^ board = gcnew gameBoard(data, file);
+					this->Hide();
+					board->ShowDialog();
+					delete board;
+				} while (MessageBox::Show("Do you want a new game?","", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes);
+				this->Show();
+			}
 		}
 	}
 	

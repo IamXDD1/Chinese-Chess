@@ -56,6 +56,7 @@ public:
 	void Output();
 	inline string getFilename() { return filename; }
 	inline void closeFile() { file.close(); }
+	inline string getFilename() { return filename; }
 };
 
 class Board {
