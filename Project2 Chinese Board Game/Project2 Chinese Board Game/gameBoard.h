@@ -579,6 +579,15 @@ namespace Project2ChineseBoardGame {
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ now = PlayerNow->Text;
 		MessageBox::Show(now + "зын░!");
+		if (playerNow == "red") {
+			file->gameRecord.push_back("Red surrender!");
+			file->gameRecord.push_back("Black Win");
+		}
+		else {
+			file->gameRecord.push_back("Black surrender!");
+			file->gameRecord.push_back("Red Win");
+		}
+		checkIfGameEnds();
 	}
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
