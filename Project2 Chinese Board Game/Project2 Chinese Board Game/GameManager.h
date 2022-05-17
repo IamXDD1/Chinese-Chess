@@ -4,7 +4,6 @@
 #include <sstream>
 #include <vector>
 #include <string>
-#include <map>
 #include "Clock.h"
 #include "Chess.h"
 
@@ -66,11 +65,11 @@ public:
 	Board();
 	void initialization();
 	static Chess getChess(int x, int y) { return board[y][x]; }
-	bool checkChess(Chess chess, int& color, string& character);
-	void moveChess(File& file, int& color, string& character, int& x1, int& y1, int& x2, int& y2, bool loading = false);
+	bool checkChess(Chess chess);
+	void moveChess(File* file, int x1, int y1, int x2, int y2, bool loading = false);
 	void useChess(Chess& temp_chess, vector<Pos>& cango);
 	void showPath(vector<Pos>& cango);
-	bool checkcango(int& x2, int& y2, vector<Pos>& cango);
+	bool checkcango(int x2, int y2, vector<Pos> cango);
 	void showBoard();
 	void showallPath();
 	void load_all_chess_cango();

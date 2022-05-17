@@ -175,7 +175,6 @@ namespace Project2ChineseBoardGame {
 			delete board;
 		} while (MessageBox::Show("Next game?","", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes);
 		this->Show();
-		
 	}
 
 	private: System::Void LoadGame_Click(System::Object^ sender, System::EventArgs^ e) {
