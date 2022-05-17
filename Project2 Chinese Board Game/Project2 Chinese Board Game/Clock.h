@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <conio.h>
 #include <ctime>
+#include <cstdlib>
 
 #define BLACK 2
 #define RED 1

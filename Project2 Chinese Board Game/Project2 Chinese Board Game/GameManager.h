@@ -4,7 +4,6 @@
 #include <sstream>
 #include <vector>
 #include <string>
-#include <map>
 #include "Clock.h"
 #include "Chess.h"
 
