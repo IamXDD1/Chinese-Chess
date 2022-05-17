@@ -35,7 +35,6 @@ void Program::startGame()
 {
 	GameManager GM;
 	File file;
-	string filename;
 	srand(time(NULL));
 	string filename = "log_" + to_string(rand()) + ".txt";
 	int round = 1;
@@ -112,7 +111,7 @@ void Program::loadFile()
 		string charactor;
 		file.Input(data[i], color, charactor, x1, y1, x2, y2);
 		color = (round % 2 == 1) ? RED : BLACK;
-		GM.gameBoard.moveChess(file, color, charactor, x1, y1, x2, y2, true);
+		GM.gameBoard.moveChess(file, x1, y1, x2, y2, true);
 		GM.gameBoard.showBoard();
 		round++;
 	}
@@ -159,7 +158,7 @@ void Program::GameRun(GameManager& GM, File& file, int& round)
 				cin >> y1;
 				//file.Input(cmd, color, charactor, x1, y1, x2, y2);
 				color = (round % 2 == 1) ? RED : BLACK;
-				GM.gameBoard.moveChess(file, color, charactor, x1, y1, x2, y2);
+				GM.gameBoard.moveChess(file, x1, y1, x2, y2);
 				GM.gameBoard.showBoard();
 				round++;
 			}
