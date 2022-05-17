@@ -104,7 +104,9 @@ void Board::initialization() {
 	return;
 }
 //check input player, chess_type is correspnding to the chess on the board[y][x]
-bool Board::checkChess(Chess chess, int& color, string& character) {
+bool Board::checkChess(Chess chess) {
+	int color = chess.chess_type / 10;
+	string character = chessname(chess.chess_type % 10);
 	switch (chess.chess_type)
 	{
 	case BLACK_GENERAL: if (color == BLACK && character == "General") return true; break;
@@ -128,25 +130,14 @@ bool Board::checkChess(Chess chess, int& color, string& character) {
 	return false;
 }
 //to move choosed chess 
-void Board::moveChess(File& file, int& color, string& character, int& x1, int& y1, int& x2, int& y2, bool loading) {
+void Board::moveChess(File* file, int x1, int y1, int x2, int y2, bool loading) {
 	Chess temp_chess = getChess(x1, y1);
-	if (checkChess(temp_chess, color, character)) { // input chess (x1, y1)
+	if (checkChess(temp_chess)) { // input chess (x1, y1)
 		bool general_death = false;
 		if (loading == false) {
 			vector<Pos> cango;
 			useChess(temp_chess, cango);  //load moveable path
 			showPath(cango);
-
-			for (;;)
-			{
-				gotoxy(0, 21);
-				cout << "x2 = ";
-				cin >> x2;
-				cout << "y2 = ";
-				cin >> y2;			//click point to move
-				if ((x2 >= 0 && x2 <= 8) && (y2 >= 0 && y2 <= 9)) break;
-				else "position is out of range. please input again!";
-			}
 
 			if (checkcango(x2, y2, cango)) {
 				if (board[y2][x2].chess_type % 10 == GENERAL) general_death = true;
@@ -157,7 +148,6 @@ void Board::moveChess(File& file, int& color, string& character, int& x1, int& y
 				board[y2][x2].pos.y = y2;
 			}
 			else {
-				throw "can't go to x2 y2";
 				return;
 			}
 		}
@@ -170,17 +160,16 @@ void Board::moveChess(File& file, int& color, string& character, int& x1, int& y
 			board[y2][x2].pos.y = y2;
 		}
 
-		string str = "Player: " + to_string(color) + ", Action: " + chessname(board[y2][x2].chess_type % 10) +
+		string str = "Player: " + to_string(board[y2][x2].chess_type/10) + ", Action: " + chessname(board[y2][x2].chess_type % 10) +
 			" (" + to_string(x1) + ", " + to_string(y1) + ") -> (" + to_string(x2) + ", " + to_string(y2) + ")     ";
-		file.gameRecord.push_back(str);
+		file->gameRecord.push_back(str);
 		if (general_death) {
-			if (color == BLACK) file.gameRecord.push_back("Black Win");
-			else file.gameRecord.push_back("Red Win");
+			if (board[y2][x2].chess_type / 10 == BLACK) file->gameRecord.push_back("Black Win");
+			else file->gameRecord.push_back("Red Win");
 		}
 		gotoxy(20, 3);
 		cout << str;
 	}
-	else throw "Move chess fail, for wrong color or chess";
 }
 
 void Board::showPath(vector<Pos>& cango) {
@@ -207,7 +196,7 @@ void Board::showallPath() {
 	return;
 }
 
-bool Board::checkcango(int& x2, int& y2, vector<Pos>& cango) {
+bool Board::checkcango(int x2, int y2, vector<Pos> cango) {
 	for (size_t i = 0; i < cango.size(); i++) {
 		if (x2 == cango[i].x && y2 == cango[i].y) return true;
 	}
