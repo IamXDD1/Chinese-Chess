@@ -1,6 +1,7 @@
 #include "GameManager.h"
 
 Chess Board::board[10][9];
+vector<pair<Pos, vector<Pos>>> Board::all_chess_cango;
 
 //File
 //load file

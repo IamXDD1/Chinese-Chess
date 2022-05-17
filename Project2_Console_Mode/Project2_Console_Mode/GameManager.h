@@ -63,7 +63,7 @@ class Board {
 protected:
 	static Chess board[10][9];
 public:
-	vector<pair<Pos, vector<Pos>>> all_chess_cango;
+	static vector<pair<Pos, vector<Pos>>> all_chess_cango;
 	Board();
 	void initialization();
 	static Chess getChess(int x, int y) { return board[y][x]; }

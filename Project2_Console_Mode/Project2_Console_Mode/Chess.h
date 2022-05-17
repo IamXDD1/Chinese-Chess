@@ -22,6 +22,10 @@ struct Pos {
 class Chess {
 protected:
 	int color;
+
+	int ifMoveThenLose_simu(Chess board[][9], Pos simu);
+	void load_all_chess_cango_cver(Chess board[][9], vector<pair<Pos, vector<Pos>>> a);
+	void useChess_cver(Chess& temp_chess, vector<Pos>& cango);
 public:
 	Pos pos;
 	int chess_type;
@@ -37,7 +41,7 @@ public:
 	void checkCompanion(vector<Pos>& cango);
 	virtual bool checkmate(int x, int y, vector<Pos>& cango);
 	//欠行
-	virtual bool ifMoveThenLose();
+	bool ifMoveThenLose();
 };
 
 class Null : public Chess {
