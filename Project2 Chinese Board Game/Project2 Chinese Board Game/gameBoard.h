@@ -3,6 +3,7 @@
 #include <string>
 #include <cmath>
 #include <algorithm>
+#include <ctime>
 #include "Program.h"
 #define TIME_LIMIT 10
 #define PLAYER_BASE_TIME 1800
@@ -24,6 +25,7 @@ namespace Project2ChineseBoardGame {
 	/// gameBoard 的摘要
 	/// </summary>
 
+
 	public ref class gameBoard : public System::Windows::Forms::Form
 	{
 	public: 
@@ -44,12 +46,14 @@ namespace Project2ChineseBoardGame {
 		int stepcount = 0;
 		Point temp;
 		//
-	public:
 		String^ playerNow = "red";
+
 		gameBoard(void)
 		{
-			srand(time(NULL));
-			string filename = "log_" + to_string(rand()) + ".txt";
+			//srand(time(NULL));
+			time_t now = time(0);
+			string dt = ctime(&now);
+			string filename = "./game data/log_" + dt + ".txt";
 			file->setFilename(filename);
 			InitializeComponent();
 			generateButton();
@@ -164,8 +168,8 @@ namespace Project2ChineseBoardGame {
 			RedTotalTime->Text = minutes + "分" + second + "秒";
 		}
 
-		void buttonMove(RoundButton^ current, RoundButton^ target) {
-			if (!current->movable) {
+		void buttonMove(RoundButton^ current, RoundButton^ target, vector<Pos>& cango) {
+			if (!current->movable || !GM->gameBoard.checkcango( target->x, target->y, cango)) {
 				return;
 			}
 			int tempx = current->x;
@@ -203,6 +207,39 @@ namespace Project2ChineseBoardGame {
 						}
 					}
 				}
+			}
+		}
+
+		void ShowLegalPath(vector<Pos>& cango) {
+			for (Pos it : cango) {
+				btnGrid[it.x, it.y]->BackColor = Color::FromArgb(70, 255, 0, 0);
+			}
+		}
+
+		void HideLegalPath(vector<Pos>& cango) {
+			for (Pos it : cango) {
+				btnGrid[it.x, it.y]->BackColor = Color::FromArgb(0, 255, 255, 255);
+			}
+		}
+
+		void ChessKilled(RoundButton^ target) {
+			target->isChessB = false;
+			target->isChessR = false;
+			target->movable = false;
+			target->BackgroundImage = nullptr;
+		}
+
+		void checkIfGameEnds() {
+			if (file->gameRecord[file->gameRecord.size() - 1] == "Black Win") {
+				MessageBox::Show("黑方玩家勝利!");
+				this->Close();
+			}
+			else if (file->gameRecord[file->gameRecord.size() - 1] == "Red Win") {
+				MessageBox::Show("紅方玩家勝利!");
+				this->Close();
+			}
+			else {
+				return;
 			}
 		}
 
@@ -459,16 +496,24 @@ namespace Project2ChineseBoardGame {
 #pragma endregion
 	private: System::Void Grid_btn_click(System::Object^ sender, System::EventArgs^ e) {
 		RoundButton^ btn = (RoundButton^)sender;
-		
+		int x = btn->x;
+		int y = btn->y;
+		static vector<Pos> cango;
 		if (buttonClicked) {
 			target = btn;
-			buttonMove(current, target);
+			HideLegalPath(cango);
+			GM->gameBoard.moveChess(file, current->x, current->y, target->x, target->y);
+			buttonMove(current, target, cango);
+			cango.clear();
 			buttonClicked = false;
 		}
 		else {
 			if (!btn->movable) {
 				return;
 			}
+			Chess currChess = GM->gameBoard.getChess(x, y);
+			GM->gameBoard.useChess(currChess, cango);
+			ShowLegalPath(cango);
 			current = btn;
 			buttonClicked = true;
 		}
@@ -544,7 +589,9 @@ namespace Project2ChineseBoardGame {
 		if (current->Location == target->Location) {
 			stepcount = 0;
 			target->Location = temp;
+			ChessKilled(target);
 			animation->Stop();
+			checkIfGameEnds();
 			turnChange();
 			return;
 		}
@@ -552,7 +599,9 @@ namespace Project2ChineseBoardGame {
 			current->Location = target->Location;
 			stepcount = 0;
 			target->Location = temp;
+			ChessKilled(target);
 			animation->Stop();
+			checkIfGameEnds();
 			turnChange();
 			return;
 		}
