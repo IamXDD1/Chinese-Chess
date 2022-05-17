@@ -1,6 +1,7 @@
 #include "GameManager.h"
 
 Chess Board::board[10][9];
+vector<pair<Pos, vector<Pos>>> Board::all_chess_cango;
 
 //File
 //load file
@@ -235,7 +236,7 @@ void Board::showBoard() {
 			case RED_CANNON:	cout << "¬¶"; break;
 			case BLACK_SOLDIER: cout << "¨ò"; break;
 			case RED_SOLDIER:	cout << "§L"; break;
-			default: cout << " €"; break;
+			default: cout << "  "; break;
 			}
 		}
 		cout << endl;
