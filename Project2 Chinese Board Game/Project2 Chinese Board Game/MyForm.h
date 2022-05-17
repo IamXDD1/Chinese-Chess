@@ -173,7 +173,7 @@ namespace Project2ChineseBoardGame {
 			this->Hide();
 			board->ShowDialog();
 			delete board;
-		} while (MessageBox::Show("Next game?","", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes);
+		} while (MessageBox::Show("Do you want a new game?","", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes);
 		this->Show();
 	}
 

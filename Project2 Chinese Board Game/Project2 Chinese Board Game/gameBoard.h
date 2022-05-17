@@ -216,6 +216,8 @@ namespace Project2ChineseBoardGame {
 				if (btnGrid[it.x, it.y]->isChessB || btnGrid[it.x, it.y]->isChessR) {
 					btnGrid[it.x, it.y]->Width = 80;
 					btnGrid[it.x, it.y]->Height = 80;
+					btnGrid[it.x, it.y]->FlatAppearance->MouseOverBackColor = Color::FromArgb(70, 255, 0, 0);
+					btnGrid[it.x, it.y]->canBeChosen = true;
 				}
 			}
 		}
@@ -226,6 +228,8 @@ namespace Project2ChineseBoardGame {
 				if (btnGrid[it.x, it.y]->isChessB || btnGrid[it.x, it.y]->isChessR) {
 					btnGrid[it.x, it.y]->Width = 70;
 					btnGrid[it.x, it.y]->Height = 70;
+					btnGrid[it.x, it.y]->FlatAppearance->MouseOverBackColor = Color::FromArgb(90, 32, 80, 191);
+					btnGrid[it.x, it.y]->canBeChosen = false;
 				}
 			}
 		}
@@ -239,10 +243,12 @@ namespace Project2ChineseBoardGame {
 
 		void checkIfGameEnds() {
 			if (file->gameRecord[file->gameRecord.size() - 1] == "Black Win") {
+				timer1->Stop();
 				MessageBox::Show("黑方玩家勝利!");
 				this->Close();
 			}
 			else if (file->gameRecord[file->gameRecord.size() - 1] == "Red Win") {
+				timer1->Stop();
 				MessageBox::Show("紅方玩家勝利!");
 				this->Close();
 			}
@@ -616,6 +622,7 @@ namespace Project2ChineseBoardGame {
 	}
 	private: System::Void Btn_Enter(System::Object^ sender, System::EventArgs^ e) {
 		RoundButton^ btn = (RoundButton^)sender;
+		if (btn->canBeChosen == true) return;
 		if (btn->isChessB || btn->isChessR) {
 			btn->Width = 80;
 			btn->Height = 80;
@@ -623,6 +630,7 @@ namespace Project2ChineseBoardGame {
 	}
 	private: System::Void Btn_Leave(System::Object^ sender, System::EventArgs^ e) {
 		RoundButton^ btn = (RoundButton^)sender;
+		if (btn->canBeChosen == true) return;
 		if (btn->isChessB || btn->isChessR) {
 			btn->Width = 70;
 			btn->Height = 70;
