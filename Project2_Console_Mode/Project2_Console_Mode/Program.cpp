@@ -35,7 +35,6 @@ void Program::startGame()
 {
 	GameManager GM;
 	File file;
-	string filename;
 	srand(time(NULL));
 	string filename = "log_" + to_string(rand()) + ".txt";
 	int round = 1;

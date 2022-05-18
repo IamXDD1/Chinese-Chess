@@ -208,11 +208,10 @@ void Chess::checkCompanion(vector<Pos>& cango)
 	}
 }
 
-
 bool Chess::ifMoveThenLose() //need opponent's all_chess_cango and all allys' Pos 
 {
 	// notice : all_chess_cango is stored in "vector<pair<Pos, vector<Pos>>>" type
-	vector<Pos> all_ally_pos; // without our general's pos
+	vector<Pos> all__able_to_move_ally_pos; // without our general's pos
 	Chess board_for_test[10][9];
 
 	//fill in "all_ally_pos"
@@ -221,7 +220,7 @@ bool Chess::ifMoveThenLose() //need opponent's all_chess_cango and all allys' Po
 		Chess chess_on_board = Board::getChess(element_of_all_chess_cango.first.x, element_of_all_chess_cango.first.y);
 		if (chess_on_board.color == color && chess_on_board.color != NULL_COLOR)
 		{
-			if (chess_on_board.chess_type % 10 != 7) all_ally_pos.push_back(element_of_all_chess_cango.first);
+			if (chess_on_board.chess_type % 10 != 7 && element_of_all_chess_cango.second.size() != 0) all__able_to_move_ally_pos.push_back(element_of_all_chess_cango.first);
 		}
 	}
 
@@ -235,12 +234,12 @@ bool Chess::ifMoveThenLose() //need opponent's all_chess_cango and all allys' Po
 	}
 
 	int counter = 0;
-	for (int i = 0; i < all_ally_pos.size(); i++)
+	for (int i = 0; i < all__able_to_move_ally_pos.size(); i++)
 	{
-		counter += ifMoveThenLose_simu(board_for_test, all_ally_pos[i]);
+		counter += ifMoveThenLose_simu(board_for_test, all__able_to_move_ally_pos[i]);
 	}
 
-	if (counter == all_ally_pos.size()) return true;
+	if (counter == all__able_to_move_ally_pos.size()) return true;
 	else return false;
 }
 
