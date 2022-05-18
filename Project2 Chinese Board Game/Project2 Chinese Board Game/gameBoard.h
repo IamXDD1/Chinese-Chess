@@ -51,7 +51,7 @@ namespace Project2ChineseBoardGame {
 
 		gameBoard(void)
 		{
-			//srand(time(NULL));
+			srand(time(NULL));
 			time_t now = time(0);
 			string dt = to_string(rand());  //ctime(&now);
 			string filename = "./game data/log_" + dt + ".txt";
