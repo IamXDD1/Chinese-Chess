@@ -54,7 +54,9 @@ public:
 	bool Load(vector<string>& data);
 	void Input(string& data, int& color, string& character, int& x1, int& y1, int& x2, int& y2);
 	void Output();
+	inline string getFilename() { return filename; }
 	inline void closeFile() { file.close(); }
+	inline string getFilename() { return filename; }
 };
 
 class Board {
