@@ -26,6 +26,7 @@ protected:
 	int ifMoveThenLose_simu(Chess board[][9], Pos simu);
 	void load_all_chess_cango_cver(Chess board[][9], vector<pair<Pos, vector<Pos>>> a);
 	void useChess_cver(Chess& temp_chess, vector<Pos>& cango);
+	bool gereral_can_escape(Chess board[][9], Pos general_pos, vector<Pos> general_cango, int type);
 public:
 	Pos pos;
 	int chess_type;
@@ -35,13 +36,12 @@ public:
 		color = -1;
 		chess_type = -1;
 	}
-	virtual bool kingKing(vector<Pos>& cango); // ¤ý¤£¨£¤ý
+	virtual bool kingKing(vector<Pos>& cango);
 	virtual int getColor() { return color; }
 	void moveable(int x, int y, vector<Pos>& cango) { return; };
 	void checkCompanion(vector<Pos>& cango);
-	virtual bool checkmate(int x, int y, vector<Pos>& cango);
-	//欠行
-	bool ifMoveThenLose();
+	virtual bool checkmate(int x, int y, vector<Pos>& cango); // 未合併
+	bool ifMoveThenLose(); // 未合併
 };
 
 class Null : public Chess {
