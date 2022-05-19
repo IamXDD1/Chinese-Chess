@@ -173,15 +173,18 @@ bool Chess::kingKing(vector<Pos>& cango)
 	}
 }
 
-//after move
-bool Chess::checkmate(int x, int y, vector<Pos>& cango)
+//after move the 2nd movable() is required
+bool Chess::checkmate(Pos general_pos, vector<Pos>& oppo_all_chess_cango)
 {
-	int type;
-	for (int i = 0; i < cango.size(); i++)
+	// whether general can escape by himself
+	for (auto a : oppo_all_chess_cango)
 	{
-		type = Board::getChess(cango[i].x, cango[i].y).chess_type;
-		if (type / 10 != color && type % 10 == 7) return true;
+		if (a == general_pos) // checkmate !!!(delete checkmate() ?
+		{
+			return true;
+		}
 	}
+
 	return false;
 }
 
@@ -208,22 +211,15 @@ void Chess::checkCompanion(vector<Pos>& cango)
 	}
 }
 
-
 bool Chess::ifMoveThenLose() //need opponent's all_chess_cango and all allys' Pos 
 {
-	// notice : all_chess_cango is stored in "vector<pair<Pos, vector<Pos>>>" type
-	vector<Pos> all_ally_pos; // without our general's pos
+	vector<Pos> all_able_to_move_ally_pos; // without our general's pos
+	vector<Pos> oppo_all_chess_cango; // for checking if checkmate
 	Chess board_for_test[10][9];
-
-	//fill in "all_ally_pos"
-	for (pair<Pos, vector<Pos>>& element_of_all_chess_cango : Board::all_chess_cango)
-	{
-		Chess chess_on_board = Board::getChess(element_of_all_chess_cango.first.x, element_of_all_chess_cango.first.y);
-		if (chess_on_board.color == color && chess_on_board.color != NULL_COLOR)
-		{
-			if (chess_on_board.chess_type % 10 != 7) all_ally_pos.push_back(element_of_all_chess_cango.first);
-		}
-	}
+	bool general_escape = false;
+	int general_type;
+	Pos general_pos;
+	vector<Pos> general_cango;
 
 	// fill in board_for_test
 	for (int y = 0; y < 10; y++)
@@ -234,14 +230,91 @@ bool Chess::ifMoveThenLose() //need opponent's all_chess_cango and all allys' Po
 		}
 	}
 
-	int counter = 0;
-	for (int i = 0; i < all_ally_pos.size(); i++)
+	//fill in "all_ally_pos"
+	for (pair<Pos, vector<Pos>>& element_of_all_chess_cango : Board::all_chess_cango)
 	{
-		counter += ifMoveThenLose_simu(board_for_test, all_ally_pos[i]);
+		Chess chess_on_board = Board::getChess(element_of_all_chess_cango.first.x, element_of_all_chess_cango.first.y);
+		if (chess_on_board.color != color)
+		{
+			for (Pos& element : element_of_all_chess_cango.second)
+			{
+				oppo_all_chess_cango.push_back(element);
+			}
+		}
+		if (chess_on_board.color == color)
+		{
+			// fill in "all_able_to_move_ally_pos"
+			if (chess_on_board.chess_type % 10 != 7 && element_of_all_chess_cango.second.size() != 0) all_able_to_move_ally_pos.push_back(element_of_all_chess_cango.first);
+			else if (chess_on_board.chess_type % 10 == 7 && element_of_all_chess_cango.second.size() != 0)
+			{
+				general_type = chess_on_board.chess_type;
+				general_pos = element_of_all_chess_cango.first;
+				for (auto& i : element_of_all_chess_cango.second)
+				{
+					general_cango.push_back(i);
+				}
+			}
+		}
 	}
 
-	if (counter == all_ally_pos.size()) return true;
+	// whether general can escape by himself
+	if(checkmate(general_pos, oppo_all_chess_cango))
+	{
+		general_escape = gereral_can_escape(board_for_test, general_pos, general_cango, general_type);
+		if (general_escape) return false; // µL¤í¦æ
+	}
+
+	int counter = 0;
+	for (auto i : all_able_to_move_ally_pos)
+	{
+		counter += ifMoveThenLose_simu(board_for_test, i); 
+	}
+
+	if (counter == all_able_to_move_ally_pos.size()) return true;
 	else return false;
+}
+
+bool Chess::gereral_can_escape(Chess board[][9], Pos general_pos, vector<Pos> general_cango, int type)
+{
+	general_cango.insert(general_cango.begin(), general_pos);
+	for (auto& general_cango_element : general_cango)
+	{
+		// Change the board
+		board[general_cango_element.y][general_cango_element.x] = General(general_cango_element.x, general_cango_element.y, type);
+		
+		// declare
+		vector<Pos> oppo_all_chess_cango;
+		vector<pair<Pos, vector<Pos>>> all_chess_cango_cver;
+		
+		// fill in "all_chess_can_go"
+		load_all_chess_cango_cver(board, all_chess_cango_cver);
+
+		// fill in " oppo_all_chess_cango"
+		for (pair<Pos, vector<Pos>>& element_of_all_chess_cango : all_chess_cango_cver)
+		{
+			Chess chess_on_board = Board::getChess(element_of_all_chess_cango.first.x, element_of_all_chess_cango.first.y);
+			if (chess_on_board.color != color && chess_on_board.color != NULL_COLOR)
+			{
+				for (Pos& element : element_of_all_chess_cango.second)
+				{
+					oppo_all_chess_cango.push_back(element);
+				}
+			}
+		}
+
+		// check whether "oppo_all_chess_cango" overlap general's position on the current board
+		int counter = 0;
+		for (auto& oppo_all_chess_cango_element: oppo_all_chess_cango)
+		{
+			if (oppo_all_chess_cango_element == general_cango_element) break;
+			counter++;
+		}
+
+		if (counter == oppo_all_chess_cango.size()) return true;
+
+		board[general_cango_element.y][general_cango_element.x] = Null(general_cango_element.x, general_cango_element.y);
+	}
+	return false;
 }
 
 int Chess::ifMoveThenLose_simu(Chess board[][9], Pos simu)
