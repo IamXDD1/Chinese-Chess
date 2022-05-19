@@ -174,14 +174,17 @@ bool Chess::kingKing(vector<Pos>& cango)
 }
 
 //after move the 2nd movable() is required
-bool Chess::checkmate(int x, int y, vector<Pos>& cango)
+bool Chess::checkmate(Pos general_pos, vector<Pos>& oppo_all_chess_cango)
 {
-	int type;
-	for (int i = 0; i < cango.size(); i++)
+	// whether general can escape by himself
+	for (auto a : oppo_all_chess_cango)
 	{
-		type = Board::getChess(cango[i].x, cango[i].y).chess_type;
-		if (type / 10 != color && type % 10 == 7) return true;
+		if (a == general_pos) // checkmate !!!(delete checkmate() ?
+		{
+			return true;
+		}
 	}
+
 	return false;
 }
 
@@ -211,7 +214,7 @@ void Chess::checkCompanion(vector<Pos>& cango)
 bool Chess::ifMoveThenLose() //need opponent's all_chess_cango and all allys' Pos 
 {
 	vector<Pos> all_able_to_move_ally_pos; // without our general's pos
-	vector<Pos> oppo_all_chess_cango;
+	vector<Pos> oppo_all_chess_cango; // for checking if checkmate
 	Chess board_for_test[10][9];
 	bool general_escape = false;
 	int general_type;
@@ -240,6 +243,7 @@ bool Chess::ifMoveThenLose() //need opponent's all_chess_cango and all allys' Po
 		}
 		if (chess_on_board.color == color)
 		{
+			// fill in "all_able_to_move_ally_pos"
 			if (chess_on_board.chess_type % 10 != 7 && element_of_all_chess_cango.second.size() != 0) all_able_to_move_ally_pos.push_back(element_of_all_chess_cango.first);
 			else if (chess_on_board.chess_type % 10 == 7 && element_of_all_chess_cango.second.size() != 0)
 			{
@@ -254,14 +258,10 @@ bool Chess::ifMoveThenLose() //need opponent's all_chess_cango and all allys' Po
 	}
 
 	// whether general can escape by himself
-	for (auto a : oppo_all_chess_cango)
+	if(checkmate(general_pos, oppo_all_chess_cango))
 	{
-		if (a == general_pos)
-		{
-			general_escape = gereral_can_escape(board_for_test, general_pos, general_cango, general_type);
-			if (general_escape) return false;
-			break;
-		}
+		general_escape = gereral_can_escape(board_for_test, general_pos, general_cango, general_type);
+		if (general_escape) return false; // µL¤í¦æ
 	}
 
 	int counter = 0;
