@@ -23,7 +23,7 @@ namespace Project2ChineseBoardGame {
 	using namespace cli;
 
 	/// <summary>
-	/// gameBoard çš„æ‘˜è¦
+	/// gameBoard ªººK­n
 	/// </summary>
 
 
@@ -32,6 +32,8 @@ namespace Project2ChineseBoardGame {
 	public:
 		GameManager* GM = new GameManager();
 		File* file = new File();
+		vector<string>* datas = new vector<string>;
+		int datas_index;
 		cli::array<RoundButton^, 2>^ btnGrid = gcnew cli::array<RoundButton^, 2>(9, 10);
 		int timeleft;
 		int minutes, second;
@@ -48,6 +50,7 @@ namespace Project2ChineseBoardGame {
 		Point temp;
 		//
 		String^ playerNow = "red";
+		bool loading = false;
 
 		gameBoard(void)
 		{
@@ -56,15 +59,17 @@ namespace Project2ChineseBoardGame {
 			string dt = to_string(rand());  //ctime(&now);
 			string filename = "./game data/log_" + dt + ".txt";
 			file->setFilename(filename);
+			loading = false;
 			InitializeComponent();
 			nextStep->Visible = false;
 			nextStep->Enabled = false;
 			previousStep->Visible = false;
 			previousStep->Enabled = false;
 			generateButton();
+			lockNonPlayerNowBtn();
 
 			//
-			//TODO:  åœ¨æ­¤åŠ å…¥å»ºæ§‹å‡½å¼ç¨‹å¼ç¢¼
+			//TODO:  ¦b¦¹¥[¤J«Øºc¨ç¦¡µ{¦¡½X
 			//
 		}
 
@@ -72,6 +77,7 @@ namespace Project2ChineseBoardGame {
 		{
 			delete file;
 			file = inputfile;
+			loading = true;
 			InitializeComponent();
 			label3->Visible = false;
 			TimeText->Visible = false;
@@ -83,13 +89,13 @@ namespace Project2ChineseBoardGame {
 			TotalTIME->Enabled = false;
 			TotalTIME->Visible = false;
 			generateButton();
-
-			//read_loaded_data(data);
-
-			//this->next_step = (gcnew System::Windows::Forms::Button());
+			lockAllBtn();
+			delete datas;
+			datas = new vector<string>(data);
+			datas_index = 0;
 
 			//
-			//TODO:  åœ¨æ­¤åŠ å…¥å»ºæ§‹å‡½å¼ç¨‹å¼ç¢¼
+			//TODO:  ¦b¦¹¥[¤J«Øºc¨ç¦¡µ{¦¡½X
 			//
 		}
 
@@ -166,15 +172,15 @@ namespace Project2ChineseBoardGame {
 			timeleft = TIME_LIMIT;
 			minutes = timeleft / 60;
 			second = timeleft % 60;
-			TimeText->Text = minutes + "åˆ†" + second + "ç§’";
+			TimeText->Text = minutes + "¤À" + second + "¬í";
 			exceed2MIN = false;
 			if (playerNow == "black") {
-				PlayerNow->Text = L"ç´…æ–¹ç©å®¶";
+				PlayerNow->Text = L"¬õ¤èª±®a";
 				PlayerNow->ForeColor = System::Drawing::Color::Red;
 				playerNow = "red";
 			}
 			else {
-				PlayerNow->Text = L"é»‘æ–¹ç©å®¶";
+				PlayerNow->Text = L"¶Â¤èª±®a";
 				PlayerNow->ForeColor = System::Drawing::Color::Black;
 				playerNow = "black";
 			}
@@ -189,17 +195,17 @@ namespace Project2ChineseBoardGame {
 			exceed2MIN = false;
 			minutes = timeleft / 60;
 			second = timeleft % 60;
-			TimeText->Text = minutes + "åˆ†" + second + "ç§’";
+			TimeText->Text = minutes + "¤À" + second + "¬í";
 			minutes = blackTIME / 60;
 			second = blackTIME % 60;
-			BlackTotalTime->Text = minutes + "åˆ†" + second + "ç§’";
+			BlackTotalTime->Text = minutes + "¤À" + second + "¬í";
 			minutes = redTIME / 60;
 			second = redTIME % 60;
-			RedTotalTime->Text = minutes + "åˆ†" + second + "ç§’";
+			RedTotalTime->Text = minutes + "¤À" + second + "¬í";
 		}
 
 		void buttonMove(RoundButton^ current, RoundButton^ target, vector<Pos>& cango) {
-			if (!current->movable || !GM->gameBoard.checkcango(target->x, target->y, cango)) {
+			if (!current->movable || (!loading && !GM->gameBoard.checkcango(target->x, target->y, cango))) {
 				return;
 			}
 			int tempx = current->x;
@@ -214,6 +220,8 @@ namespace Project2ChineseBoardGame {
 			RoundButton^ SwapT = btnGrid[tempx, tempy];
 			btnGrid[tempx, tempy] = btnGrid[current->x, current->y];
 			btnGrid[current->x, current->y] = SwapT;
+			nextStep->Enabled = false;
+			previousStep->Enabled = false;
 			animation->Start();
 		}
 
@@ -236,6 +244,22 @@ namespace Project2ChineseBoardGame {
 							btnGrid[i, j]->movable = false;
 						}
 					}
+				}
+			}
+		}
+
+		void lockAllBtn() {
+			for (int i = 0; i < 9; i++) {
+				for (int j = 0; j < 10; j++) {
+					btnGrid[i, j]->movable = false;
+				}
+			}
+		}
+
+		void unlockAllBtn() {
+			for (int i = 0; i < 9; i++) {
+				for (int j = 0; j < 10; j++) {
+					btnGrid[i, j]->movable = true;
 				}
 			}
 		}
@@ -274,12 +298,12 @@ namespace Project2ChineseBoardGame {
 		void checkIfGameEnds() {
 			if (file->gameRecord[file->gameRecord.size() - 1] == "Black Win") {
 				timer1->Stop();
-				MessageBox::Show("é»‘æ–¹ç©å®¶å‹åˆ©!");
+				MessageBox::Show("¶Â¤èª±®a³Ó§Q!");
 				this->Close();
 			}
 			else if (file->gameRecord[file->gameRecord.size() - 1] == "Red Win") {
 				timer1->Stop();
-				MessageBox::Show("ç´…æ–¹ç©å®¶å‹åˆ©!");
+				MessageBox::Show("¬õ¤èª±®a³Ó§Q!");
 				this->Close();
 			}
 			else {
@@ -297,56 +321,36 @@ namespace Project2ChineseBoardGame {
 			System::IO::File::WriteAllText(filename, str);
 		}
 
-		void read_loaded_data(vector<string>& data){
-			bool keep_playing = true;
-			for (int i = 0; i < data.size(); i++) {
-				/*
-				if (file.gameRecord.size() > 0) {
-					if (file.gameRecord[file.gameRecord.size() - 1] == "Black Win"
-						|| file.gameRecord[file.gameRecord.size() - 1] == "Red Win") {
-						keep_playing = false;
-						break;
-					}
-				}
+		void ContinueInTheMiddle() {
+			label3->Visible = true;
+			TimeText->Visible = true;
+			timer1->Enabled = true;
+			surrender->Enabled = true;
+			surrender->Visible = true;
+			TurnChangeTest->Visible = true;
+			TurnChangeTest->Enabled = true;
+			TotalTIME->Enabled = true;
+			TotalTIME->Visible = true;
+			nextStep->Visible = false;
+			nextStep->Enabled = false;
+			previousStep->Visible = false;
+			previousStep->Enabled = false;
+			lockNonPlayerNowBtn();
+			timer1->Stop();
+			timerReset();
+			loading = false;
+			timer1->Start();
 
-				if (data[i] == "Red Win" || data[i] == "Black Win") {
-					file.gameRecord.push_back(data[i]);
-					Sleep(1000);
-					clearScreen();
-					cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << " because ";
-					if (data[i][0] == 'R') cout << "Black surrender." << '\n';
-					else cout << "Red surrender." << '\n';
-					keep_playing = false;
-					break;
-				}
-
-				int choice;
-				gotoxy(20, 0); cout << "1.any input to next turn (except 2).";
-				gotoxy(20, 1); cout << "2.start from here.";
-				gotoxy(20, 2); cout << "Input option : ";
-				cin >> choice;
-				if (choice == 2) break;
-
-				int x1 = -1, x2 = -1, y1 = -1, y2 = -1, color = -1;
-				string charactor;
-				file.Input(data[i], color, charactor, x1, y1, x2, y2);
-				color = (round % 2 == 1) ? RED : BLACK;
-				GM.gameBoard.moveChess(file, x1, y1, x2, y2, true);
-				GM.gameBoard.showBoard();
-				round++;
-				*/
-			}
-
-			//keep playing
-			if (keep_playing) {
-				//GameRun(GM, file, round);
-			}
-			return;
+			srand(time(NULL));
+			time_t now = time(0);
+			string dt = to_string(rand());  //ctime(&now);
+			string filename = "./game data/log_" + dt + ".txt";
+			file->setFilename(filename);
 		}
 
 	protected:
 		/// <summary>
-		/// æ¸…é™¤ä»»ä½•ä½¿ç”¨ä¸­çš„è³‡æºã€‚
+		/// ²M°£¥ô¦ó¨Ï¥Î¤¤ªº¸ê·½¡C
 		/// </summary>
 		~gameBoard()
 		{
@@ -381,14 +385,14 @@ namespace Project2ChineseBoardGame {
 
 	private:
 		/// <summary>
-		/// è¨­è¨ˆå·¥å…·æ‰€éœ€çš„è®Šæ•¸ã€‚
+		/// ³]­p¤u¨ã©Ò»İªºÅÜ¼Æ¡C
 		/// </summary>
 
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
-		/// æ­¤ç‚ºè¨­è¨ˆå·¥å…·æ”¯æ´æ‰€éœ€çš„æ–¹æ³• - è«‹å‹¿ä½¿ç”¨ç¨‹å¼ç¢¼ç·¨è¼¯å™¨ä¿®æ”¹
-		/// é€™å€‹æ–¹æ³•çš„å…§å®¹ã€‚
+		/// ¦¹¬°³]­p¤u¨ã¤ä´©©Ò»İªº¤èªk - ½Ğ¤Å¨Ï¥Îµ{¦¡½X½s¿è¾¹­×§ï
+		/// ³o­Ó¤èªkªº¤º®e¡C
 		/// </summary>
 		void InitializeComponent(void)
 		{
@@ -427,41 +431,41 @@ namespace Project2ChineseBoardGame {
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Font = (gcnew System::Drawing::Font(L"æ¨™æ¥·é«”", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->label1->Font = (gcnew System::Drawing::Font(L"¼Ğ·¢Åé", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->label1->Location = System::Drawing::Point(795, 165);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(202, 40);
 			this->label1->TabIndex = 1;
-			this->label1->Text = L"ç¾åœ¨å›åˆ:";
+			this->label1->Text = L"²{¦b¦^¦X:";
 			// 
 			// PlayerNow
 			// 
 			this->PlayerNow->AutoSize = true;
-			this->PlayerNow->Font = (gcnew System::Drawing::Font(L"æ¨™æ¥·é«”", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->PlayerNow->Font = (gcnew System::Drawing::Font(L"¼Ğ·¢Åé", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->PlayerNow->ForeColor = System::Drawing::Color::Red;
 			this->PlayerNow->Location = System::Drawing::Point(1003, 165);
 			this->PlayerNow->Name = L"PlayerNow";
 			this->PlayerNow->Size = System::Drawing::Size(181, 40);
 			this->PlayerNow->TabIndex = 2;
-			this->PlayerNow->Text = L"ç´…æ–¹ç©å®¶";
+			this->PlayerNow->Text = L"¬õ¤èª±®a";
 			// 
 			// label3
 			// 
 			this->label3->AutoSize = true;
-			this->label3->Font = (gcnew System::Drawing::Font(L"æ¨™æ¥·é«”", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->label3->Font = (gcnew System::Drawing::Font(L"¼Ğ·¢Åé", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->label3->Location = System::Drawing::Point(795, 80);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(202, 40);
 			this->label3->TabIndex = 3;
-			this->label3->Text = L"å‰©é¤˜æ™‚é–“:";
+			this->label3->Text = L"³Ñ¾l®É¶¡:";
 			// 
 			// TimeText
 			// 
 			this->TimeText->AutoSize = true;
-			this->TimeText->Font = (gcnew System::Drawing::Font(L"æ¨™æ¥·é«”", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->TimeText->Font = (gcnew System::Drawing::Font(L"¼Ğ·¢Åé", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->TimeText->Location = System::Drawing::Point(1003, 80);
 			this->TimeText->Name = L"TimeText";
@@ -476,25 +480,25 @@ namespace Project2ChineseBoardGame {
 			// 
 			// surrender
 			// 
-			this->surrender->Font = (gcnew System::Drawing::Font(L"æ¨™æ¥·é«”", 24, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->surrender->Font = (gcnew System::Drawing::Font(L"¼Ğ·¢Åé", 24, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->surrender->Location = System::Drawing::Point(984, 627);
 			this->surrender->Name = L"surrender";
 			this->surrender->Size = System::Drawing::Size(248, 68);
 			this->surrender->TabIndex = 5;
-			this->surrender->Text = L"æŠ•é™";
+			this->surrender->Text = L"§ë­°";
 			this->surrender->UseVisualStyleBackColor = true;
 			this->surrender->Click += gcnew System::EventHandler(this, &gameBoard::button1_Click);
 			// 
 			// exit
 			// 
-			this->exit->Font = (gcnew System::Drawing::Font(L"æ¨™æ¥·é«”", 24, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->exit->Font = (gcnew System::Drawing::Font(L"¼Ğ·¢Åé", 24, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->exit->Location = System::Drawing::Point(984, 701);
 			this->exit->Name = L"exit";
 			this->exit->Size = System::Drawing::Size(248, 68);
 			this->exit->TabIndex = 6;
-			this->exit->Text = L"é€€å‡ºéŠæˆ²";
+			this->exit->Text = L"°h¥X¹CÀ¸";
 			this->exit->UseVisualStyleBackColor = true;
 			this->exit->Click += gcnew System::EventHandler(this, &gameBoard::button2_Click);
 			// 
@@ -504,19 +508,19 @@ namespace Project2ChineseBoardGame {
 			this->TotalTIME->Controls->Add(this->BlackTotalTime);
 			this->TotalTIME->Controls->Add(this->label4);
 			this->TotalTIME->Controls->Add(this->label2);
-			this->TotalTIME->Font = (gcnew System::Drawing::Font(L"æ¨™æ¥·é«”", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->TotalTIME->Font = (gcnew System::Drawing::Font(L"¼Ğ·¢Åé", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->TotalTIME->Location = System::Drawing::Point(985, 396);
 			this->TotalTIME->Name = L"TotalTIME";
 			this->TotalTIME->Size = System::Drawing::Size(247, 151);
 			this->TotalTIME->TabIndex = 8;
 			this->TotalTIME->TabStop = false;
-			this->TotalTIME->Text = L"ç¸½å‰©é¤˜æ™‚é–“:";
+			this->TotalTIME->Text = L"Á`³Ñ¾l®É¶¡:";
 			// 
 			// RedTotalTime
 			// 
 			this->RedTotalTime->AutoSize = true;
-			this->RedTotalTime->Font = (gcnew System::Drawing::Font(L"æ¨™æ¥·é«”", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->RedTotalTime->Font = (gcnew System::Drawing::Font(L"¼Ğ·¢Åé", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->RedTotalTime->Location = System::Drawing::Point(94, 93);
 			this->RedTotalTime->Name = L"RedTotalTime";
@@ -527,7 +531,7 @@ namespace Project2ChineseBoardGame {
 			// BlackTotalTime
 			// 
 			this->BlackTotalTime->AutoSize = true;
-			this->BlackTotalTime->Font = (gcnew System::Drawing::Font(L"æ¨™æ¥·é«”", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->BlackTotalTime->Font = (gcnew System::Drawing::Font(L"¼Ğ·¢Åé", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->BlackTotalTime->Location = System::Drawing::Point(94, 42);
 			this->BlackTotalTime->Name = L"BlackTotalTime";
@@ -538,35 +542,35 @@ namespace Project2ChineseBoardGame {
 			// label4
 			// 
 			this->label4->AutoSize = true;
-			this->label4->Font = (gcnew System::Drawing::Font(L"æ¨™æ¥·é«”", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->label4->Font = (gcnew System::Drawing::Font(L"¼Ğ·¢Åé", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->label4->ForeColor = System::Drawing::Color::Red;
 			this->label4->Location = System::Drawing::Point(6, 93);
 			this->label4->Name = L"label4";
 			this->label4->Size = System::Drawing::Size(96, 28);
 			this->label4->TabIndex = 1;
-			this->label4->Text = L"ç´…æ–¹: ";
+			this->label4->Text = L"¬õ¤è: ";
 			// 
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Font = (gcnew System::Drawing::Font(L"æ¨™æ¥·é«”", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->label2->Font = (gcnew System::Drawing::Font(L"¼Ğ·¢Åé", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->label2->Location = System::Drawing::Point(6, 42);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(96, 28);
 			this->label2->TabIndex = 0;
-			this->label2->Text = L"é»‘æ–¹: ";
+			this->label2->Text = L"¶Â¤è: ";
 			// 
 			// TurnChangeTest
 			// 
-			this->TurnChangeTest->Font = (gcnew System::Drawing::Font(L"æ¨™æ¥·é«”", 24, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->TurnChangeTest->Font = (gcnew System::Drawing::Font(L"¼Ğ·¢Åé", 24, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->TurnChangeTest->Location = System::Drawing::Point(984, 553);
 			this->TurnChangeTest->Name = L"TurnChangeTest";
 			this->TurnChangeTest->Size = System::Drawing::Size(248, 68);
 			this->TurnChangeTest->TabIndex = 9;
-			this->TurnChangeTest->Text = L"å›åˆçµæŸ";
+			this->TurnChangeTest->Text = L"¦^¦Xµ²§ô";
 			this->TurnChangeTest->UseVisualStyleBackColor = true;
 			this->TurnChangeTest->Click += gcnew System::EventHandler(this, &gameBoard::TurnChangeTest_Click);
 			// 
@@ -577,25 +581,27 @@ namespace Project2ChineseBoardGame {
 			// 
 			// nextStep
 			// 
-			this->nextStep->Font = (gcnew System::Drawing::Font(L"æ¨™æ¥·é«”", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->nextStep->Font = (gcnew System::Drawing::Font(L"¼Ğ·¢Åé", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->nextStep->Location = System::Drawing::Point(1010, 257);
 			this->nextStep->Name = L"nextStep";
 			this->nextStep->Size = System::Drawing::Size(188, 63);
 			this->nextStep->TabIndex = 10;
-			this->nextStep->Text = L"ä¸‹ä¸€æ­¥";
+			this->nextStep->Text = L"¤U¤@¨B";
 			this->nextStep->UseVisualStyleBackColor = true;
+			this->nextStep->Click += gcnew System::EventHandler(this, &gameBoard::nextStep_Click);
 			// 
 			// previousStep
 			// 
-			this->previousStep->Font = (gcnew System::Drawing::Font(L"æ¨™æ¥·é«”", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->previousStep->Font = (gcnew System::Drawing::Font(L"¼Ğ·¢Åé", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
 			this->previousStep->Location = System::Drawing::Point(802, 257);
 			this->previousStep->Name = L"previousStep";
 			this->previousStep->Size = System::Drawing::Size(188, 63);
 			this->previousStep->TabIndex = 11;
-			this->previousStep->Text = L"ä¸Šä¸€æ­¥";
+			this->previousStep->Text = L"±q³o¸Ì¶}©l";
 			this->previousStep->UseVisualStyleBackColor = true;
+			this->previousStep->Click += gcnew System::EventHandler(this, &gameBoard::previousStep_Click);
 			// 
 			// gameBoard
 			// 
@@ -613,7 +619,7 @@ namespace Project2ChineseBoardGame {
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->chessBoard);
 			this->Name = L"gameBoard";
-			this->Text = L"ä¸­åœ‹è±¡æ£‹";
+			this->Text = L"¤¤°ê¶H´Ñ";
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &gameBoard::gameBoard_FormClosed);
 			this->Load += gcnew System::EventHandler(this, &gameBoard::gameBoard_Load);
 			this->TotalTIME->ResumeLayout(false);
@@ -653,20 +659,20 @@ namespace Project2ChineseBoardGame {
 			timeleft--;
 			minutes = timeleft / 60;
 			second = timeleft % 60;
-			TimeText->Text = minutes + "åˆ†" + second + "ç§’";
+			TimeText->Text = minutes + "¤À" + second + "¬í";
 		}
 		else {
 			if (playerNow == "black") { // count black
 				blackTIME--;
 				minutes = blackTIME / 60;
 				second = blackTIME % 60;
-				BlackTotalTime->Text = minutes + "åˆ†" + second + "ç§’";
+				BlackTotalTime->Text = minutes + "¤À" + second + "¬í";
 			}
 			else { // count red
 				redTIME--;
 				minutes = redTIME / 60;
 				second = redTIME % 60;
-				RedTotalTime->Text = minutes + "åˆ†" + second + "ç§’";
+				RedTotalTime->Text = minutes + "¤À" + second + "¬í";
 			}
 		}
 		if (timeleft == 0) {
@@ -678,23 +684,22 @@ namespace Project2ChineseBoardGame {
 		}
 		if (redTIME == 0) {
 			timer1->Stop();
-			MessageBox::Show("ç´…æ–¹æ™‚é–“è€—ç›¡ï¼Œé»‘æ–¹ç©å®¶ç²å‹!");
+			MessageBox::Show("¬õ¤è®É¶¡¯ÓºÉ¡A¶Â¤èª±®aÀò³Ó!");
 			this->Close();
 		}
 		if (blackTIME == 0) {
 			timer1->Stop();
-			MessageBox::Show("é»‘æ–¹æ™‚é–“è€—ç›¡ï¼Œç´…æ–¹ç©å®¶ç²å‹!");
+			MessageBox::Show("¶Â¤è®É¶¡¯ÓºÉ¡A¬õ¤èª±®aÀò³Ó!");
 			this->Close();
 		}
 	}
 	private: System::Void gameBoard_Load(System::Object^ sender, System::EventArgs^ e) {
 		timerReset();
-		lockNonPlayerNowBtn();
 		timer1->Start();
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ now = PlayerNow->Text;
-		MessageBox::Show(now + "æŠ•é™!");
+		MessageBox::Show(now + "§ë­°!");
 		if (playerNow == "red") {
 			file->gameRecord.push_back("Red surrender!");
 			file->gameRecord.push_back("Black Win");
@@ -712,7 +717,7 @@ namespace Project2ChineseBoardGame {
 		timer1->Enabled = false;
 		animation->Enabled = false;
 		fileOutput();
-		file->closeFile();
+		delete datas;
 		delete GM;
 		delete file;
 	}
@@ -732,6 +737,8 @@ namespace Project2ChineseBoardGame {
 			animation->Stop();
 			checkIfGameEnds();
 			turnChange();
+			nextStep->Enabled = true;
+			previousStep->Enabled = true;
 			return;
 		}
 		if (stepcount == 24) {
@@ -742,6 +749,8 @@ namespace Project2ChineseBoardGame {
 			animation->Stop();
 			checkIfGameEnds();
 			turnChange();
+			nextStep->Enabled = true;
+			previousStep->Enabled = true;
 			return;
 		}
 	}
@@ -761,5 +770,43 @@ namespace Project2ChineseBoardGame {
 			btn->Height = 70;
 		}
 	}
-	};
+	private: System::Void nextStep_Click(System::Object^ sender, System::EventArgs^ e) {
+
+		std::string inputData = datas->at(datas_index);
+		if (inputData == "Red Win" || inputData == "Black Win") {
+			file->gameRecord.push_back(inputData);
+			checkIfGameEnds();
+		}
+		else if (inputData == "Red surrender!") {
+			file->gameRecord.push_back(inputData);
+			file->gameRecord.push_back("Black Win");
+			MessageBox::Show("¬õ¤èª±®a§ë­°!");
+			checkIfGameEnds();
+		}
+		else if (inputData == "Black surrender!") {
+			file->gameRecord.push_back(inputData);
+			file->gameRecord.push_back("Red Win");
+			MessageBox::Show("¶Â¤èª±®a§ë­°!");
+			checkIfGameEnds();
+		}
+		else{
+			int x1 = -1, x2 = -1, y1 = -1, y2 = -1, color = -1;
+			string charactor;
+			file->Input(inputData, color, charactor, x1, y1, x2, y2);
+			GM->gameBoard.moveChess(file, x1, y1, x2, y2, true);
+			current = btnGrid[x1, y1];
+			target = btnGrid[x2, y2];
+			unlockAllBtn();
+			vector<Pos> garbage;
+			buttonMove(current, target, garbage);
+			lockAllBtn();
+		}
+
+		datas_index++;
+		if(datas_index >= datas->size()) ContinueInTheMiddle();
+	}
+    private: System::Void previousStep_Click(System::Object^ sender, System::EventArgs^ e) {
+		ContinueInTheMiddle();
+    }
+};
 }

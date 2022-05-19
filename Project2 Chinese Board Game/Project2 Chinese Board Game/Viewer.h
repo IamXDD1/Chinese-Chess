@@ -184,12 +184,10 @@ namespace Project2ChineseBoardGame {
 			vector<string> data;
 			file->setFilename(msclr::interop::marshal_as<string>(fname));
 			if(file->Load(data)){
-				do {
-					gameBoard^ board = gcnew gameBoard(data, file);
-					this->Hide();
-					board->ShowDialog();
-					delete board;
-				} while (MessageBox::Show("Do you want a new game?","", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes);
+				gameBoard^ board = gcnew gameBoard(data, file);
+				this->Hide();
+				board->ShowDialog();
+				delete board;
 				this->Show();
 			}
 		}
