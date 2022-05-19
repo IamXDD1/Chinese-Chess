@@ -1,4 +1,4 @@
-#include "MyForm.h"
+#include "Viewer.h"
 
 using namespace System;
 
@@ -14,7 +14,7 @@ void main(cli::array<String^>^ args)
 
     Application::SetCompatibleTextRenderingDefault(false);
 
-    Project2ChineseBoardGame::MyForm form;
+    Project2ChineseBoardGame::Viewer form;
 
     Application::Run(% form);
 
