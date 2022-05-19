@@ -7,22 +7,19 @@ Chess Board::board[10][9];
 bool File::Load(vector<string>& data) {  //XDD
 	file.open(filename);
 	if (!file) {
-		cout << "File \"" + filename + "\" can't be opened.\n";
 		return false;
 	}
 	else {
-		cout << "File is loading...\n";
-		Sleep(2000);
-
 		string temp;
 		for (; getline(file, temp);) {
 			data.push_back(temp);
 		}
+		file.close();
 		return true;
 	}
 }
 //divide input. ex: Player: 1, Action: Cannon (x1, y1) -> (x2, y2)
-void File::Input(string& data, int& color, string& character, int& x1, int& y1, int& x2, int& y2) {
+void File::Input(string data, int& color, string& character, int& x1, int& y1, int& x2, int& y2) {
 	gotoxy(30, 20); cout << "Error:                                                  ";
 	stringstream ss(data);
 	string part;
