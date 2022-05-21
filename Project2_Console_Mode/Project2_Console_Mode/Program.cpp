@@ -146,26 +146,38 @@ void Program::GameRun(GameManager& GM, File& file, int& round)
 			gotoxy(0, 11);
 			cout << "Input charactor (or input 'surrender'): ";
 			//getline(cin, cmd);
-			cin >> charactor;
-			if (cin.eof()) break;
-			GM.gameBoard.load_all_chess_cango();
-			GM.gameBoard.showallPath();
-			int x1, x2, y1, y2, color;
-			if (charactor != "surrender") {
-				cout << "x1 = ";
-				cin >> x1;
-				cout << "y1 = ";
-				cin >> y1;
-				//file.Input(cmd, color, charactor, x1, y1, x2, y2);
-				color = (round % 2 == 1) ? RED : BLACK;
-				GM.gameBoard.moveChess(file, x1, y1, x2, y2);
-				GM.gameBoard.showBoard();
-				round++;
-			}
-			else {
-				color = (round % 2 == 1) ? RED : BLACK;
+
+			bool isCheckmate = false;
+			Board::load_all_chess_cango();
+			int color = (round % 2 == 1) ? RED : BLACK;
+			if (Board::ifMoveThenLose(isCheckmate, color))
+			{
 				if (color == BLACK) file.gameRecord.push_back("Red Win");
 				else file.gameRecord.push_back("Black Win");
+			}
+			else
+			{
+				cin >> charactor;
+				if (cin.eof()) break;
+				GM.gameBoard.load_all_chess_cango();
+				GM.gameBoard.showallPath();
+				int x1, x2, y1, y2;
+				if (charactor != "surrender") {
+					cout << "x1 = ";
+					cin >> x1;
+					cout << "y1 = ";
+					cin >> y1;
+					//file.Input(cmd, color, charactor, x1, y1, x2, y2);
+					color = (round % 2 == 1) ? RED : BLACK;
+					GM.gameBoard.moveChess(file, x1, y1, x2, y2);
+					GM.gameBoard.showBoard();
+					round++;
+				}
+				else {
+					color = (round % 2 == 1) ? RED : BLACK;
+					if (color == BLACK) file.gameRecord.push_back("Red Win");
+					else file.gameRecord.push_back("Black Win");
+				}
 			}
 
 			if (file.gameRecord[file.gameRecord.size() - 1] == "Black Win"

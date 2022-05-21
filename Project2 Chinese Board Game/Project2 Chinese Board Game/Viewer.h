@@ -12,12 +12,12 @@ namespace Project2ChineseBoardGame {
 	using namespace System::Drawing;
 
 	/// <summary>
-	/// MyForm 的摘要
+	/// Viewer 的摘要
 	/// </summary>
-	public ref class MyForm : public System::Windows::Forms::Form
+	public ref class Viewer : public System::Windows::Forms::Form
 	{
 	public:
-		MyForm(void)
+		Viewer(void)
 		{
 			InitializeComponent();
 			//
@@ -30,7 +30,7 @@ namespace Project2ChineseBoardGame {
 		/// <summary>
 		/// 清除任何使用中的資源。
 		/// </summary>
-		~MyForm()
+		~Viewer()
 		{
 			if (components)
 			{
@@ -94,7 +94,7 @@ namespace Project2ChineseBoardGame {
 			this->GameStart->TabIndex = 1;
 			this->GameStart->Text = L"開始遊戲";
 			this->GameStart->UseVisualStyleBackColor = false;
-			this->GameStart->Click += gcnew System::EventHandler(this, &MyForm::GameStart_Click);
+			this->GameStart->Click += gcnew System::EventHandler(this, &Viewer::GameStart_Click);
 			// 
 			// LoadGame
 			// 
@@ -107,7 +107,7 @@ namespace Project2ChineseBoardGame {
 			this->LoadGame->TabIndex = 2;
 			this->LoadGame->Text = L"讀取遊戲";
 			this->LoadGame->UseVisualStyleBackColor = true;
-			this->LoadGame->Click += gcnew System::EventHandler(this, &MyForm::LoadGame_Click);
+			this->LoadGame->Click += gcnew System::EventHandler(this, &Viewer::LoadGame_Click);
 			// 
 			// EndGame
 			// 
@@ -119,7 +119,7 @@ namespace Project2ChineseBoardGame {
 			this->EndGame->TabIndex = 3;
 			this->EndGame->Text = L"遊戲結束";
 			this->EndGame->UseVisualStyleBackColor = true;
-			this->EndGame->Click += gcnew System::EventHandler(this, &MyForm::EndGame_Click);
+			this->EndGame->Click += gcnew System::EventHandler(this, &Viewer::EndGame_Click);
 			// 
 			// author
 			// 
@@ -131,7 +131,7 @@ namespace Project2ChineseBoardGame {
 			this->author->Size = System::Drawing::Size(207, 112);
 			this->author->TabIndex = 4;
 			this->author->Text = L"Author:\r\nB11030037吳秉諺\r\nB11030021游翔霖\r\nB11030001葉衍嚴";
-			this->author->Click += gcnew System::EventHandler(this, &MyForm::author_Click);
+			this->author->Click += gcnew System::EventHandler(this, &Viewer::author_Click);
 			// 
 			// Github
 			// 
@@ -146,9 +146,9 @@ namespace Project2ChineseBoardGame {
 			this->Github->TabIndex = 5;
 			this->Github->TabStop = true;
 			this->Github->Text = L"Github Repo";
-			this->Github->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &MyForm::Github_LinkClicked);
+			this->Github->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &Viewer::Github_LinkClicked);
 			// 
-			// MyForm
+			// Viewer
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 15);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
@@ -160,7 +160,7 @@ namespace Project2ChineseBoardGame {
 			this->Controls->Add(this->LoadGame);
 			this->Controls->Add(this->GameStart);
 			this->Controls->Add(this->Title);
-			this->Name = L"MyForm";
+			this->Name = L"Viewer";
 			this->Text = L"Chinese Chess";
 			this->ResumeLayout(false);
 			this->PerformLayout();
@@ -184,12 +184,10 @@ namespace Project2ChineseBoardGame {
 			vector<string> data;
 			file->setFilename(msclr::interop::marshal_as<string>(fname));
 			if(file->Load(data)){
-				do {
-					gameBoard^ board = gcnew gameBoard(data, file);
-					this->Hide();
-					board->ShowDialog();
-					delete board;
-				} while (MessageBox::Show("Do you want a new game?","", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes);
+				gameBoard^ board = gcnew gameBoard(data, file);
+				this->Hide();
+				board->ShowDialog();
+				delete board;
 				this->Show();
 			}
 		}
