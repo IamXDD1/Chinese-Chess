@@ -36,7 +36,7 @@ void Program::startGame()
 	GameManager GM;
 	File file;
 	srand(time(NULL));
-	string filename = "./gamedata/log_" + to_string(rand()) + ".txt";
+	string filename = "./game data/log_" + to_string(rand()) + ".txt";
 	int round = 1;
 
 	cin.get();
@@ -67,7 +67,7 @@ void Program::loadFile()
 		cout << "Please input a file name to load : ";
 		getline(cin, filename);
 
-		file.setFilename(filename + ".txt");
+		file.setFilename("./game data/" + filename + ".txt");
 		if (file.Load(data)) break;
 	}
 	file.closeFile();

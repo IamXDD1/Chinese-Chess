@@ -32,6 +32,8 @@ namespace Project2ChineseBoardGame {
 	public:
 		GameManager* GM = new GameManager();
 		File* file = new File();
+		vector<string>* datas = new vector<string>;
+		int datas_index;
 		cli::array<RoundButton^, 2>^ btnGrid = gcnew cli::array<RoundButton^, 2>(9, 10);
 		int timeleft;
 		int minutes, second;
@@ -48,6 +50,7 @@ namespace Project2ChineseBoardGame {
 		Point temp;
 		//
 		String^ playerNow = "red";
+		bool loading = false;
 
 		gameBoard(void)
 		{
@@ -56,12 +59,14 @@ namespace Project2ChineseBoardGame {
 			string dt = to_string(rand());  //ctime(&now);
 			string filename = "./game data/log_" + dt + ".txt";
 			file->setFilename(filename);
+			loading = false;
 			InitializeComponent();
 			nextStep->Visible = false;
 			nextStep->Enabled = false;
 			previousStep->Visible = false;
 			previousStep->Enabled = false;
 			generateButton();
+			lockNonPlayerNowBtn();
 
 			//
 			//TODO:  在此加入建構函式程式碼
@@ -72,6 +77,7 @@ namespace Project2ChineseBoardGame {
 		{
 			delete file;
 			file = inputfile;
+			loading = true;
 			InitializeComponent();
 			label3->Visible = false;
 			TimeText->Visible = false;
@@ -83,10 +89,10 @@ namespace Project2ChineseBoardGame {
 			TotalTIME->Enabled = false;
 			TotalTIME->Visible = false;
 			generateButton();
-
-			//read_loaded_data(data);
-
-			//this->next_step = (gcnew System::Windows::Forms::Button());
+			lockAllBtn();
+			delete datas;
+			datas = new vector<string>(data);
+			datas_index = 0;
 
 			//
 			//TODO:  在此加入建構函式程式碼
@@ -199,7 +205,7 @@ namespace Project2ChineseBoardGame {
 		}
 
 		void buttonMove(RoundButton^ current, RoundButton^ target, vector<Pos>& cango) {
-			if (!current->movable || !GM->gameBoard.checkcango(target->x, target->y, cango)) {
+			if (!current->movable || (!loading && !GM->gameBoard.checkcango(target->x, target->y, cango))) {
 				return;
 			}
 			int tempx = current->x;
@@ -214,6 +220,8 @@ namespace Project2ChineseBoardGame {
 			RoundButton^ SwapT = btnGrid[tempx, tempy];
 			btnGrid[tempx, tempy] = btnGrid[current->x, current->y];
 			btnGrid[current->x, current->y] = SwapT;
+			nextStep->Enabled = false;
+			previousStep->Enabled = false;
 			animation->Start();
 		}
 
@@ -236,6 +244,22 @@ namespace Project2ChineseBoardGame {
 							btnGrid[i, j]->movable = false;
 						}
 					}
+				}
+			}
+		}
+
+		void lockAllBtn() {
+			for (int i = 0; i < 9; i++) {
+				for (int j = 0; j < 10; j++) {
+					btnGrid[i, j]->movable = false;
+				}
+			}
+		}
+
+		void unlockAllBtn() {
+			for (int i = 0; i < 9; i++) {
+				for (int j = 0; j < 10; j++) {
+					btnGrid[i, j]->movable = true;
 				}
 			}
 		}
@@ -297,48 +321,31 @@ namespace Project2ChineseBoardGame {
 			System::IO::File::WriteAllText(filename, str);
 		}
 
-		void read_loaded_data(vector<string>& data) {
-			bool keep_playing = true;
-			for (int i = 0; i < data.size(); i++) {
-				/*
-				if (file.gameRecord.size() > 0) {
-					if (file.gameRecord[file.gameRecord.size() - 1] == "Black Win"
-						|| file.gameRecord[file.gameRecord.size() - 1] == "Red Win") {
-						keep_playing = false;
-						break;
-					}
-				}
-				if (data[i] == "Red Win" || data[i] == "Black Win") {
-					file.gameRecord.push_back(data[i]);
-					Sleep(1000);
-					clearScreen();
-					cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << " because ";
-					if (data[i][0] == 'R') cout << "Black surrender." << '\n';
-					else cout << "Red surrender." << '\n';
-					keep_playing = false;
-					break;
-				}
-				int choice;
-				gotoxy(20, 0); cout << "1.any input to next turn (except 2).";
-				gotoxy(20, 1); cout << "2.start from here.";
-				gotoxy(20, 2); cout << "Input option : ";
-				cin >> choice;
-				if (choice == 2) break;
-				int x1 = -1, x2 = -1, y1 = -1, y2 = -1, color = -1;
-				string charactor;
-				file.Input(data[i], color, charactor, x1, y1, x2, y2);
-				color = (round % 2 == 1) ? RED : BLACK;
-				GM.gameBoard.moveChess(file, x1, y1, x2, y2, true);
-				GM.gameBoard.showBoard();
-				round++;
-				*/
-			}
+		void ContinueInTheMiddle() {
+			label3->Visible = true;
+			TimeText->Visible = true;
+			timer1->Enabled = true;
+			surrender->Enabled = true;
+			surrender->Visible = true;
+			TurnChangeTest->Visible = true;
+			TurnChangeTest->Enabled = true;
+			TotalTIME->Enabled = true;
+			TotalTIME->Visible = true;
+			nextStep->Visible = false;
+			nextStep->Enabled = false;
+			previousStep->Visible = false;
+			previousStep->Enabled = false;
+			lockNonPlayerNowBtn();
+			timer1->Stop();
+			timerReset();
+			loading = false;
+			timer1->Start();
 
-			//keep playing
-			if (keep_playing) {
-				//GameRun(GM, file, round);
-			}
-			return;
+			srand(time(NULL));
+			time_t now = time(0);
+			string dt = to_string(rand());  //ctime(&now);
+			string filename = "./game data/log_" + dt + ".txt";
+			file->setFilename(filename);
 		}
 
 	protected:
@@ -582,6 +589,7 @@ namespace Project2ChineseBoardGame {
 			this->nextStep->TabIndex = 10;
 			this->nextStep->Text = L"下一步";
 			this->nextStep->UseVisualStyleBackColor = true;
+			this->nextStep->Click += gcnew System::EventHandler(this, &gameBoard::nextStep_Click);
 			// 
 			// previousStep
 			// 
@@ -591,8 +599,9 @@ namespace Project2ChineseBoardGame {
 			this->previousStep->Name = L"previousStep";
 			this->previousStep->Size = System::Drawing::Size(188, 63);
 			this->previousStep->TabIndex = 11;
-			this->previousStep->Text = L"上一步";
+			this->previousStep->Text = L"從這裡開始";
 			this->previousStep->UseVisualStyleBackColor = true;
+			this->previousStep->Click += gcnew System::EventHandler(this, &gameBoard::previousStep_Click);
 			// 
 			// gameBoard
 			// 
@@ -686,7 +695,6 @@ namespace Project2ChineseBoardGame {
 	}
 	private: System::Void gameBoard_Load(System::Object^ sender, System::EventArgs^ e) {
 		timerReset();
-		lockNonPlayerNowBtn();
 		timer1->Start();
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -709,7 +717,7 @@ namespace Project2ChineseBoardGame {
 		timer1->Enabled = false;
 		animation->Enabled = false;
 		fileOutput();
-		file->closeFile();
+		delete datas;
 		delete GM;
 		delete file;
 	}
@@ -729,6 +737,8 @@ namespace Project2ChineseBoardGame {
 			animation->Stop();
 			checkIfGameEnds();
 			turnChange();
+			nextStep->Enabled = true;
+			previousStep->Enabled = true;
 			return;
 		}
 		if (stepcount == 24) {
@@ -739,6 +749,8 @@ namespace Project2ChineseBoardGame {
 			animation->Stop();
 			checkIfGameEnds();
 			turnChange();
+			nextStep->Enabled = true;
+			previousStep->Enabled = true;
 			return;
 		}
 	}
@@ -757,6 +769,44 @@ namespace Project2ChineseBoardGame {
 			btn->Width = 70;
 			btn->Height = 70;
 		}
+	}
+	private: System::Void nextStep_Click(System::Object^ sender, System::EventArgs^ e) {
+
+		std::string inputData = datas->at(datas_index);
+		if (inputData == "Red Win" || inputData == "Black Win") {
+			file->gameRecord.push_back(inputData);
+			checkIfGameEnds();
+		}
+		else if (inputData == "Red surrender!") {
+			file->gameRecord.push_back(inputData);
+			file->gameRecord.push_back("Black Win");
+			MessageBox::Show("紅方玩家投降!");
+			checkIfGameEnds();
+		}
+		else if (inputData == "Black surrender!") {
+			file->gameRecord.push_back(inputData);
+			file->gameRecord.push_back("Red Win");
+			MessageBox::Show("黑方玩家投降!");
+			checkIfGameEnds();
+		}
+		else {
+			int x1 = -1, x2 = -1, y1 = -1, y2 = -1, color = -1;
+			string charactor;
+			file->Input(inputData, color, charactor, x1, y1, x2, y2);
+			GM->gameBoard.moveChess(file, x1, y1, x2, y2, true);
+			current = btnGrid[x1, y1];
+			target = btnGrid[x2, y2];
+			unlockAllBtn();
+			vector<Pos> garbage;
+			buttonMove(current, target, garbage);
+			lockAllBtn();
+		}
+
+		datas_index++;
+		if (datas_index >= datas->size()) ContinueInTheMiddle();
+	}
+	private: System::Void previousStep_Click(System::Object^ sender, System::EventArgs^ e) {
+		ContinueInTheMiddle();
 	}
 	};
 }
