@@ -157,7 +157,7 @@ void Board::moveChess(File* file, int x1, int y1, int x2, int y2, bool loading) 
 			board[y2][x2].pos.y = y2;
 		}
 
-		string str = "Player: " + to_string(board[y2][x2].chess_type/10) + ", Action: " + chessname(board[y2][x2].chess_type % 10) +
+		string str = "Player: " + to_string(board[y2][x2].chess_type / 10) + ", Action: " + chessname(board[y2][x2].chess_type % 10) +
 			" (" + to_string(x1) + ", " + to_string(y1) + ") -> (" + to_string(x2) + ", " + to_string(y2) + ")     ";
 		file->gameRecord.push_back(str);
 		if (general_death) {
