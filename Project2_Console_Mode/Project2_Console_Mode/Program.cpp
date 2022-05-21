@@ -93,9 +93,16 @@ void Program::loadFile()
 			file.gameRecord.push_back(data[i]);
 			Sleep(1000);
 			clearScreen();
-			cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << " because ";
-			if (data[i][0] == 'R') cout << "Black surrender." << '\n';
-			else cout << "Red surrender." << '\n';
+			cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << " because Stalemate.\n";
+			keep_playing = false;
+			break;
+		}
+		else if (data[i] == "Red surrender!" || data[i] == "Black surrender!") {
+			file.gameRecord.push_back(data[i]);
+			file.gameRecord.push_back(data[i+1]);
+			Sleep(1000);
+			clearScreen();
+			cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 2] << ' ' << file.gameRecord[file.gameRecord.size() - 1];
 			keep_playing = false;
 			break;
 		}
