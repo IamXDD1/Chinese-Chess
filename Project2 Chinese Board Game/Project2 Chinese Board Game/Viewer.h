@@ -62,6 +62,7 @@ namespace Project2ChineseBoardGame {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Viewer::typeid));
 			this->Title = (gcnew System::Windows::Forms::Label());
 			this->GameStart = (gcnew System::Windows::Forms::Button());
 			this->LoadGame = (gcnew System::Windows::Forms::Button());
@@ -76,7 +77,7 @@ namespace Project2ChineseBoardGame {
 			this->Title->AutoSize = true;
 			this->Title->Font = (gcnew System::Drawing::Font(L"µØ±d¦Ë­·ÅéW4", 48, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
-			this->Title->Location = System::Drawing::Point(241, 116);
+			this->Title->Location = System::Drawing::Point(248, 90);
 			this->Title->Name = L"Title";
 			this->Title->Size = System::Drawing::Size(358, 80);
 			this->Title->TabIndex = 0;
@@ -124,13 +125,13 @@ namespace Project2ChineseBoardGame {
 			// author
 			// 
 			this->author->AutoSize = true;
-			this->author->Font = (gcnew System::Drawing::Font(L"Consolas", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
+			this->author->Font = (gcnew System::Drawing::Font(L"µØ±d¦Ë­·ÅéW4(P)", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(136)));
 			this->author->Location = System::Drawing::Point(582, 277);
 			this->author->Name = L"author";
-			this->author->Size = System::Drawing::Size(207, 112);
+			this->author->Size = System::Drawing::Size(209, 168);
 			this->author->TabIndex = 4;
-			this->author->Text = L"Author:\r\nB11030037§dªÃ¿Î\r\nB11030021´åµ¾ÀM\r\nB11030001¸­­lÄY";
+			this->author->Text = L"Author:\r\n\r\nB11030037§dªÃ¿Î\r\n\r\nB11030021´åµ¾ÀM\r\n\r\nB11030001¸­­lÄY";
 			this->author->Click += gcnew System::EventHandler(this, &Viewer::author_Click);
 			// 
 			// Github
@@ -160,8 +161,9 @@ namespace Project2ChineseBoardGame {
 			this->Controls->Add(this->LoadGame);
 			this->Controls->Add(this->GameStart);
 			this->Controls->Add(this->Title);
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"Viewer";
-			this->Text = L"Chinese Chess";
+			this->Text = L"¤¤°ê¶H´Ñ";
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
