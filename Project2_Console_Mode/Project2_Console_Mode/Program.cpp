@@ -67,7 +67,7 @@ void Program::loadFile()
 		cout << "Please input a file name to load : ";
 		getline(cin, filename);
 
-		file.setFilename(filename + ".txt");
+		file.setFilename("./game data/" + filename + ".txt");
 		if (file.Load(data)) break;
 	}
 	file.closeFile();
