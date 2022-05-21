@@ -51,6 +51,7 @@ namespace Project2ChineseBoardGame {
 		//
 		String^ playerNow = "red";
 		bool loading = false;
+		//bool* general_death = new bool;
 
 		gameBoard(void)
 		{
@@ -67,7 +68,7 @@ namespace Project2ChineseBoardGame {
 			previousStep->Enabled = false;
 			generateButton();
 			lockNonPlayerNowBtn();
-
+			//*general_death = false;
 			//
 			//TODO:  在此加入建構函式程式碼
 			//
@@ -93,7 +94,7 @@ namespace Project2ChineseBoardGame {
 			delete datas;
 			datas = new vector<string>(data);
 			datas_index = 0;
-
+			//*general_death = false;
 			//
 			//TODO:  在此加入建構函式程式碼
 			//
@@ -169,6 +170,7 @@ namespace Project2ChineseBoardGame {
 
 		void turnChange() {
 			timer1->Stop();
+			//if (general_death) 
 			stalemate_and_checkmate();
 			timeleft = TIME_LIMIT;
 			minutes = timeleft / 60;
@@ -656,7 +658,7 @@ namespace Project2ChineseBoardGame {
 		if (buttonClicked) {
 			target = btn;
 			HideLegalPath(cango);
-			GM->gameBoard.moveChess(file, current->x, current->y, target->x, target->y);
+			GM->gameBoard.moveChess(file, current->x, current->y, target->x, target->y); //不能交換
 			buttonMove(current, target, cango);
 			cango.clear();
 			buttonClicked = false;
@@ -735,7 +737,7 @@ namespace Project2ChineseBoardGame {
 		timer1->Enabled = false;
 		animation->Enabled = false;
 		fileOutput();
-
+		//delete general_death;
 		delete datas;
 		delete GM;
 		delete file;

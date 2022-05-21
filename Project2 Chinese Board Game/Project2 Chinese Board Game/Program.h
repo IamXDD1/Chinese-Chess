@@ -1,7 +1,7 @@
 #pragma once
 #include "GameManager.h"
 #include "Clock.h"
-
+/*
 class Program {
 public:
 	void Run() {
@@ -22,3 +22,4 @@ public:
 	void GameRun(GameManager& GM, File* file, int& round);
 	void playagain();
 };
+*/
