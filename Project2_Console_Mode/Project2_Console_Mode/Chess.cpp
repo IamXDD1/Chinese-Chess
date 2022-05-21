@@ -531,7 +531,7 @@ void Soldier::moveable(int x, int y, vector<Pos>& cango) // tested
 			if (y > 0) cango.push_back({ x, y - 1 });
 			if (y < 5) // cross the river
 			{
-				if (x < 9) cango.push_back({ x + 1, y });
+				if (x < 8) cango.push_back({ x + 1, y });
 				if (x > 0) cango.push_back({ x - 1, y });
 			}
 		}
@@ -540,7 +540,7 @@ void Soldier::moveable(int x, int y, vector<Pos>& cango) // tested
 			if (y < 9) cango.push_back({ x, y + 1 });
 			if (y > 4)// cross the river
 			{
-				if (x < 9) cango.push_back({ x + 1, y });
+				if (x < 8) cango.push_back({ x + 1, y });
 				if (x > 0) cango.push_back({ x - 1, y });
 			}
 		}
