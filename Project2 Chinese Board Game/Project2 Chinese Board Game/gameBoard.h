@@ -229,6 +229,8 @@ namespace Project2ChineseBoardGame {
 			btnGrid[current->x, current->y] = SwapT;
 			nextStep->Enabled = false;
 			previousStep->Enabled = false;
+			current->MouseEnter -= gcnew System::EventHandler(this, &gameBoard::Btn_Enter);
+			current->MouseLeave -= gcnew System::EventHandler(this, &gameBoard::Btn_Leave);
 			animation->Start();
 		}
 
@@ -804,6 +806,8 @@ namespace Project2ChineseBoardGame {
 			target->Location = temp;
 			ChessKilled(target);
 			animation->Stop();
+			current->MouseEnter += gcnew System::EventHandler(this, &gameBoard::Btn_Enter);
+			current->MouseLeave += gcnew System::EventHandler(this, &gameBoard::Btn_Leave);
 			checkIfGameEnds();
 			turnChange();
 			nextStep->Enabled = true;
@@ -816,6 +820,8 @@ namespace Project2ChineseBoardGame {
 			target->Location = temp;
 			ChessKilled(target);
 			animation->Stop();
+			current->MouseEnter += gcnew System::EventHandler(this, &gameBoard::Btn_Enter);
+			current->MouseLeave += gcnew System::EventHandler(this, &gameBoard::Btn_Leave);
 			checkIfGameEnds();
 			turnChange();
 			nextStep->Enabled = true;
