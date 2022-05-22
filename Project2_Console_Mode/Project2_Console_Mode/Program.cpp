@@ -41,7 +41,7 @@ void Program::startGame()
 
 	cin.get();
 
-	file.setFilename(filename + ".txt");
+	file.setFilename(filename);
 
 	clearScreen();
 	GM.gameBoard.showBoard();
@@ -67,7 +67,7 @@ void Program::loadFile()
 		cout << "Please input a file name to load : ";
 		getline(cin, filename);
 
-		file.setFilename(filename + ".txt");
+		file.setFilename("./game data/" + filename + ".txt");
 		if (file.Load(data)) break;
 	}
 	file.closeFile();
@@ -93,9 +93,7 @@ void Program::loadFile()
 			file.gameRecord.push_back(data[i]);
 			Sleep(1000);
 			clearScreen();
-			cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << " because ";
-			if (data[i][0] == 'R') cout << "Black surrender." << '\n';
-			else cout << "Red surrender." << '\n';
+			cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << '\n';
 			keep_playing = false;
 			break;
 		}
