@@ -27,10 +27,10 @@
     <ClCompile Include="GameManager.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="Program.cpp">
+    <ClCompile Include="Clock.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="Clock.cpp">
+    <ClCompile Include="Program.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,10 +56,10 @@
     <ClInclude Include="GameManager.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="Program.h">
+    <ClInclude Include="Clock.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="Clock.h">
+    <ClInclude Include="Program.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

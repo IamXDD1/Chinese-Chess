@@ -237,20 +237,20 @@ void Board::showBoard() {
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 9; j++) {
 			switch (board[i][j].chess_type) {
-			case BLACK_GENERAL: cout << "±N"; break;
-			case RED_GENERAL:	cout << "«Ó"; break;
-			case BLACK_ADVISOR: cout << "¤h"; break;
-			case RED_ADVISOR:	cout << "¥K"; break;
-			case BLACK_ELEPHANT:cout << "¶H"; break;
-			case RED_ELEPHANT:	cout << "¬Û"; break;
-			case BLACK_CHARIOT: cout << "¨®"; break;
-			case RED_CHARIOT:	cout << "¨®"; break;
-			case BLACK_HORSE:	cout << "°¨"; break;
-			case RED_HORSE:		cout << "ØX"; break;
-			case BLACK_CANNON:	cout << "¯¥"; break;
-			case RED_CANNON:	cout << "¬¶"; break;
-			case BLACK_SOLDIER: cout << "¨ò"; break;
-			case RED_SOLDIER:	cout << "§L"; break;
+			case BLACK_GENERAL: cout << "å°‡"; break;
+			case RED_GENERAL:	cout << "å¸¥"; break;
+			case BLACK_ADVISOR: cout << "å£«"; break;
+			case RED_ADVISOR:	cout << "ä»•"; break;
+			case BLACK_ELEPHANT:cout << "è±¡"; break;
+			case RED_ELEPHANT:	cout << "ç›¸"; break;
+			case BLACK_CHARIOT: cout << "è»Š"; break;
+			case RED_CHARIOT:	cout << "è»Š"; break;
+			case BLACK_HORSE:	cout << "é¦¬"; break;
+			case RED_HORSE:		cout << "å‚Œ"; break;
+			case BLACK_CANNON:	cout << "ç ²"; break;
+			case RED_CANNON:	cout << "ç‚®"; break;
+			case BLACK_SOLDIER: cout << "å’"; break;
+			case RED_SOLDIER:	cout << "å…µ"; break;
 			default: cout << "  "; break;
 			}
 		}
@@ -383,7 +383,7 @@ bool Board::ifMoveThenLose(bool& isCheckmate, int color) //need opponent's all_c
 		{
 			return false;
 		}
-		// µL¤í¦æ
+		// ç„¡æ¬ è¡Œ
 	}
 
 	for (auto i : ally_all_chess_cango)
@@ -394,7 +394,7 @@ bool Board::ifMoveThenLose(bool& isCheckmate, int color) //need opponent's all_c
 		}
 	}
 
-	return true; // ¤í¦æ
+	return true; // æ¬ è¡Œ
 }
 
 bool Board::gereral_can_escape(Chess board[][9], Pos general_pos, vector<Pos> general_cango,
@@ -523,11 +523,6 @@ void Board::load_all_chess_cango_test(Chess boardT[][9], vector<pair<Pos, vector
 			if (boardT[j][i].chess_type != NULL_CHESS) {
 				board_useChess(boardT[j][i], cango, boardT);
 				a.push_back({ Pos(i,j), cango });
-				/*
-				cout << j << ',' << i << ' ';
-				for (int x = 0; x < cango.size(); x++) cout << cango[x].x << ',' << cango[x].y << ' ';
-				cout << '\n';
-				*/
 			}
 		}
 	}
