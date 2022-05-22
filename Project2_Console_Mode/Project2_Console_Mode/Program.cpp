@@ -173,16 +173,7 @@ void Program::GameRun(GameManager& GM, File& file, int& round)
 				else file.gameRecord.push_back("Black Win");
 			}
 
-			int colorToPass;
-			if (color == BLACK) colorToPass = RED;
-			else if (color == RED) colorToPass = BLACK;
-			Board::load_all_chess_cango();
-			if (Board::ifMoveThenLose(isCheckmate, colorToPass))
-			{
-				if (color == BLACK) file.gameRecord.push_back("Red Win");
-				else file.gameRecord.push_back("Black Win");
-			}
-
+			// general death
 			if (file.gameRecord[file.gameRecord.size() - 1] == "Black Win"
 				|| file.gameRecord[file.gameRecord.size() - 1] == "Red Win") {
 				Sleep(1000);
@@ -190,6 +181,26 @@ void Program::GameRun(GameManager& GM, File& file, int& round)
 				cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << '\n';
 				break;
 			}
+
+			int colorToPass;
+			if (color == BLACK) colorToPass = RED;
+			else if (color == RED) colorToPass = BLACK;
+			Board::load_all_chess_cango();
+			if (Board::ifMoveThenLose(isCheckmate, colorToPass))
+			{
+				if (colorToPass == BLACK) file.gameRecord.push_back("Red Win");
+				else file.gameRecord.push_back("Black Win");
+			}
+
+			// stalement
+			if (file.gameRecord[file.gameRecord.size() - 1] == "Black Win"
+				|| file.gameRecord[file.gameRecord.size() - 1] == "Red Win") {
+				Sleep(1000);
+				clearScreen();
+				cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << '\n';
+				break;
+			}
+
 		}
 		catch (const char* error) {
 			gotoxy(36, 20);
