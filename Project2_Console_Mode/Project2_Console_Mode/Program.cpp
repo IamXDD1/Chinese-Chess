@@ -173,6 +173,13 @@ void Program::GameRun(GameManager& GM, File& file, int& round)
 				else file.gameRecord.push_back("Black Win");
 			}
 
+			if (file.gameRecord[file.gameRecord.size() - 1] == "Black Win"
+				|| file.gameRecord[file.gameRecord.size() - 1] == "Red Win") {
+				Sleep(1000);
+				clearScreen();
+				cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << '\n';
+				break;
+			}
 			int colorToPass;
 			if (color == BLACK) colorToPass = RED;
 			else if (color == RED) colorToPass = BLACK;
