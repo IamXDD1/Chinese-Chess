@@ -175,6 +175,7 @@ namespace Project2ChineseBoardGame {
 			timer1->Stop();
 			//if (general_death) 
 			stalemate_and_checkmate();
+			checkIfGameEnds();
 			timeleft = TIME_LIMIT;
 			minutes = timeleft / 60;
 			second = timeleft % 60;
@@ -308,11 +309,13 @@ namespace Project2ChineseBoardGame {
 		void checkIfGameEnds() {
 			if (file->gameRecord[file->gameRecord.size() - 1] == "Black Win") {
 				timer1->Stop();
+				TotalTimer->Stop();
 				MessageBox::Show("黑方玩家勝利!");
 				this->Close();
 			}
 			else if (file->gameRecord[file->gameRecord.size() - 1] == "Red Win") {
 				timer1->Stop();
+				TotalTimer->Stop();
 				MessageBox::Show("紅方玩家勝利!");
 				this->Close();
 			}
@@ -322,7 +325,7 @@ namespace Project2ChineseBoardGame {
 		}
 
 		void fileOutput() {
-			String^ filename = msclr::interop::marshal_as<String^>(file->getFilename());
+			String^ filename = msclr::interop::marshal_as<String^>(file->filename);
 			String^ str = "";
 
 			for (int i = 0; i < file->gameRecord.size(); i++) {
@@ -376,7 +379,7 @@ namespace Project2ChineseBoardGame {
 				else MessageBox::Show("黑方將軍!");
 			}
 		}
-		
+
 	protected:
 		/// <summary>
 		/// 清除任何使用中的資源。
@@ -695,7 +698,7 @@ namespace Project2ChineseBoardGame {
 		}
 
 #pragma endregion
-	private: System::Void Grid_btn_click(System::Object ^ sender, System::EventArgs ^ e) {
+	private: System::Void Grid_btn_click(System::Object^ sender, System::EventArgs^ e) {
 		RoundButton^ btn = (RoundButton^)sender;
 		int x = btn->x;
 		int y = btn->y;
@@ -719,7 +722,7 @@ namespace Project2ChineseBoardGame {
 			buttonClicked = true;
 		}
 	}
-	private: System::Void timer1_Tick(System::Object ^ sender, System::EventArgs ^ e) {
+	private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) {
 		if (!exceed2MIN) {
 			timeleft--;
 			minutes = timeleft / 60;
@@ -758,12 +761,12 @@ namespace Project2ChineseBoardGame {
 			this->Close();
 		}
 	}
-	private: System::Void gameBoard_Load(System::Object ^ sender, System::EventArgs ^ e) {
+	private: System::Void gameBoard_Load(System::Object^ sender, System::EventArgs^ e) {
 		timerReset();
 		timer1->Start();
 		TotalTimer->Start();
 	}
-	private: System::Void button1_Click(System::Object ^ sender, System::EventArgs ^ e) {
+	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ now = PlayerNow->Text;
 		MessageBox::Show(now + "投降!");
 		if (playerNow == "red") {
@@ -776,10 +779,10 @@ namespace Project2ChineseBoardGame {
 		}
 		checkIfGameEnds();
 	}
-	private: System::Void button2_Click(System::Object ^ sender, System::EventArgs ^ e) {
+	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
 	}
-	private: System::Void gameBoard_FormClosed(System::Object ^ sender, System::Windows::Forms::FormClosedEventArgs ^ e) {
+	private: System::Void gameBoard_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
 		timer1->Enabled = false;
 		TotalTimer->Enabled = false;
 		animation->Enabled = false;
@@ -790,10 +793,10 @@ namespace Project2ChineseBoardGame {
 		delete file;
 
 	}
-	private: System::Void TurnChangeTest_Click(System::Object ^ sender, System::EventArgs ^ e) {
+	private: System::Void TurnChangeTest_Click(System::Object^ sender, System::EventArgs^ e) {
 		turnChange();
 	}
-	private: System::Void animation_Tick(System::Object ^ sender, System::EventArgs ^ e) {
+	private: System::Void animation_Tick(System::Object^ sender, System::EventArgs^ e) {
 		stepcount++;
 		double stepDISx = round(disx / 24.0);
 		double stepDISy = round(disy / 24.0);
@@ -806,7 +809,7 @@ namespace Project2ChineseBoardGame {
 			animation->Stop();
 			current->MouseEnter += gcnew System::EventHandler(this, &gameBoard::Btn_Enter);
 			current->MouseLeave += gcnew System::EventHandler(this, &gameBoard::Btn_Leave);
-			checkIfGameEnds();
+			//checkIfGameEnds();
 			turnChange();
 			nextStep->Enabled = true;
 			previousStep->Enabled = true;
@@ -827,7 +830,7 @@ namespace Project2ChineseBoardGame {
 			return;
 		}
 	}
-	private: System::Void Btn_Enter(System::Object ^ sender, System::EventArgs ^ e) {
+	private: System::Void Btn_Enter(System::Object^ sender, System::EventArgs^ e) {
 		RoundButton^ btn = (RoundButton^)sender;
 		if (btn->canBeChosen == true) return;
 		if (btn->isChessB || btn->isChessR) {
@@ -835,7 +838,7 @@ namespace Project2ChineseBoardGame {
 			btn->Height = 80;
 		}
 	}
-	private: System::Void Btn_Leave(System::Object ^ sender, System::EventArgs ^ e) {
+	private: System::Void Btn_Leave(System::Object^ sender, System::EventArgs^ e) {
 		RoundButton^ btn = (RoundButton^)sender;
 		if (btn->canBeChosen == true) return;
 		if (btn->isChessB || btn->isChessR) {
@@ -843,7 +846,7 @@ namespace Project2ChineseBoardGame {
 			btn->Height = 70;
 		}
 	}
-	private: System::Void nextStep_Click(System::Object ^ sender, System::EventArgs ^ e) {
+	private: System::Void nextStep_Click(System::Object^ sender, System::EventArgs^ e) {
 
 		std::string inputData = datas->at(datas_index);
 		if (inputData == "Red Win" || inputData == "Black Win") {
@@ -878,10 +881,10 @@ namespace Project2ChineseBoardGame {
 		datas_index++;
 		if (datas_index >= datas->size()) ContinueInTheMiddle();
 	}
-	private: System::Void previousStep_Click(System::Object ^ sender, System::EventArgs ^ e) {
+	private: System::Void previousStep_Click(System::Object^ sender, System::EventArgs^ e) {
 		ContinueInTheMiddle();
 	}
-	private: System::Void TotalTimer_Tick(System::Object ^ sender, System::EventArgs ^ e) {
+	private: System::Void TotalTimer_Tick(System::Object^ sender, System::EventArgs^ e) {
 		totaltime++;
 		int totalMin = totaltime / 60;
 		int totalSec = totaltime % 60;

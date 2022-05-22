@@ -237,20 +237,20 @@ void Board::showBoard() {
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 9; j++) {
 			switch (board[i][j].chess_type) {
-			case BLACK_GENERAL: cout << "å°‡"; break;
-			case RED_GENERAL:	cout << "å¸¥"; break;
-			case BLACK_ADVISOR: cout << "å£«"; break;
-			case RED_ADVISOR:	cout << "ä»•"; break;
-			case BLACK_ELEPHANT:cout << "è±¡"; break;
-			case RED_ELEPHANT:	cout << "ç›¸"; break;
-			case BLACK_CHARIOT: cout << "è»Š"; break;
-			case RED_CHARIOT:	cout << "è»Š"; break;
-			case BLACK_HORSE:	cout << "é¦¬"; break;
-			case RED_HORSE:		cout << "å‚Œ"; break;
-			case BLACK_CANNON:	cout << "ç ²"; break;
-			case RED_CANNON:	cout << "ç‚®"; break;
-			case BLACK_SOLDIER: cout << "å’"; break;
-			case RED_SOLDIER:	cout << "å…µ"; break;
+			case BLACK_GENERAL: cout << "±N"; break;
+			case RED_GENERAL:	cout << "«Ó"; break;
+			case BLACK_ADVISOR: cout << "¤h"; break;
+			case RED_ADVISOR:	cout << "¥K"; break;
+			case BLACK_ELEPHANT:cout << "¶H"; break;
+			case RED_ELEPHANT:	cout << "¬Û"; break;
+			case BLACK_CHARIOT: cout << "¨®"; break;
+			case RED_CHARIOT:	cout << "¨®"; break;
+			case BLACK_HORSE:	cout << "°¨"; break;
+			case RED_HORSE:		cout << "ØX"; break;
+			case BLACK_CANNON:	cout << "¯¥"; break;
+			case RED_CANNON:	cout << "¬¶"; break;
+			case BLACK_SOLDIER: cout << "¨ò"; break;
+			case RED_SOLDIER:	cout << "§L"; break;
 			default: cout << "  "; break;
 			}
 		}
@@ -344,7 +344,7 @@ bool Board::ifMoveThenLose(bool& isCheckmate, int color) //need opponent's all_c
 	bool generalCanMove = false;
 	for (pair<Pos, vector<Pos>>& element_of_all_chess_cango : Board::all_chess_cango) // red and black
 	{
-		Chess chess_on_board = Board::getChess(element_of_all_chess_cango.first.x, 
+		Chess chess_on_board = Board::getChess(element_of_all_chess_cango.first.x,
 			element_of_all_chess_cango.first.y);
 
 		// fill in "oppo_all_chess_cango"
@@ -361,13 +361,13 @@ bool Board::ifMoveThenLose(bool& isCheckmate, int color) //need opponent's all_c
 			// fill in "all_able_to_move_ally_pos"
 			if (chess_on_board.chess_type % 10 != 7 && element_of_all_chess_cango.second.size() != 0)
 			{
-				ally_all_chess_cango.push_back({ element_of_all_chess_cango.first, 
+				ally_all_chess_cango.push_back({ element_of_all_chess_cango.first,
 					element_of_all_chess_cango.second });
 			}
 			// my general ( can move )
 			else if (chess_on_board.chess_type % 10 == 7)
 			{
-				if(element_of_all_chess_cango.second.size() != 0) generalCanMove = true;
+				if (element_of_all_chess_cango.second.size() != 0) generalCanMove = true;
 
 				general_type = chess_on_board.chess_type;
 				our_general_pos = element_of_all_chess_cango.first;
@@ -383,7 +383,7 @@ bool Board::ifMoveThenLose(bool& isCheckmate, int color) //need opponent's all_c
 		{
 			return false;
 		}
-		// ç„¡æ¬ è¡Œ
+		// µL¤í¦æ
 	}
 
 	for (auto i : ally_all_chess_cango)
@@ -394,7 +394,7 @@ bool Board::ifMoveThenLose(bool& isCheckmate, int color) //need opponent's all_c
 		}
 	}
 
-	return true; // æ¬ è¡Œ
+	return true; // ¤í¦æ
 }
 
 bool Board::gereral_can_escape(Chess board[][9], Pos general_pos, vector<Pos> general_cango,
@@ -483,11 +483,11 @@ int Board::ifMoveThenLose_simu(Chess board[][9], pair<Pos, vector<Pos>> simu, in
 			}
 			else if ((chess_on_board.chess_type % 10 == 7))
 			{
-				our_general_pos.x = element_of_all_chess_cango.first.x; 
+				our_general_pos.x = element_of_all_chess_cango.first.x;
 				our_general_pos.y = element_of_all_chess_cango.first.y;
 			}
 		}
-		
+
 		bool overlap = false;
 		for (auto& i : oppo_all_chess_cango)
 		{
@@ -504,7 +504,7 @@ int Board::ifMoveThenLose_simu(Chess board[][9], pair<Pos, vector<Pos>> simu, in
 			return 1; // didnt overlap our general
 		}
 
-		board[e.y][e.x] = Null(e.x,e.y);
+		board[e.y][e.x] = Null(e.x, e.y);
 	}
 
 	if (simu.first.x == 6 && simu.first.y == 0)
