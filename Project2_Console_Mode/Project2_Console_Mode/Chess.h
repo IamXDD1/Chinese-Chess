@@ -32,8 +32,8 @@ public:
 		color = -1;
 		chess_type = -1;
 	}
-	virtual bool kingKing(vector<Pos>& cango);
-	bool board_kingKing(vector<Pos>& cango, Chess board[][9]);
+	virtual void kingKing(vector<Pos>& cango);
+	void board_kingKing(vector<Pos>& cango, Chess board[][9]);
 	virtual int getColor() { return color; }
 	void moveable(int x, int y, vector<Pos>& cango) { return; };
 	void checkCompanion(vector<Pos>& cango);
