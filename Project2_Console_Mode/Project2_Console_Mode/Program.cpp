@@ -181,7 +181,7 @@ void Program::GameRun(GameManager& GM, File& file, int& round)
 				cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << '\n';
 				break;
 			}
-
+      
 			int colorToPass;
 			if (color == BLACK) colorToPass = RED;
 			else if (color == RED) colorToPass = BLACK;
