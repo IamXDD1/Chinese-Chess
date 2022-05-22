@@ -1,5 +1,4 @@
 #include "GameManager.h"
-using std::cout;
 
 Chess Board::board[10][9];
 vector<pair<Pos, vector<Pos>>> Board::all_chess_cango;
@@ -9,22 +8,19 @@ vector<pair<Pos, vector<Pos>>> Board::all_chess_cango;
 bool File::Load(vector<string>& data) {  //XDD
 	file.open(filename);
 	if (!file) {
-		cout << "File \"" + filename + "\" can't be opened.\n";
 		return false;
 	}
 	else {
-		cout << "File is loading...\n";
-		Sleep(2000);
-
 		string temp;
 		for (; getline(file, temp);) {
 			data.push_back(temp);
 		}
+		file.close();
 		return true;
 	}
 }
 //divide input. ex: Player: 1, Action: Cannon (x1, y1) -> (x2, y2)
-void File::Input(string& data, int& color, string& character, int& x1, int& y1, int& x2, int& y2) {
+void File::Input(string data, int& color, string& character, int& x1, int& y1, int& x2, int& y2) {
 	gotoxy(30, 20); cout << "Error:                                                  ";
 	stringstream ss(data);
 	string part;
@@ -132,38 +128,14 @@ bool Board::checkChess(Chess chess) {
 	return false;
 }
 //to move choosed chess 
-void Board::moveChess(File& file, int& x1, int& y1, int& x2, int& y2, bool loading) {
-	load_all_chess_cango();
+void Board::moveChess(File* file, int x1, int y1, int x2, int y2, bool loading) {
 	Chess temp_chess = getChess(x1, y1);
-	/*
-	try
-	{
-		bool isCheckmate = false;
-		temp_chess.ifMoveThenLose(isCheckmate);
-	}
-	catch(const char* error)
-	{
-		std::cout << error << endl;
-	}
-	*/
 	if (checkChess(temp_chess)) { // input chess (x1, y1)
-		bool isCheckmate = false;
 		bool general_death = false;
 		if (loading == false) {
 			vector<Pos> cango;
 			useChess(temp_chess, cango);  //load moveable path
 			showPath(cango);
-
-			for (;;)
-			{
-				gotoxy(0, 21);
-				cout << "x2 = ";
-				cin >> x2;
-				cout << "y2 = ";
-				cin >> y2;			//click point to move
-				if ((x2 >= 0 && x2 <= 8) && (y2 >= 0 && y2 <= 9)) break;
-				else "position is out of range. please input again!";
-			}
 
 			if (checkcango(x2, y2, cango)) {
 				if (board[y2][x2].chess_type % 10 == GENERAL) general_death = true;
@@ -174,7 +146,6 @@ void Board::moveChess(File& file, int& x1, int& y1, int& x2, int& y2, bool loadi
 				board[y2][x2].pos.y = y2;
 			}
 			else {
-				throw "can't go to x2 y2";
 				return;
 			}
 		}
@@ -187,18 +158,16 @@ void Board::moveChess(File& file, int& x1, int& y1, int& x2, int& y2, bool loadi
 			board[y2][x2].pos.y = y2;
 		}
 
-
 		string str = "Player: " + to_string(board[y2][x2].chess_type / 10) + ", Action: " + chessname(board[y2][x2].chess_type % 10) +
 			" (" + to_string(x1) + ", " + to_string(y1) + ") -> (" + to_string(x2) + ", " + to_string(y2) + ")     ";
-		file.gameRecord.push_back(str);
+		file->gameRecord.push_back(str);
 		if (general_death) {
-			if (board[y2][x2].chess_type / 10 == BLACK) file.gameRecord.push_back("Black Win");
-			else file.gameRecord.push_back("Red Win");
+			if (board[y2][x2].chess_type / 10 == BLACK) file->gameRecord.push_back("Black Win");
+			else file->gameRecord.push_back("Red Win");
 		}
 		gotoxy(20, 3);
 		cout << str;
 	}
-	else throw "Move chess fail, for wrong color or chess";
 }
 
 void Board::showPath(vector<Pos>& cango) {
@@ -225,7 +194,7 @@ void Board::showallPath() {
 	return;
 }
 
-bool Board::checkcango(int& x2, int& y2, vector<Pos>& cango) {
+bool Board::checkcango(int x2, int y2, vector<Pos> cango) {
 	for (size_t i = 0; i < cango.size(); i++) {
 		if (x2 == cango[i].x && y2 == cango[i].y) return true;
 	}
@@ -251,7 +220,7 @@ void Board::showBoard() {
 			case RED_CANNON:	cout << "¬¶"; break;
 			case BLACK_SOLDIER: cout << "¨ò"; break;
 			case RED_SOLDIER:	cout << "§L"; break;
-			default: cout << "  "; break;
+			default: cout << " €"; break;
 			}
 		}
 		cout << endl;
@@ -265,7 +234,7 @@ void Board::load_all_chess_cango()
 		for (int j = 0; j < 10; j++) {
 			vector<Pos> cango;
 			if (board[j][i].chess_type != NULL_CHESS) {
-				Board::useChess(board[j][i], cango);
+				useChess(board[j][i], cango);
 				all_chess_cango.push_back({ Pos(i,j), cango });
 				/*
 				cout << j << ',' << i << ' ';
@@ -323,6 +292,7 @@ void Board::useChess(Chess& temp_chess, vector<Pos>& cango) {
 	}
 }
 
+
 bool Board::ifMoveThenLose(bool& isCheckmate, int color) //need opponent's all_chess_cango and all allys' Pos 
 {
 	vector<Pos> oppo_all_chess_cango; // for checking if checkmate
@@ -344,7 +314,7 @@ bool Board::ifMoveThenLose(bool& isCheckmate, int color) //need opponent's all_c
 	bool generalCanMove = false;
 	for (pair<Pos, vector<Pos>>& element_of_all_chess_cango : Board::all_chess_cango) // red and black
 	{
-		Chess chess_on_board = Board::getChess(element_of_all_chess_cango.first.x, 
+		Chess chess_on_board = Board::getChess(element_of_all_chess_cango.first.x,
 			element_of_all_chess_cango.first.y);
 
 		// fill in "oppo_all_chess_cango"
@@ -361,13 +331,13 @@ bool Board::ifMoveThenLose(bool& isCheckmate, int color) //need opponent's all_c
 			// fill in "all_able_to_move_ally_pos"
 			if (chess_on_board.chess_type % 10 != 7 && element_of_all_chess_cango.second.size() != 0)
 			{
-				ally_all_chess_cango.push_back({ element_of_all_chess_cango.first, 
+				ally_all_chess_cango.push_back({ element_of_all_chess_cango.first,
 					element_of_all_chess_cango.second });
 			}
 			// my general ( can move )
 			else if (chess_on_board.chess_type % 10 == 7)
 			{
-				if(element_of_all_chess_cango.second.size() != 0) generalCanMove = true;
+				if (element_of_all_chess_cango.second.size() != 0) generalCanMove = true;
 
 				general_type = chess_on_board.chess_type;
 				our_general_pos = element_of_all_chess_cango.first;
@@ -386,7 +356,7 @@ bool Board::ifMoveThenLose(bool& isCheckmate, int color) //need opponent's all_c
 		// µL¤í¦æ
 	}
 
-	board_for_test[our_general_pos.y][our_general_pos.x] = General(our_general_pos.x, our_general_pos.y, (color*10) + 7);
+	board_for_test[our_general_pos.y][our_general_pos.x] = General(our_general_pos.x, our_general_pos.y, (color * 10) + 7);
 	for (auto i : ally_all_chess_cango)
 	{
 		if (ifMoveThenLose_simu(board_for_test, i, color) == 1)
@@ -446,8 +416,8 @@ bool Board::gereral_can_escape(Chess board[][9], Pos general_pos, vector<Pos> ge
 		{
 			return true;
 		}
-		
-		board[general_cango_element.y][general_cango_element.x] = Null(general_cango_element.x, 
+
+		board[general_cango_element.y][general_cango_element.x] = Null(general_cango_element.x,
 			general_cango_element.y);
 	}
 
@@ -466,6 +436,7 @@ int Board::ifMoveThenLose_simu(Chess board[][9], pair<Pos, vector<Pos>> simu, in
 		vector<Pos> oppo_all_chess_cango;
 
 		board[e.y][e.x] = current;
+
 		load_all_chess_cango_test(board, all_chess_cango_cver);
 
 		//fill in "oppo_all_chess_cango"
@@ -483,11 +454,11 @@ int Board::ifMoveThenLose_simu(Chess board[][9], pair<Pos, vector<Pos>> simu, in
 			}
 			else if ((chess_on_board.chess_type % 10 == 7))
 			{
-				our_general_pos.x = element_of_all_chess_cango.first.x; 
+				our_general_pos.x = element_of_all_chess_cango.first.x;
 				our_general_pos.y = element_of_all_chess_cango.first.y;
 			}
 		}
-		
+
 		bool overlap = false;
 		for (auto& i : oppo_all_chess_cango)
 		{
@@ -503,10 +474,10 @@ int Board::ifMoveThenLose_simu(Chess board[][9], pair<Pos, vector<Pos>> simu, in
 			return 1; // didnt overlap our general
 		}
 
-		board[e.y][e.x] = Null(e.x,e.y);
+		board[e.y][e.x] = Null(e.x, e.y);
 	}
 
-	
+
 	return 0;
 }
 
@@ -537,7 +508,6 @@ bool Board::checkmate(Pos general_pos, vector<Pos>& oppo_all_chess_cango, bool& 
 	}
 	return false;
 }
-
 //====================================================================================================
 
 //GameManager

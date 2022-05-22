@@ -4,13 +4,11 @@
 #include <sstream>
 #include <vector>
 #include <string>
-#include <map>
 #include "Clock.h"
 #include "Chess.h"
 
 #define BLACK 2
 #define RED 1
-#define NULL_COLOR -1
 
 #define BLACK_GENERAL	27
 #define BLACK_ADVISOR	26
@@ -54,8 +52,9 @@ public:
 	File() : filename("") {};
 	inline void setFilename(string name) { filename = name; }
 	bool Load(vector<string>& data);
-	void Input(string& data, int& color, string& character, int& x1, int& y1, int& x2, int& y2);
+	void Input(string data, int& color, string& character, int& x1, int& y1, int& x2, int& y2);
 	void Output();
+	inline string getFilename() { return filename; }
 	inline void closeFile() { file.close(); }
 };
 
@@ -65,26 +64,25 @@ protected:
 
 	static int ifMoveThenLose_simu(Chess board[][9], pair<Pos, vector<Pos>> simu, int color);
 	static void load_all_chess_cango_test(Chess board[][9], vector<pair<Pos, vector<Pos>>>& a);
-	static bool gereral_can_escape(Chess board[][9], Pos general_pos, vector<Pos> general_cango, 
+	static bool gereral_can_escape(Chess board[][9], Pos general_pos, vector<Pos> general_cango,
 		vector<pair<Pos, vector<Pos>>> ally_all_chess_cango, int color);
-	static bool checkmate(Pos general_pos, vector<Pos>& oppo_all_chess_cango, bool& checkmate); 
+	static bool checkmate(Pos general_pos, vector<Pos>& oppo_all_chess_cango, bool& checkmate);
 public:
 	static vector<pair<Pos, vector<Pos>>> all_chess_cango;
 	Board();
 	void initialization();
 	static Chess getChess(int x, int y) { return board[y][x]; }
 	bool checkChess(Chess chess);
-	void moveChess(File& file, int& x1, int& y1, int& x2, int& y2, bool loading = false);
+	void moveChess(File* file, int x1, int y1, int x2, int y2, bool loading = false);
 	static void useChess(Chess& temp_chess, vector<Pos>& cango);
 	void showPath(vector<Pos>& cango);
-	bool checkcango(int& x2, int& y2, vector<Pos>& cango);
+	bool checkcango(int x2, int y2, vector<Pos> cango);
 	void showBoard();
 	void showallPath();
-	static void load_all_chess_cango();
 	string chessname(int num);
 
-	static bool ifMoveThenLose(bool& isCheckmate, int color); // ¥¼¦X¨Ö
-
+	static void load_all_chess_cango();
+	static bool ifMoveThenLose(bool& isCheckmate, int color);
 	~Board() {};
 };
 

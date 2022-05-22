@@ -22,7 +22,6 @@ struct Pos {
 class Chess {
 protected:
 	int color;
-
 public:
 	Pos pos;
 	int chess_type;
@@ -32,10 +31,11 @@ public:
 		color = -1;
 		chess_type = -1;
 	}
-	virtual bool kingKing(vector<Pos>& cango);
+	virtual bool kingKing(vector<Pos>& cango); // ¤ý¤£¨£¤ý
 	virtual int getColor() { return color; }
 	void moveable(int x, int y, vector<Pos>& cango) { return; };
 	void checkCompanion(vector<Pos>& cango);
+	virtual bool checkmate(int x, int y, vector<Pos>& cango);
 };
 
 class Null : public Chess {

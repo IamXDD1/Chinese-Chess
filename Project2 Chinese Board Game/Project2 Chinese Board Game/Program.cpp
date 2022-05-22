@@ -1,5 +1,5 @@
 #include "Program.h"
-
+/*
 void Program::menu()
 {
 	cout << "                                               " << '\n'
@@ -34,30 +34,26 @@ int Program::chooseOption()
 void Program::startGame()
 {
 	GameManager GM;
-	File file;
+	File* file = new File;
 	srand(time(NULL));
-	string filename = "./game data/log_" + to_string(rand()) + ".txt";
+	string filename = "log_" + to_string(rand()) + ".txt";
 	int round = 1;
 
-	cin.get();
-
-	file.setFilename(filename + ".txt");
-
-	clearScreen();
-	GM.gameBoard.showBoard();
+	file->setFilename(filename);
 
 	//keep playing
 	GameRun(GM, file, round);
-	file.Output();
+	file->Output();
 
 	playagain();
+	delete file;
 }
 //read file's input to move chess
 void Program::loadFile()
 {
 	GameManager GM;
 	vector<string> data;
-	File file;
+	File* file;
 	string filename;
 	int round = 1;
 
@@ -67,10 +63,10 @@ void Program::loadFile()
 		cout << "Please input a file name to load : ";
 		getline(cin, filename);
 
-		file.setFilename(filename + ".txt");
-		if (file.Load(data)) break;
+		file->setFilename(filename + ".txt");
+		if (file->Load(data)) break;
 	}
-	file.closeFile();
+	file->closeFile();
 
 	clearScreen();
 	GM.gameBoard.showBoard();
@@ -78,22 +74,22 @@ void Program::loadFile()
 	//read file 
 	bool keep_playing = true;
 	for (int i = 0; i < data.size(); i++) {
-		if (file.gameRecord.size() > 0) {
-			if (file.gameRecord[file.gameRecord.size() - 1] == "Black Win"
-				|| file.gameRecord[file.gameRecord.size() - 1] == "Red Win") {
+		if (file->gameRecord.size() > 0) {
+			if (file->gameRecord[file->gameRecord.size() - 1] == "Black Win"
+				|| file->gameRecord[file->gameRecord.size() - 1] == "Red Win") {
 				Sleep(1000);
 				clearScreen();
-				cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << '\n';
+				cout << "Game Over! " << file->gameRecord[file->gameRecord.size() - 1] << '\n';
 				keep_playing = false;
 				break;
 			}
 		}
 
 		if (data[i] == "Red Win" || data[i] == "Black Win") {
-			file.gameRecord.push_back(data[i]);
+			file->gameRecord.push_back(data[i]);
 			Sleep(1000);
 			clearScreen();
-			cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << " because ";
+			cout << "Game Over! " << file->gameRecord[file->gameRecord.size() - 1] << " because ";
 			if (data[i][0] == 'R') cout << "Black surrender." << '\n';
 			else cout << "Red surrender." << '\n';
 			keep_playing = false;
@@ -109,7 +105,7 @@ void Program::loadFile()
 
 		int x1 = -1, x2 = -1, y1 = -1, y2 = -1, color = -1;
 		string charactor;
-		file.Input(data[i], color, charactor, x1, y1, x2, y2);
+		file->Input(data[i], color, charactor, x1, y1, x2, y2);
 		color = (round % 2 == 1) ? RED : BLACK;
 		GM.gameBoard.moveChess(file, x1, y1, x2, y2, true);
 		GM.gameBoard.showBoard();
@@ -123,7 +119,7 @@ void Program::loadFile()
 		cin.get();
 		GameRun(GM, file, round);
 	}
-	file.Output();
+	file->Output();
 
 	playagain();
 }
@@ -133,7 +129,7 @@ void Program::leaveGame()
 	return;
 }
 //input cmd to move chess
-void Program::GameRun(GameManager& GM, File& file, int& round)
+void Program::GameRun(GameManager& GM, File* file, int& round)
 {
 	GameClock GameTime;
 	PlayerClock PlayerTime;
@@ -146,16 +142,11 @@ void Program::GameRun(GameManager& GM, File& file, int& round)
 			gotoxy(0, 11);
 			cout << "Input charactor (or input 'surrender'): ";
 			//getline(cin, cmd);
-
-			bool isCheckmate = false;
-			int color = (round % 2 == 1) ? RED : BLACK;
-			Board::load_all_chess_cango();
-
 			cin >> charactor;
 			if (cin.eof()) break;
 			GM.gameBoard.load_all_chess_cango();
 			GM.gameBoard.showallPath();
-			int x1, x2, y1, y2;
+			int x1, x2, y1, y2, color;
 			if (charactor != "surrender") {
 				cout << "x1 = ";
 				cin >> x1;
@@ -169,25 +160,15 @@ void Program::GameRun(GameManager& GM, File& file, int& round)
 			}
 			else {
 				color = (round % 2 == 1) ? RED : BLACK;
-				if (color == BLACK) file.gameRecord.push_back("Red Win");
-				else file.gameRecord.push_back("Black Win");
+				if (color == BLACK) file->gameRecord.push_back("Red Win");
+				else file->gameRecord.push_back("Black Win");
 			}
 
-			int colorToPass;
-			if (color == BLACK) colorToPass = RED;
-			else if (color == RED) colorToPass = BLACK;
-			Board::load_all_chess_cango();
-			if (Board::ifMoveThenLose(isCheckmate, colorToPass))
-			{
-				if (color == BLACK) file.gameRecord.push_back("Red Win");
-				else file.gameRecord.push_back("Black Win");
-			}
-
-			if (file.gameRecord[file.gameRecord.size() - 1] == "Black Win"
-				|| file.gameRecord[file.gameRecord.size() - 1] == "Red Win") {
+			if (file->gameRecord[file->gameRecord.size() - 1] == "Black Win"
+				|| file->gameRecord[file->gameRecord.size() - 1] == "Red Win") {
 				Sleep(1000);
 				clearScreen();
-				cout << "Game Over! " << file.gameRecord[file.gameRecord.size() - 1] << '\n';
+				cout << "Game Over! " << file->gameRecord[file->gameRecord.size() - 1] << '\n';
 				break;
 			}
 		}
@@ -221,3 +202,4 @@ void Program::playagain()
 		}
 	}
 }
+*/
