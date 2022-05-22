@@ -6,7 +6,7 @@
 #include <ctime>
 #include <msclr\marshal_cppstd.h>
 #include "Program.h"
-#define TIME_LIMIT 10
+#define TIME_LIMIT 120
 #define PLAYER_BASE_TIME 1800
 
 
@@ -307,7 +307,8 @@ namespace Project2ChineseBoardGame {
 		}
 
 		void checkIfGameEnds() {
-			if (file->gameRecord[file->gameRecord.size() - 1] == "Black Win") {
+			if (file->gameRecord.size() == 0) return;
+			else if (file->gameRecord[file->gameRecord.size() - 1] == "Black Win") {
 				timer1->Stop();
 				MessageBox::Show("¶Â¤èª±®a³Ó§Q!");
 				this->Close();
@@ -821,7 +822,7 @@ namespace Project2ChineseBoardGame {
 			animation->Stop();
 			current->MouseEnter += gcnew System::EventHandler(this, &gameBoard::Btn_Enter);
 			current->MouseLeave += gcnew System::EventHandler(this, &gameBoard::Btn_Leave);
-			checkIfGameEnds();
+			//checkIfGameEnds();
 			turnChange();
 			nextStep->Enabled = true;
 			previousStep->Enabled = true;
