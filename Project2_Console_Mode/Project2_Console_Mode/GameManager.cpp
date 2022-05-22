@@ -375,6 +375,7 @@ bool Board::ifMoveThenLose(bool& isCheckmate, int color) //need opponent's all_c
 			}
 		}
 	}
+
 	// whether general can escape by himself
 	if (checkmate(our_general_pos, oppo_all_chess_cango, isCheckmate) && generalCanMove)
 	{
@@ -385,8 +386,6 @@ bool Board::ifMoveThenLose(bool& isCheckmate, int color) //need opponent's all_c
 		// 無欠行
 	}
 
-	board_for_test[our_general_pos.y][our_general_pos.x] = General(our_general_pos.x, our_general_pos.y, (color*10) + 7);
-
 	for (auto i : ally_all_chess_cango)
 	{
 		if (ifMoveThenLose_simu(board_for_test, i, color) == 1)
@@ -394,31 +393,6 @@ bool Board::ifMoveThenLose(bool& isCheckmate, int color) //need opponent's all_c
 			return false;
 		}
 	}
-	/*
-		cout << endl;
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 9; j++) {
-				switch (board_for_test[i][j].chess_type) {
-				case BLACK_GENERAL: cout << "將"; break;
-				case RED_GENERAL:	cout << "帥"; break;
-				case BLACK_ADVISOR: cout << "士"; break;
-				case RED_ADVISOR:	cout << "仕"; break;
-				case BLACK_ELEPHANT:cout << "象"; break;
-				case RED_ELEPHANT:	cout << "相"; break;
-				case BLACK_CHARIOT: cout << "車"; break;
-				case RED_CHARIOT:	cout << "車"; break;
-				case BLACK_HORSE:	cout << "馬"; break;
-				case RED_HORSE:		cout << "傌"; break;
-				case BLACK_CANNON:	cout << "砲"; break;
-				case RED_CANNON:	cout << "炮"; break;
-				case BLACK_SOLDIER: cout << "卒"; break;
-				case RED_SOLDIER:	cout << "兵"; break;
-				default: cout << "  "; break;
-				}
-			}
-			cout << endl;
-		}
-		*/
 
 	return true; // 欠行
 }
@@ -466,70 +440,16 @@ bool Board::gereral_can_escape(Chess board[][9], Pos general_pos, vector<Pos> ge
 			}
 		}
 
+		board[general_cango_element.y][general_cango_element.x] = Null(general_cango_element.x,
+			general_cango_element.y);
+
 		if (!overlap)
 		{
 			board[general_pos.y][general_pos.x] = General(general_pos.x, general_pos.y, 7 + (color * 10));
 			return true;
 		}
-		
-		board[general_cango_element.y][general_cango_element.x] = Null(general_cango_element.x, 
-			general_cango_element.y);
 	}
-	/*
-	else
-	{
-		// general cannot escape by himself
-		for (auto& element_of_ally_all_chess_cango : ally_all_chess_cango)
-		{
-			Chess current = Board::getChess(element_of_ally_all_chess_cango.first.x,
-				element_of_ally_all_chess_cango.first.y);
 
-			board[element_of_ally_all_chess_cango.first.y][element_of_ally_all_chess_cango.first.x]
-				= Null(element_of_ally_all_chess_cango.first.x, element_of_ally_all_chess_cango.first.y);
-
-			for (auto& element : element_of_ally_all_chess_cango.second)
-			{
-				board[element.y][element.x] = current;
-				vector<pair<Pos, vector<Pos>>> all_chess_cango_test;
-				vector<Pos> oppo_all_chess_cango;
-
-				// fill in "all_chess_can_go"
-				load_all_chess_cango_test(board, all_chess_cango_test);
-
-				// fill in " oppo_all_chess_cango"
-				for (pair<Pos, vector<Pos>>& element_of_all_chess_cango : all_chess_cango_test)
-				{
-					Chess chess_on_board = Board::getChess(element_of_all_chess_cango.first.x, element_of_all_chess_cango.first.y);
-					if (chess_on_board.getColor() != color && chess_on_board.getColor() != NULL_COLOR)
-					{
-						for (Pos& element : element_of_all_chess_cango.second)
-						{
-							oppo_all_chess_cango.push_back(element);
-						}
-					}
-				}
-
-				// check whether "oppo_all_chess_cango" overlap general's position on the current board
-				int counter = 0;
-				for (auto& oppo_all_chess_cango_element : oppo_all_chess_cango)
-				{
-					if (oppo_all_chess_cango_element == general_pos)
-					{
-						counter++;
-						break;
-					}
-				}
-
-				if (counter < oppo_all_chess_cango.size())
-				{
-					return true;
-				}
-
-				board[element.y][element.x] = Null(element.x, element.y);
-			}
-		}
-	}
-	*/
 	board[general_pos.y][general_pos.x] = General(general_pos.x, general_pos.y, 7 + (color * 10));
 	return false;
 }
@@ -545,40 +465,7 @@ int Board::ifMoveThenLose_simu(Chess board[][9], pair<Pos, vector<Pos>> simu, in
 		Pos our_general_pos;
 		vector<Pos> oppo_all_chess_cango;
 
-		/*
-		if (simu.first.x == 6 && simu.first.y == 0)
-		cout << e.x << " " << e.y << endl;
-		*/
 		board[e.y][e.x] = current;
-		
-		/*
-		if (simu.first.x == 6 && simu.first.y == 0)
-		{
-			cout << endl;
-			for (int i = 0; i < 10; i++) {
-				for (int j = 0; j < 9; j++) {
-					switch (board[i][j].chess_type) {
-					case BLACK_GENERAL: cout << "將"; break;
-					case RED_GENERAL:	cout << "帥"; break;
-					case BLACK_ADVISOR: cout << "士"; break;
-					case RED_ADVISOR:	cout << "仕"; break;
-					case BLACK_ELEPHANT:cout << "象"; break;
-					case RED_ELEPHANT:	cout << "相"; break;
-					case BLACK_CHARIOT: cout << "車"; break;
-					case RED_CHARIOT:	cout << "車"; break;
-					case BLACK_HORSE:	cout << "馬"; break;
-					case RED_HORSE:		cout << "傌"; break;
-					case BLACK_CANNON:	cout << "砲"; break;
-					case RED_CANNON:	cout << "炮"; break;
-					case BLACK_SOLDIER: cout << "卒"; break;
-					case RED_SOLDIER:	cout << "兵"; break;
-					default: cout << "  "; break;
-					}
-				}
-				cout << endl;
-			}
-		}
-		*/
 
 		load_all_chess_cango_test(board, all_chess_cango_test);
 
@@ -590,12 +477,7 @@ int Board::ifMoveThenLose_simu(Chess board[][9], pair<Pos, vector<Pos>> simu, in
 			if (chess_on_board.getColor() != color)
 			{
 				for (Pos& element : element_of_all_chess_cango.second)
-				{/*
-					if (simu.first.x == 6 && simu.first.y == 0 && element_of_all_chess_cango.first.x == 7 && element_of_all_chess_cango.first.y == 0)
-					{
-						cout << 7 << " " << 0 << " to " << element.x << " " << element.y << endl;
-					}
-					*/
+				{
 					oppo_all_chess_cango.push_back(element);
 				}
 			}
