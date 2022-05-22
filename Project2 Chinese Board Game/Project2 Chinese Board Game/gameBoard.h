@@ -6,7 +6,7 @@
 #include <ctime>
 #include <msclr\marshal_cppstd.h>
 #include "Program.h"
-#define TIME_LIMIT 10
+#define TIME_LIMIT 120
 #define PLAYER_BASE_TIME 1800
 
 
