@@ -22,6 +22,7 @@ struct Pos {
 class Chess {
 protected:
 	int color;
+
 public:
 	Pos pos;
 	int chess_type;
@@ -31,11 +32,13 @@ public:
 		color = -1;
 		chess_type = -1;
 	}
-	virtual bool kingKing(vector<Pos>& cango); // ¤ý¤£¨£¤ý
+	virtual bool kingKing(vector<Pos>& cango);
+	bool board_kingKing(vector<Pos>& cango, Chess board[][9]);
 	virtual int getColor() { return color; }
 	void moveable(int x, int y, vector<Pos>& cango) { return; };
 	void checkCompanion(vector<Pos>& cango);
-	virtual bool checkmate(int x, int y, vector<Pos>& cango);
+	void board_checkCompanion(vector<Pos>& cango, Chess board[][9]);
+	void board_moveable(int x, int y, vector<Pos>& cango) { return; };
 };
 
 class Null : public Chess {
@@ -55,6 +58,7 @@ public:
 		chess_type = type;
 	}
 	void moveable(int x, int y, vector<Pos>& cango);
+	void board_moveable(int x, int y, vector<Pos>& cango, Chess board[][9]);
 };
 
 class Advisor : public Chess {
@@ -66,6 +70,7 @@ public:
 		chess_type = type;
 	}
 	void moveable(int x, int y, vector<Pos>& cango);
+	void board_moveable(int x, int y, vector<Pos>& cango, Chess board[][9]);
 };
 
 class Elephant : public Chess {
@@ -77,6 +82,7 @@ public:
 		chess_type = type;
 	}
 	void moveable(int x, int y, vector<Pos>& cango);
+	void board_moveable(int x, int y, vector<Pos>& cango, Chess board[][9]);
 };
 
 class Chariot : public Chess {
@@ -88,6 +94,7 @@ public:
 		chess_type = type;
 	}
 	void moveable(int x, int y, vector<Pos>& cango);
+	void board_moveable(int x, int y, vector<Pos>& cango, Chess board[][9]);
 };
 
 class Horse : public Chess {
@@ -99,6 +106,7 @@ public:
 		chess_type = type;
 	}
 	void moveable(int x, int y, vector<Pos>& cango);
+	void board_moveable(int x, int y, vector<Pos>& cango, Chess board[][9]);
 };
 
 class Cannon : public Chess {
@@ -110,6 +118,7 @@ public:
 		chess_type = type;
 	}
 	void moveable(int x, int y, vector<Pos>& cango);
+	void board_moveable(int x, int y, vector<Pos>& cango, Chess board[][9]);
 };
 
 class Soldier : public Chess {
@@ -121,4 +130,5 @@ public:
 		chess_type = type;
 	}
 	void moveable(int x, int y, vector<Pos>& cango);
+	void board_moveable(int x, int y, vector<Pos>& cango, Chess board[][9]);
 };
