@@ -310,11 +310,13 @@ namespace Project2ChineseBoardGame {
 			if (file->gameRecord.size() == 0) return;
 			else if (file->gameRecord[file->gameRecord.size() - 1] == "Black Win") {
 				timer1->Stop();
+				TotalTimer->Stop();
 				MessageBox::Show("黑方玩家勝利!");
 				this->Close();
 			}
 			else if (file->gameRecord[file->gameRecord.size() - 1] == "Red Win") {
 				timer1->Stop();
+				TotalTimer->Stop();
 				MessageBox::Show("紅方玩家勝利!");
 				this->Close();
 			}
